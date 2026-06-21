@@ -1,0 +1,167 @@
+{
+  "info": {
+    "name": "Truepill (FuzeRx) API",
+    "description": "Truepill (FuzeRx) pharmacy and healthcare-infrastructure REST API. Base URL https://rxapi.fuzehealth.com/v1 (sandbox https://rxapi.sandbox.fuzehealth.com/v1). Authenticates with Authorization: ApiKey <KEY>.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      { "key": "key", "value": "Authorization" },
+      { "key": "value", "value": "ApiKey {{apiKey}}" },
+      { "key": "in", "value": "header" }
+    ]
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "https://rxapi.fuzehealth.com/v1" }
+  ],
+  "item": [
+    {
+      "name": "Patients",
+      "item": [
+        {
+          "name": "Create a patient record.",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/patient", "host": ["{{baseUrl}}"], "path": ["patient"] },
+            "body": { "mode": "raw", "raw": "{\n  \"first_name\": \"\",\n  \"last_name\": \"\",\n  \"dob\": \"\",\n  \"gender\": \"\",\n  \"address_1\": \"\",\n  \"city\": \"\",\n  \"state\": \"\",\n  \"zip\": \"\",\n  \"phone_number\": \"\",\n  \"email\": \"\"\n}", "options": { "raw": { "language": "json" } } }
+          }
+        },
+        {
+          "name": "Find a patient by demographics.",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/patient?first_name=&last_name=&dob=", "host": ["{{baseUrl}}"], "path": ["patient"], "query": [{ "key": "first_name", "value": "" }, { "key": "last_name", "value": "" }, { "key": "dob", "value": "" }] }
+          }
+        },
+        {
+          "name": "Retrieve patient details.",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/patient/{patient_token}", "host": ["{{baseUrl}}"], "path": ["patient", "{patient_token}"] }
+          }
+        },
+        {
+          "name": "Update patient information.",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/patient/{patient_token}", "host": ["{{baseUrl}}"], "path": ["patient", "{patient_token}"] },
+            "body": { "mode": "raw", "raw": "{}", "options": { "raw": { "language": "json" } } }
+          }
+        },
+        {
+          "name": "List a patient's prescriptions.",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/patient/{patient_token}/prescriptions", "host": ["{{baseUrl}}"], "path": ["patient", "{patient_token}", "prescriptions"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Prescriptions & Transfers",
+      "item": [
+        {
+          "name": "Get prescription details.",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/prescription/{prescription_token}", "host": ["{{baseUrl}}"], "path": ["prescription", "{prescription_token}"] }
+          }
+        },
+        {
+          "name": "Initiate a pharmacy transfer request.",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/transfer_request", "host": ["{{baseUrl}}"], "path": ["transfer_request"] },
+            "body": { "mode": "raw", "raw": "{}", "options": { "raw": { "language": "json" } } }
+          }
+        },
+        {
+          "name": "List all transfer requests.",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/transfer_request", "host": ["{{baseUrl}}"], "path": ["transfer_request"] }
+          }
+        },
+        {
+          "name": "Get a specific transfer request.",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/transfer_request/{transfer_token}", "host": ["{{baseUrl}}"], "path": ["transfer_request", "{transfer_token}"] }
+          }
+        },
+        {
+          "name": "Create a direct transfer (v1).",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/direct_transfer", "host": ["{{baseUrl}}"], "path": ["direct_transfer"] },
+            "body": { "mode": "raw", "raw": "{}", "options": { "raw": { "language": "json" } } }
+          }
+        },
+        {
+          "name": "Create a direct transfer (v2).",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/v2/direct_transfer", "host": ["{{baseUrl}}"], "path": ["v2", "direct_transfer"] },
+            "body": { "mode": "raw", "raw": "{}", "options": { "raw": { "language": "json" } } }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Insurance & Copay",
+      "item": [
+        {
+          "name": "Create an insurance object for a patient.",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/insurance", "host": ["{{baseUrl}}"], "path": ["insurance"] },
+            "body": { "mode": "raw", "raw": "{\n  \"patient_token\": \"\",\n  \"bin\": \"\",\n  \"pcn\": \"\",\n  \"group_number\": \"\",\n  \"member_id\": \"\"\n}", "options": { "raw": { "language": "json" } } }
+          }
+        },
+        {
+          "name": "Create a copay request.",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{baseUrl}}/copay_request", "host": ["{{baseUrl}}"], "path": ["copay_request"] },
+            "body": { "mode": "raw", "raw": "{\n  \"patient_token\": \"\",\n  \"prescription_token\": \"\"\n}", "options": { "raw": { "language": "json" } } }
+          }
+        },
+        {
+          "name": "Get insurance claim details.",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/insurance_claim", "host": ["{{baseUrl}}"], "path": ["insurance_claim"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Webhooks",
+      "item": [
+        {
+          "name": "Retrieve webhook events by type.",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/webhook_events/{webhook_type}", "host": ["{{baseUrl}}"], "path": ["webhook_events", "{webhook_type}"] }
+          }
+        }
+      ]
+    }
+  ]
+}

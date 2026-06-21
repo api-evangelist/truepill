@@ -1,0 +1,523 @@
+openapi: 3.0.1
+info:
+  title: Truepill (FuzeRx) API
+  description: >-
+    REST API for Truepill's pharmacy and healthcare-infrastructure platform,
+    now shipping as FuzeRx after LetsGetChecked's 2024 acquisition of Truepill
+    and the May 2025 rebrand to Fuze Health. The API exposes JSON over HTTPS for
+    patient management, prescriptions, pharmacy-to-pharmacy transfers, insurance
+    and copay adjudication, and webhook event retrieval. Endpoints and field
+    names below reflect Truepill/FuzeRx public developer documentation; request
+    and response bodies are summarized and should be reconciled against the live
+    reference at https://rxdocs.fuzehealth.com before production use.
+  termsOfService: https://www.truepill.com/terms-of-service
+  contact:
+    name: FuzeRx Support
+    email: rx.support@fuzehealth.com
+  version: 'v1'
+servers:
+  - url: https://rxapi.fuzehealth.com/v1
+    description: Production
+  - url: https://rxapi.sandbox.fuzehealth.com/v1
+    description: Sandbox
+security:
+  - ApiKeyAuth: []
+tags:
+  - name: Patients
+    description: Patient records and demographics.
+  - name: Prescriptions
+    description: Prescription details and routing.
+  - name: Transfers
+    description: Pharmacy-to-pharmacy prescription transfers.
+  - name: Insurance
+    description: Insurance objects, copay requests, and claim adjudication.
+  - name: Webhooks
+    description: Asynchronous event retrieval.
+paths:
+  /patient:
+    put:
+      operationId: createPatient
+      tags:
+        - Patients
+      summary: Create a patient record.
+      description: >-
+        Creates a patient and returns an opaque patient_token used to reference
+        the patient on subsequent requests.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatientRequest'
+      responses:
+        '200':
+          description: Patient created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PatientResponse'
+    get:
+      operationId: findPatient
+      tags:
+        - Patients
+      summary: Find a patient by demographics.
+      parameters:
+        - name: first_name
+          in: query
+          schema:
+            type: string
+        - name: last_name
+          in: query
+          schema:
+            type: string
+        - name: dob
+          in: query
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Matching patient(s).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PatientResponse'
+  /patient/{patient_token}:
+    get:
+      operationId: getPatient
+      tags:
+        - Patients
+      summary: Retrieve patient details.
+      parameters:
+        - $ref: '#/components/parameters/PatientToken'
+      responses:
+        '200':
+          description: Patient details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PatientResponse'
+    post:
+      operationId: updatePatient
+      tags:
+        - Patients
+      summary: Update patient information.
+      parameters:
+        - $ref: '#/components/parameters/PatientToken'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatientRequest'
+      responses:
+        '200':
+          description: Patient updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PatientResponse'
+  /patient/{patient_token}/prescriptions:
+    get:
+      operationId: listPatientPrescriptions
+      tags:
+        - Patients
+        - Prescriptions
+      summary: List a patient's prescriptions.
+      parameters:
+        - $ref: '#/components/parameters/PatientToken'
+      responses:
+        '200':
+          description: Prescriptions for the patient.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Prescription'
+  /prescription/{prescription_token}:
+    get:
+      operationId: getPrescription
+      tags:
+        - Prescriptions
+      summary: Get prescription details.
+      parameters:
+        - name: prescription_token
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Prescription details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Prescription'
+  /transfer_request:
+    post:
+      operationId: createTransferRequest
+      tags:
+        - Transfers
+      summary: Initiate a pharmacy transfer request.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferRequest'
+      responses:
+        '200':
+          description: Transfer request created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransferResponse'
+    get:
+      operationId: listTransferRequests
+      tags:
+        - Transfers
+      summary: List all transfer requests.
+      responses:
+        '200':
+          description: Transfer requests.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TransferResponse'
+  /transfer_request/{transfer_token}:
+    get:
+      operationId: getTransferRequest
+      tags:
+        - Transfers
+      summary: Get a specific transfer request.
+      parameters:
+        - name: transfer_token
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Transfer request details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransferResponse'
+  /direct_transfer:
+    post:
+      operationId: createDirectTransfer
+      tags:
+        - Transfers
+      summary: Create a direct transfer (v1).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferRequest'
+      responses:
+        '200':
+          description: Direct transfer created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransferResponse'
+  /v2/direct_transfer:
+    post:
+      operationId: createDirectTransferV2
+      tags:
+        - Transfers
+      summary: Create a direct transfer (v2).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferRequest'
+      responses:
+        '200':
+          description: Direct transfer created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransferResponse'
+  /insurance:
+    post:
+      operationId: createInsurance
+      tags:
+        - Insurance
+      summary: Create an insurance object for a patient.
+      description: >-
+        Establishes a patient's pharmacy benefit details (BIN, PCN, group
+        number, member ID) for use in copay determination and claim adjudication.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Insurance'
+      responses:
+        '200':
+          description: Insurance object created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Insurance'
+  /copay_request:
+    post:
+      operationId: createCopayRequest
+      tags:
+        - Insurance
+      summary: Create a copay request.
+      description: >-
+        Submits patient insurance and prescription details to determine a
+        patient's real-time out-of-pocket expense for a medication. Results may
+        also be delivered asynchronously via webhook events.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CopayRequest'
+      responses:
+        '200':
+          description: Copay request accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CopayResponse'
+  /insurance_claim:
+    get:
+      operationId: getInsuranceClaim
+      tags:
+        - Insurance
+      summary: Get insurance claim details.
+      description: >-
+        Queries claim details from successfully adjudicated insurance claims.
+        Access to this endpoint is restricted.
+      responses:
+        '200':
+          description: Insurance claim details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InsuranceClaim'
+  /webhook_events/{webhook_type}:
+    get:
+      operationId: getWebhookEvents
+      tags:
+        - Webhooks
+      summary: Retrieve webhook events by type.
+      parameters:
+        - name: webhook_type
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Webhook event type (e.g., notify_rx).
+      responses:
+        '200':
+          description: Webhook events.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WebhookEvent'
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: >-
+        API key passed as `Authorization: ApiKey <YOUR_API_KEY>`. Separate keys
+        are issued for the sandbox and production environments.
+  parameters:
+    PatientToken:
+      name: patient_token
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Opaque token identifying the patient.
+  schemas:
+    PatientRequest:
+      type: object
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        dob:
+          type: string
+          format: date
+        gender:
+          type: string
+        ssn:
+          type: string
+        address_1:
+          type: string
+        address_2:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        zip:
+          type: string
+        phone_number:
+          type: string
+        email:
+          type: string
+        language_preference:
+          type: string
+        species:
+          type: string
+          description: Supports veterinary dispensing.
+    PatientResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        request_id:
+          type: string
+        details:
+          type: object
+          properties:
+            patient_token:
+              type: string
+            first_name:
+              type: string
+            last_name:
+              type: string
+            dob:
+              type: string
+              format: date
+    Prescription:
+      type: object
+      properties:
+        prescription_token:
+          type: string
+        patient_token:
+          type: string
+        medication_name:
+          type: string
+        ndc:
+          type: string
+          description: National Drug Code.
+        quantity:
+          type: number
+        days_supply:
+          type: integer
+        directions:
+          type: string
+        status:
+          type: string
+        refills_remaining:
+          type: integer
+    TransferRequest:
+      type: object
+      properties:
+        patient_token:
+          type: string
+        prescription_token:
+          type: string
+        from_pharmacy:
+          type: string
+        to_pharmacy:
+          type: string
+        medication_name:
+          type: string
+    TransferResponse:
+      type: object
+      properties:
+        transfer_token:
+          type: string
+        status:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        details:
+          type: object
+    Insurance:
+      type: object
+      properties:
+        patient_token:
+          type: string
+        bin:
+          type: string
+        pcn:
+          type: string
+        group_number:
+          type: string
+        member_id:
+          type: string
+        relationship_code:
+          type: string
+        priority:
+          type: string
+          description: primary, secondary, or tertiary.
+    CopayRequest:
+      type: object
+      properties:
+        patient_token:
+          type: string
+        prescription_token:
+          type: string
+        ndc:
+          type: string
+        quantity:
+          type: number
+        days_supply:
+          type: integer
+    CopayResponse:
+      type: object
+      properties:
+        copay_request_token:
+          type: string
+        status:
+          type: string
+        copay_amount:
+          type: number
+        currency:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+    InsuranceClaim:
+      type: object
+      properties:
+        claim_id:
+          type: string
+        prescription_token:
+          type: string
+        bin:
+          type: string
+        adjudicated_amount:
+          type: number
+        patient_pay_amount:
+          type: number
+        status:
+          type: string
+    WebhookEvent:
+      type: object
+      properties:
+        callback_type:
+          type: string
+        status:
+          type: string
+          description: success or error.
+        timestamp:
+          type: string
+          format: date-time
+        details:
+          type: object
+          description: Event-specific payload.

@@ -1,0 +1,55 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+provider: Truepill
+providerId: truepill
+created: '2026-06-21'
+modified: '2026-06-21'
+reconciled: false
+tags:
+- Pharmacy
+- Healthcare
+- Prescription Fulfillment
+- Insurance
+- Rate Limiting
+- Quotas
+- Throttling
+description: >-
+  Truepill (FuzeRx) does not publish specific public rate limits or quotas for
+  its REST API. The platform is gated behind a commercial agreement with
+  separate sandbox and production API keys, and limits are expected to be
+  governed by contract and account configuration rather than a published
+  rate card. No per-endpoint RPM/RPD/quota values are documented to reconcile.
+notes: >-
+  Confirm applicable throttling, concurrency, and quota limits with Truepill /
+  Fuze Health during onboarding. Standard HTTP 429 throttling and exponential
+  backoff with Retry-After should be assumed but are not explicitly documented.
+sources:
+- https://rxdocs.fuzehealth.com
+- https://www.truepill.com
+responseCodes:
+  throttled: 429
+limits:
+- name: Account Request Rate
+  scope: account
+  metric: requests
+  limit: see provider documentation
+  notes: Not publicly documented; governed by commercial agreement and API key configuration.
+- name: Copay / Insurance Adjudication
+  scope: account
+  metric: claims
+  limit: see provider documentation
+  notes: Copay requests may be subject to payor- and contract-specific limits.
+- name: Webhook Event Retrieval
+  scope: account
+  metric: requests
+  limit: see provider documentation
+  notes: Polling limits for webhook_events endpoints are not publicly documented.
+policies:
+- name: Contract-Governed Limits
+  description: Limits are set per commercial agreement and account, not via a public tier system.
+- name: Backoff Strategy
+  description: Clients should implement exponential backoff with jitter and honor Retry-After if returned.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

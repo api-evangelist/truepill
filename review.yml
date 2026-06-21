@@ -1,0 +1,123 @@
+aid: truepill
+name: Truepill
+review:
+  question: Does Truepill expose a documented, publicly accessible REST API for pharmacy fulfillment, and is it still operated under the Truepill brand?
+  answer: partial
+  date: '2026-06-21'
+  reviewer: API Evangelist
+  ownershipChange: true
+findings:
+  summary: |
+    Truepill operates a real, documented RESTful API for pharmacy and
+    healthcare infrastructure, but it is gated and has been rebranded.
+    Following LetsGetChecked's 2024 acquisition of Truepill, the combined
+    company launched as Fuze Health in May 2025 (with Alto Pharmacy also
+    joining), and the developer platform now ships as FuzeRx. The legacy
+    documentation host www.truepill.com/api-docs now 301-redirects to
+    rx.fuzehealth.com, and the API reference lives at
+    https://rxdocs.fuzehealth.com against the base URL
+    https://rxapi.fuzehealth.com/v1 (sandbox at
+    https://rxapi.sandbox.fuzehealth.com/v1).
+
+    The API is REST/JSON over HTTPS and authenticates with an API key passed
+    as `Authorization: ApiKey <KEY>`. Documented resources include patients,
+    prescriptions, pharmacy transfers (transfer_request, direct_transfer v1/v2),
+    insurance/copay adjudication (insurance, copay_request, insurance_claim),
+    and webhook event retrieval (webhook_events, including notify_rx). A
+    separate legacy reference at https://tpos-api.truepill.com/documentation/
+    lists copay, eligibility, get-copay-claims, get-transaction,
+    discontinue-prescription, outbound-transfer-prescription, prescription-image,
+    prescription-transfer-image, and takeover-rx-from-pioneer operations.
+
+    Availability is "partial" because production access is sales-led: API keys
+    (sandbox and production) and pricing are issued only under a commercial
+    agreement. There is no public self-serve signup, no published pricing, and
+    no public rate-limit documentation, so plans, rate-limits, and finops
+    artifacts are marked reconciled: false. There is no obvious public GitHub
+    organization for the SDK/specs, so no GitHubOrganization common property is
+    asserted.
+  ownership:
+    acquirer: LetsGetChecked
+    acquisitionYear: 2024
+    rebrand: Fuze Health
+    rebrandDate: '2025-05-21'
+    apiBrand: FuzeRx
+    relatedEntities:
+      - Truepill
+      - LetsGetChecked
+      - Alto Pharmacy
+    note: >-
+      LetsGetChecked acquired Truepill in 2024; the two rebranded as Fuze
+      Health in May 2025, with Alto Pharmacy joining the combined company. The
+      developer-facing API is branded FuzeRx and served from fuzehealth.com
+      hosts, while legacy truepill.com URLs redirect to the new domain.
+  transports:
+    - protocol: REST
+      scheme: https
+      baseURL: https://rxapi.fuzehealth.com/v1
+      documented: true
+    - protocol: Webhooks
+      scheme: https
+      note: Asynchronous events retrieved via GET /webhook_events/{webhook_type} (e.g., notify_rx). Outbound callbacks deliver status/copay/fulfillment updates.
+      documented: true
+  authentication:
+    type: apiKey
+    header: Authorization
+    scheme: 'ApiKey <KEY>'
+    environments:
+      - sandbox
+      - production
+  endpointsConfirmed:
+    - PUT    https://rxapi.fuzehealth.com/v1/patient
+    - GET    https://rxapi.fuzehealth.com/v1/patient
+    - GET    https://rxapi.fuzehealth.com/v1/patient/{patient_token}
+    - POST   https://rxapi.fuzehealth.com/v1/patient/{patient_token}
+    - GET    https://rxapi.fuzehealth.com/v1/patient/{patient_token}/prescriptions
+    - GET    https://rxapi.fuzehealth.com/v1/prescription/{prescription_token}
+    - POST   https://rxapi.fuzehealth.com/v1/transfer_request
+    - GET    https://rxapi.fuzehealth.com/v1/transfer_request
+    - GET    https://rxapi.fuzehealth.com/v1/transfer_request/{transfer_token}
+    - POST   https://rxapi.fuzehealth.com/v1/direct_transfer
+    - POST   https://rxapi.fuzehealth.com/v1/v2/direct_transfer
+    - POST   https://rxapi.fuzehealth.com/v1/insurance
+    - POST   https://rxapi.fuzehealth.com/v1/copay_request
+    - GET    https://rxapi.fuzehealth.com/v1/insurance_claim
+    - GET    https://rxapi.fuzehealth.com/v1/webhook_events/{webhook_type}
+    - GET    https://rxapi.fuzehealth.com/v1/webhook_events/notify_rx
+  notDocumented:
+    - A standalone shipments/tracking resource (shipment state is delivered via webhooks rather than a dedicated REST collection).
+    - Public pricing, rate limits, and quotas.
+    - A public GitHub organization hosting official SDKs or OpenAPI specs.
+sources:
+  - url: https://www.truepill.com/api-docs
+    type: Documentation
+    note: 301-redirects to https://rx.fuzehealth.com/api-docs, confirming the Fuze Health rebrand.
+  - url: https://rxdocs.fuzehealth.com
+    type: APIReference
+    note: FuzeRx API reference; base URL https://rxapi.fuzehealth.com/v1, ApiKey auth, patient/prescription/transfer/insurance/webhook endpoints.
+  - url: https://tpos-api.truepill.com/documentation/
+    type: APIReference
+    note: Legacy Truepill TPOS API directory listing copay, eligibility, transfer, and prescription-image operations.
+  - url: https://healthbrands.truepill.com/
+    type: Website
+    note: Pharmacy fulfillment for health brands; sales-led engagement.
+  - url: https://hitconsultant.net/2025/05/23/fuze-health-launches-uniting-truepill-letsgetchecked-alto/
+    type: News
+    note: Fuze Health launch (May 2025) uniting Truepill, LetsGetChecked, and Alto.
+  - url: https://www.ycombinator.com/companies/truepill
+    type: Profile
+    note: Truepill described as API-connected healthcare infrastructure.
+actions:
+  apisYmlCreated: true
+  openapiPath: openapi/truepill-openapi.yml
+  reconciled: false
+  reason: |
+    A real REST API surface is documented and was modeled in
+    openapi/truepill-openapi.yml from public FuzeRx documentation. Because
+    production access, pricing, and rate limits are sales-led and not
+    publicly disclosed, plans/rate-limits/finops are marked reconciled: false,
+    and the ownership change (Truepill -> LetsGetChecked -> Fuze Health /
+    FuzeRx) is recorded above.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

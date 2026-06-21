@@ -1,0 +1,149 @@
+aid: truepill
+url: https://raw.githubusercontent.com/api-evangelist/truepill/refs/heads/main/apis.yml
+name: Truepill
+kind: company
+description: Truepill is a pharmacy and healthcare-infrastructure company providing
+  API-driven prescription fulfillment, pharmacy dispensing, insurance/copay
+  adjudication, telehealth, and at-home diagnostics. Following LetsGetChecked's
+  2024 acquisition of Truepill, the combined company rebranded as Fuze Health in
+  May 2025, and the developer platform now ships as FuzeRx. The REST API exposes
+  JSON endpoints for patients, prescriptions, transfers, insurance/copay, and
+  webhook events under https://rxapi.fuzehealth.com/v1.
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+tags:
+- Pharmacy
+- Healthcare
+- Prescription Fulfillment
+- Telehealth
+- Diagnostics
+- Insurance
+created: '2026-06-21'
+modified: '2026-06-21'
+specificationVersion: '0.19'
+apis:
+- aid: truepill:truepill-patients-api
+  name: Truepill Patients API
+  tags:
+  - Patients
+  - Demographics
+  - Eligibility
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://rxdocs.fuzehealth.com
+  baseURL: https://rxapi.fuzehealth.com/v1
+  properties:
+  - url: https://rxdocs.fuzehealth.com
+    type: Documentation
+  - url: openapi/truepill-openapi.yml
+    type: OpenAPI
+  - url: collections/truepill.postman_collection.json
+    type: PostmanCollection
+  - url: collections/truepill.opencollection.json
+    type: OpenCollection
+  description: Create, update, retrieve, and search patient records (demographics,
+    address, contact, language preference) and list a patient's prescriptions. Patients
+    are referenced by an opaque patient_token.
+- aid: truepill:truepill-prescriptions-orders-api
+  name: Truepill Prescriptions & Orders API
+  tags:
+  - Prescriptions
+  - Orders
+  - Transfers
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://rxdocs.fuzehealth.com
+  baseURL: https://rxapi.fuzehealth.com/v1
+  properties:
+  - url: https://rxdocs.fuzehealth.com
+    type: Documentation
+  - url: openapi/truepill-openapi.yml
+    type: OpenAPI
+  - url: collections/truepill.postman_collection.json
+    type: PostmanCollection
+  - url: collections/truepill.opencollection.json
+    type: OpenCollection
+  description: Retrieve prescription details and orchestrate prescription routing
+    via transfer requests and direct transfers (v1 and v2) into Truepill/FuzeRx pharmacy
+    fulfillment.
+- aid: truepill:truepill-medications-insurance-api
+  name: Truepill Medications & Insurance API
+  tags:
+  - Medications
+  - Insurance
+  - Copay
+  - Eligibility
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://rxdocs.fuzehealth.com
+  baseURL: https://rxapi.fuzehealth.com/v1
+  properties:
+  - url: https://rxdocs.fuzehealth.com
+    type: Documentation
+  - url: https://tpos-api.truepill.com/documentation/
+    type: APIReference
+  - url: openapi/truepill-openapi.yml
+    type: OpenAPI
+  - url: collections/truepill.postman_collection.json
+    type: PostmanCollection
+  - url: collections/truepill.opencollection.json
+    type: OpenCollection
+  description: Establish patient insurance objects (BIN, group, member ID), submit
+    copay requests for real-time out-of-pocket determination, and query adjudicated
+    insurance claim details across primary, secondary, and tertiary coverage.
+- aid: truepill:truepill-shipments-fulfillment-api
+  name: Truepill Shipments & Fulfillment API
+  tags:
+  - Shipments
+  - Fulfillment
+  - Dispensing
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://healthbrands.truepill.com/
+  baseURL: https://rxapi.fuzehealth.com/v1
+  properties:
+  - url: https://rxdocs.fuzehealth.com
+    type: Documentation
+  - url: openapi/truepill-openapi.yml
+    type: OpenAPI
+  - url: collections/truepill.postman_collection.json
+    type: PostmanCollection
+  - url: collections/truepill.opencollection.json
+    type: OpenCollection
+  description: Pharmacy dispensing and prescription fulfillment, surfaced through
+    prescription status and webhook events rather than a standalone shipments
+    resource. Shipment and tracking state is delivered asynchronously via webhook
+    notifications.
+- aid: truepill:truepill-webhooks-api
+  name: Truepill Webhooks API
+  tags:
+  - Webhooks
+  - Events
+  - Notifications
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://rxdocs.fuzehealth.com
+  baseURL: https://rxapi.fuzehealth.com/v1
+  properties:
+  - url: https://rxdocs.fuzehealth.com
+    type: Documentation
+  - url: openapi/truepill-openapi.yml
+    type: OpenAPI
+  - url: collections/truepill.postman_collection.json
+    type: PostmanCollection
+  - url: collections/truepill.opencollection.json
+    type: OpenCollection
+  description: Retrieve webhook events by type (including Notify Rx) carrying
+    asynchronous status updates for prescriptions, copay/insurance adjudication,
+    and fulfillment. Events include callback_type, status, timestamp, and a details
+    object.
+common:
+- type: LinkedIn
+  url: https://www.linkedin.com/company/truepill
+- type: Website
+  url: https://www.truepill.com
+- type: Documentation
+  url: https://rxdocs.fuzehealth.com
+- type: Plans
+  url: plans/truepill-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/truepill-rate-limits.yml
+- type: FinOps
+  url: finops/truepill-finops.yml
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

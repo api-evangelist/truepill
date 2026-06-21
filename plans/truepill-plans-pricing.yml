@@ -1,0 +1,81 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: Truepill
+providerId: truepill
+created: '2026-06-21'
+modified: '2026-06-21'
+reconciled: false
+tags:
+- Pharmacy
+- Healthcare
+- Prescription Fulfillment
+- Telehealth
+- Diagnostics
+- Insurance
+- Plans
+description: >-
+  Truepill (now FuzeRx / Fuze Health) does not publish public, self-serve
+  pricing for its pharmacy fulfillment, insurance/copay, telehealth, or
+  diagnostics APIs. Access is sales-led and contract-based: pricing is
+  negotiated per healthcare brand and typically reflects dispensing/fulfillment
+  fees, per-transaction or per-claim adjudication costs, and platform fees.
+  Onboarding requires a commercial agreement and sandbox credentials before
+  production API keys are issued. No documented rate-card values exist to
+  reconcile.
+notes: >-
+  Pricing is not disclosed publicly and was not reconciled. Engage Truepill /
+  Fuze Health sales for a quote. Values below are structural placeholders, not
+  published rates.
+sources:
+- https://www.truepill.com
+- https://healthbrands.truepill.com/
+- https://rxdocs.fuzehealth.com
+plans:
+- id: truepill-enterprise
+  name: Enterprise (Sales-Led)
+  type: enterprise
+  description: >-
+    Contract-based access to pharmacy fulfillment, insurance/copay
+    adjudication, telehealth, and diagnostics APIs. Negotiated per healthcare
+    brand; contact Truepill / Fuze Health sales.
+  entries:
+  - label: Platform Agreement
+    name: platform_agreement
+    type: flat
+    metric: contract
+    limit: -1
+    timeFrame: year
+    geo: us
+    unit: 1
+    price: contact sales
+    userMultiplied: false
+  - label: Prescription Fulfillment / Dispensing
+    name: fulfillment
+    type: usage
+    metric: prescriptions
+    limit: -1
+    timeFrame: month
+    geo: us
+    unit: 1
+    price: contact sales
+    userMultiplied: false
+  - label: Insurance / Copay Adjudication
+    name: copay_adjudication
+    type: usage
+    metric: claims
+    limit: -1
+    timeFrame: month
+    geo: us
+    unit: 1
+    price: contact sales
+    userMultiplied: false
+  elements:
+  - name: Patients API
+  - name: Prescriptions & Orders API
+  - name: Medications & Insurance API
+  - name: Shipments & Fulfillment
+  - name: Webhooks
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

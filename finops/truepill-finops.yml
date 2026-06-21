@@ -1,0 +1,95 @@
+specification: FinOps Framework
+specificationVersion: '1.0'
+schema: https://www.finops.org/framework/
+provider: Truepill
+providerId: truepill
+created: '2026-06-21'
+modified: '2026-06-21'
+reconciled: false
+tags:
+- Pharmacy
+- Healthcare
+- Prescription Fulfillment
+- Insurance
+- FinOps
+- Cost Management
+- FOCUS
+description: >-
+  FinOps view of Truepill (FuzeRx) API spend. Truepill bills under a sales-led
+  commercial agreement rather than published usage rates, so cost components
+  must be derived from the negotiated contract. Likely meters include
+  prescription fulfillment/dispensing fees, insurance/copay adjudication per
+  claim or transaction, and platform/subscription fees. Specific rates are not
+  public and are not reconciled here.
+notes: >-
+  Cost drivers and unit rates are contract-specific and were not reconciled.
+  Obtain the executed rate schedule from Truepill / Fuze Health and map it to
+  the meters below during reconciliation.
+sources:
+- https://www.truepill.com
+- https://rxdocs.fuzehealth.com
+- https://focus.finops.org/focus-specification/v1-3/
+alignedWith:
+  framework: FinOps Foundation Framework
+  frameworkUrl: https://www.finops.org/framework/
+  dataSpec: FOCUS
+  dataSpecVersion: '1.3'
+  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
+publisherName: Truepill
+serviceCategory: Healthcare and Pharmacy
+billingModel:
+  pricingCategory: Contract-Based
+  billingFrequency: Monthly
+  billingCurrency: USD
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Adjustment
+focusColumns:
+  ServiceName: Truepill (FuzeRx) API
+  ServiceCategory: Healthcare and Pharmacy
+  ProviderName: Truepill
+  PublisherName: Fuze Health
+  InvoiceIssuerName: Truepill
+  BillingCurrency: USD
+  ChargeCategory: Usage
+  PricingCategory: Contract-Based
+meters:
+- name: prescription_fulfillment
+  description: Prescriptions dispensed / fulfilled, billed per contract.
+  unit: prescriptions
+  aggregation: sum
+  dimensions:
+  - account
+  - pharmacy
+- name: copay_adjudication
+  description: Insurance/copay adjudication transactions or claims, billed per contract.
+  unit: claims
+  aggregation: sum
+  dimensions:
+  - account
+  - payor
+- name: transfer_requests
+  description: Pharmacy-to-pharmacy transfer and direct-transfer operations.
+  unit: transfers
+  aggregation: sum
+  dimensions:
+  - account
+- name: platform_fee
+  description: Recurring platform / subscription fee per the commercial agreement.
+  unit: months
+  aggregation: sum
+  dimensions:
+  - account
+principles:
+- name: Visibility
+  description: Request itemized usage and billing exports from Truepill; map line items to the meters above.
+- name: Allocation
+  description: Tag API keys per brand/program; separate sandbox from production spend.
+- name: Optimization
+  description: Consolidate fulfillment volume to leverage contract tiers; minimize failed/rejected claim retries.
+- name: Accountability
+  description: Assign program owners; review fulfillment and adjudication spend monthly against contract terms.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
