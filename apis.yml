@@ -132,6 +132,10 @@ apis:
     and fulfillment. Events include callback_type, status, timestamp, and a details
     object.
 common:
+- type: DomainSecurity
+  url: security/truepill-domain-security.yml
+- type: Authentication
+  url: authentication/truepill-authentication.yml
 - type: LinkedIn
   url: https://www.linkedin.com/company/truepill
 - type: Website
