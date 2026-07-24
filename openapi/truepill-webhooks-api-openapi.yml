@@ -1,0 +1,64 @@
+openapi: 3.0.1
+info:
+  title: Truepill (FuzeRx) Insurance Webhooks API
+  description: REST API for Truepill's pharmacy and healthcare-infrastructure platform, now shipping as FuzeRx after LetsGetChecked's 2024 acquisition of Truepill and the May 2025 rebrand to Fuze Health. The API exposes JSON over HTTPS for patient management, prescriptions, pharmacy-to-pharmacy transfers, insurance and copay adjudication, and webhook event retrieval. Endpoints and field names below reflect Truepill/FuzeRx public developer documentation; request and response bodies are summarized and should be reconciled against the live reference at https://rxdocs.fuzehealth.com before production use.
+  termsOfService: https://www.truepill.com/terms-of-service
+  contact:
+    name: FuzeRx Support
+    email: rx.support@fuzehealth.com
+  version: v1
+servers:
+- url: https://rxapi.fuzehealth.com/v1
+  description: Production
+- url: https://rxapi.sandbox.fuzehealth.com/v1
+  description: Sandbox
+security:
+- ApiKeyAuth: []
+tags:
+- name: Webhooks
+  description: Asynchronous event retrieval.
+paths:
+  /webhook_events/{webhook_type}:
+    get:
+      operationId: getWebhookEvents
+      tags:
+      - Webhooks
+      summary: Retrieve webhook events by type.
+      parameters:
+      - name: webhook_type
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Webhook event type (e.g., notify_rx).
+      responses:
+        '200':
+          description: Webhook events.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WebhookEvent'
+components:
+  schemas:
+    WebhookEvent:
+      type: object
+      properties:
+        callback_type:
+          type: string
+        status:
+          type: string
+          description: success or error.
+        timestamp:
+          type: string
+          format: date-time
+        details:
+          type: object
+          description: Event-specific payload.
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'API key passed as `Authorization: ApiKey <YOUR_API_KEY>`. Separate keys are issued for the sandbox and production environments.'

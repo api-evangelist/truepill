@@ -1,0 +1,142 @@
+openapi: 3.0.1
+info:
+  title: Truepill (FuzeRx) Insurance API
+  description: REST API for Truepill's pharmacy and healthcare-infrastructure platform, now shipping as FuzeRx after LetsGetChecked's 2024 acquisition of Truepill and the May 2025 rebrand to Fuze Health. The API exposes JSON over HTTPS for patient management, prescriptions, pharmacy-to-pharmacy transfers, insurance and copay adjudication, and webhook event retrieval. Endpoints and field names below reflect Truepill/FuzeRx public developer documentation; request and response bodies are summarized and should be reconciled against the live reference at https://rxdocs.fuzehealth.com before production use.
+  termsOfService: https://www.truepill.com/terms-of-service
+  contact:
+    name: FuzeRx Support
+    email: rx.support@fuzehealth.com
+  version: v1
+servers:
+- url: https://rxapi.fuzehealth.com/v1
+  description: Production
+- url: https://rxapi.sandbox.fuzehealth.com/v1
+  description: Sandbox
+security:
+- ApiKeyAuth: []
+tags:
+- name: Insurance
+  description: Insurance objects, copay requests, and claim adjudication.
+paths:
+  /insurance:
+    post:
+      operationId: createInsurance
+      tags:
+      - Insurance
+      summary: Create an insurance object for a patient.
+      description: Establishes a patient's pharmacy benefit details (BIN, PCN, group number, member ID) for use in copay determination and claim adjudication.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Insurance'
+      responses:
+        '200':
+          description: Insurance object created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Insurance'
+  /copay_request:
+    post:
+      operationId: createCopayRequest
+      tags:
+      - Insurance
+      summary: Create a copay request.
+      description: Submits patient insurance and prescription details to determine a patient's real-time out-of-pocket expense for a medication. Results may also be delivered asynchronously via webhook events.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CopayRequest'
+      responses:
+        '200':
+          description: Copay request accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CopayResponse'
+  /insurance_claim:
+    get:
+      operationId: getInsuranceClaim
+      tags:
+      - Insurance
+      summary: Get insurance claim details.
+      description: Queries claim details from successfully adjudicated insurance claims. Access to this endpoint is restricted.
+      responses:
+        '200':
+          description: Insurance claim details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InsuranceClaim'
+components:
+  schemas:
+    Insurance:
+      type: object
+      properties:
+        patient_token:
+          type: string
+        bin:
+          type: string
+        pcn:
+          type: string
+        group_number:
+          type: string
+        member_id:
+          type: string
+        relationship_code:
+          type: string
+        priority:
+          type: string
+          description: primary, secondary, or tertiary.
+    CopayResponse:
+      type: object
+      properties:
+        copay_request_token:
+          type: string
+        status:
+          type: string
+        copay_amount:
+          type: number
+        currency:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+    InsuranceClaim:
+      type: object
+      properties:
+        claim_id:
+          type: string
+        prescription_token:
+          type: string
+        bin:
+          type: string
+        adjudicated_amount:
+          type: number
+        patient_pay_amount:
+          type: number
+        status:
+          type: string
+    CopayRequest:
+      type: object
+      properties:
+        patient_token:
+          type: string
+        prescription_token:
+          type: string
+        ndc:
+          type: string
+        quantity:
+          type: number
+        days_supply:
+          type: integer
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'API key passed as `Authorization: ApiKey <YOUR_API_KEY>`. Separate keys are issued for the sandbox and production environments.'

@@ -1,0 +1,211 @@
+openapi: 3.0.1
+info:
+  title: Truepill (FuzeRx) Insurance Patients API
+  description: REST API for Truepill's pharmacy and healthcare-infrastructure platform, now shipping as FuzeRx after LetsGetChecked's 2024 acquisition of Truepill and the May 2025 rebrand to Fuze Health. The API exposes JSON over HTTPS for patient management, prescriptions, pharmacy-to-pharmacy transfers, insurance and copay adjudication, and webhook event retrieval. Endpoints and field names below reflect Truepill/FuzeRx public developer documentation; request and response bodies are summarized and should be reconciled against the live reference at https://rxdocs.fuzehealth.com before production use.
+  termsOfService: https://www.truepill.com/terms-of-service
+  contact:
+    name: FuzeRx Support
+    email: rx.support@fuzehealth.com
+  version: v1
+servers:
+- url: https://rxapi.fuzehealth.com/v1
+  description: Production
+- url: https://rxapi.sandbox.fuzehealth.com/v1
+  description: Sandbox
+security:
+- ApiKeyAuth: []
+tags:
+- name: Patients
+  description: Patient records and demographics.
+paths:
+  /patient:
+    put:
+      operationId: createPatient
+      tags:
+      - Patients
+      summary: Create a patient record.
+      description: Creates a patient and returns an opaque patient_token used to reference the patient on subsequent requests.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatientRequest'
+      responses:
+        '200':
+          description: Patient created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PatientResponse'
+    get:
+      operationId: findPatient
+      tags:
+      - Patients
+      summary: Find a patient by demographics.
+      parameters:
+      - name: first_name
+        in: query
+        schema:
+          type: string
+      - name: last_name
+        in: query
+        schema:
+          type: string
+      - name: dob
+        in: query
+        schema:
+          type: string
+          format: date
+      responses:
+        '200':
+          description: Matching patient(s).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PatientResponse'
+  /patient/{patient_token}:
+    get:
+      operationId: getPatient
+      tags:
+      - Patients
+      summary: Retrieve patient details.
+      parameters:
+      - $ref: '#/components/parameters/PatientToken'
+      responses:
+        '200':
+          description: Patient details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PatientResponse'
+    post:
+      operationId: updatePatient
+      tags:
+      - Patients
+      summary: Update patient information.
+      parameters:
+      - $ref: '#/components/parameters/PatientToken'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatientRequest'
+      responses:
+        '200':
+          description: Patient updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PatientResponse'
+  /patient/{patient_token}/prescriptions:
+    get:
+      operationId: listPatientPrescriptions
+      tags:
+      - Patients
+      summary: List a patient's prescriptions.
+      parameters:
+      - $ref: '#/components/parameters/PatientToken'
+      responses:
+        '200':
+          description: Prescriptions for the patient.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Prescription'
+components:
+  parameters:
+    PatientToken:
+      name: patient_token
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Opaque token identifying the patient.
+  schemas:
+    Prescription:
+      type: object
+      properties:
+        prescription_token:
+          type: string
+        patient_token:
+          type: string
+        medication_name:
+          type: string
+        ndc:
+          type: string
+          description: National Drug Code.
+        quantity:
+          type: number
+        days_supply:
+          type: integer
+        directions:
+          type: string
+        status:
+          type: string
+        refills_remaining:
+          type: integer
+    PatientRequest:
+      type: object
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        dob:
+          type: string
+          format: date
+        gender:
+          type: string
+        ssn:
+          type: string
+        address_1:
+          type: string
+        address_2:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        zip:
+          type: string
+        phone_number:
+          type: string
+        email:
+          type: string
+        language_preference:
+          type: string
+        species:
+          type: string
+          description: Supports veterinary dispensing.
+    PatientResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        request_id:
+          type: string
+        details:
+          type: object
+          properties:
+            patient_token:
+              type: string
+            first_name:
+              type: string
+            last_name:
+              type: string
+            dob:
+              type: string
+              format: date
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'API key passed as `Authorization: ApiKey <YOUR_API_KEY>`. Separate keys are issued for the sandbox and production environments.'

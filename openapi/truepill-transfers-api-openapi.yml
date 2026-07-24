@@ -1,0 +1,143 @@
+openapi: 3.0.1
+info:
+  title: Truepill (FuzeRx) Insurance Transfers API
+  description: REST API for Truepill's pharmacy and healthcare-infrastructure platform, now shipping as FuzeRx after LetsGetChecked's 2024 acquisition of Truepill and the May 2025 rebrand to Fuze Health. The API exposes JSON over HTTPS for patient management, prescriptions, pharmacy-to-pharmacy transfers, insurance and copay adjudication, and webhook event retrieval. Endpoints and field names below reflect Truepill/FuzeRx public developer documentation; request and response bodies are summarized and should be reconciled against the live reference at https://rxdocs.fuzehealth.com before production use.
+  termsOfService: https://www.truepill.com/terms-of-service
+  contact:
+    name: FuzeRx Support
+    email: rx.support@fuzehealth.com
+  version: v1
+servers:
+- url: https://rxapi.fuzehealth.com/v1
+  description: Production
+- url: https://rxapi.sandbox.fuzehealth.com/v1
+  description: Sandbox
+security:
+- ApiKeyAuth: []
+tags:
+- name: Transfers
+  description: Pharmacy-to-pharmacy prescription transfers.
+paths:
+  /transfer_request:
+    post:
+      operationId: createTransferRequest
+      tags:
+      - Transfers
+      summary: Initiate a pharmacy transfer request.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferRequest'
+      responses:
+        '200':
+          description: Transfer request created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransferResponse'
+    get:
+      operationId: listTransferRequests
+      tags:
+      - Transfers
+      summary: List all transfer requests.
+      responses:
+        '200':
+          description: Transfer requests.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TransferResponse'
+  /transfer_request/{transfer_token}:
+    get:
+      operationId: getTransferRequest
+      tags:
+      - Transfers
+      summary: Get a specific transfer request.
+      parameters:
+      - name: transfer_token
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Transfer request details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransferResponse'
+  /direct_transfer:
+    post:
+      operationId: createDirectTransfer
+      tags:
+      - Transfers
+      summary: Create a direct transfer (v1).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferRequest'
+      responses:
+        '200':
+          description: Direct transfer created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransferResponse'
+  /v2/direct_transfer:
+    post:
+      operationId: createDirectTransferV2
+      tags:
+      - Transfers
+      summary: Create a direct transfer (v2).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferRequest'
+      responses:
+        '200':
+          description: Direct transfer created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransferResponse'
+components:
+  schemas:
+    TransferResponse:
+      type: object
+      properties:
+        transfer_token:
+          type: string
+        status:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        details:
+          type: object
+    TransferRequest:
+      type: object
+      properties:
+        patient_token:
+          type: string
+        prescription_token:
+          type: string
+        from_pharmacy:
+          type: string
+        to_pharmacy:
+          type: string
+        medication_name:
+          type: string
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'API key passed as `Authorization: ApiKey <YOUR_API_KEY>`. Separate keys are issued for the sandbox and production environments.'

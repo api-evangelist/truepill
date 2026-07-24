@@ -1,0 +1,94 @@
+openapi: 3.0.1
+info:
+  title: Truepill (FuzeRx) Insurance Prescriptions API
+  description: REST API for Truepill's pharmacy and healthcare-infrastructure platform, now shipping as FuzeRx after LetsGetChecked's 2024 acquisition of Truepill and the May 2025 rebrand to Fuze Health. The API exposes JSON over HTTPS for patient management, prescriptions, pharmacy-to-pharmacy transfers, insurance and copay adjudication, and webhook event retrieval. Endpoints and field names below reflect Truepill/FuzeRx public developer documentation; request and response bodies are summarized and should be reconciled against the live reference at https://rxdocs.fuzehealth.com before production use.
+  termsOfService: https://www.truepill.com/terms-of-service
+  contact:
+    name: FuzeRx Support
+    email: rx.support@fuzehealth.com
+  version: v1
+servers:
+- url: https://rxapi.fuzehealth.com/v1
+  description: Production
+- url: https://rxapi.sandbox.fuzehealth.com/v1
+  description: Sandbox
+security:
+- ApiKeyAuth: []
+tags:
+- name: Prescriptions
+  description: Prescription details and routing.
+paths:
+  /patient/{patient_token}/prescriptions:
+    get:
+      operationId: listPatientPrescriptions
+      tags:
+      - Prescriptions
+      summary: List a patient's prescriptions.
+      parameters:
+      - $ref: '#/components/parameters/PatientToken'
+      responses:
+        '200':
+          description: Prescriptions for the patient.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Prescription'
+  /prescription/{prescription_token}:
+    get:
+      operationId: getPrescription
+      tags:
+      - Prescriptions
+      summary: Get prescription details.
+      parameters:
+      - name: prescription_token
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Prescription details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Prescription'
+components:
+  parameters:
+    PatientToken:
+      name: patient_token
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Opaque token identifying the patient.
+  schemas:
+    Prescription:
+      type: object
+      properties:
+        prescription_token:
+          type: string
+        patient_token:
+          type: string
+        medication_name:
+          type: string
+        ndc:
+          type: string
+          description: National Drug Code.
+        quantity:
+          type: number
+        days_supply:
+          type: integer
+        directions:
+          type: string
+        status:
+          type: string
+        refills_remaining:
+          type: integer
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'API key passed as `Authorization: ApiKey <YOUR_API_KEY>`. Separate keys are issued for the sandbox and production environments.'
