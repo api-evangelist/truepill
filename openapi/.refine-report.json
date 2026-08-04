@@ -1,0 +1,22 @@
+{
+  "provider": "truepill",
+  "sources": [
+    "truepill-insurance-api-openapi.yml",
+    "truepill-patients-api-openapi.yml",
+    "truepill-prescriptions-api-openapi.yml",
+    "truepill-transfers-api-openapi.yml",
+    "truepill-webhooks-api-openapi.yml"
+  ],
+  "outputs": [
+    "truepill-insurance-api-openapi.yml",
+    "truepill-patients-api-openapi.yml",
+    "truepill-prescriptions-api-openapi.yml",
+    "truepill-transfers-api-openapi.yml",
+    "truepill-webhooks-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
