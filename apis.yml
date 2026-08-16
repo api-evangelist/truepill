@@ -30,8 +30,14 @@ tags:
 - Telehealth
 - Diagnostics
 - Insurance
+- Copay Adjudication
+- Prior Authorization
+- Electronic Prescribing
+- Pharmacy Transfers
+- Webhooks
+- HIPAA
 created: '2026-06-21'
-modified: '2026-06-21'
+modified: '2026-08-15'
 specificationVersion: '0.19'
 apis:
 - aid: truepill:truepill-insurance-api
@@ -44,6 +50,8 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/truepill-insurance-api-openapi.yml
+  - type: Overlay
+    url: overlays/truepill-insurance-api-overlay.yaml
   - type: Documentation
     url: https://rxdocs.fuzehealth.com
   - type: PostmanCollection
@@ -62,6 +70,8 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/truepill-patients-api-openapi.yml
+  - type: Overlay
+    url: overlays/truepill-patients-api-overlay.yaml
   - type: Documentation
     url: https://rxdocs.fuzehealth.com
   - type: PostmanCollection
@@ -80,6 +90,8 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/truepill-prescriptions-api-openapi.yml
+  - type: Overlay
+    url: overlays/truepill-prescriptions-api-overlay.yaml
   - type: Documentation
     url: https://rxdocs.fuzehealth.com
   - type: PostmanCollection
@@ -98,6 +110,8 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/truepill-transfers-api-openapi.yml
+  - type: Overlay
+    url: overlays/truepill-transfers-api-overlay.yaml
   - type: Documentation
     url: https://rxdocs.fuzehealth.com
   - type: PostmanCollection
@@ -124,6 +138,80 @@ apis:
     url: collections/truepill.opencollection.json
   - type: APIReference
     url: https://tpos-api.truepill.com/documentation/
+  - type: Overlay
+    url: overlays/truepill-webhooks-api-overlay.yaml
+- aid: truepill:truepill-fulfillment-api
+  name: Truepill Fulfillment API
+  description: >-
+    Fill requests, orders, NDC availability, prescribers, same-day delivery and specialty-pharmacy
+    routing — the dispensing core of the FuzeRx platform. 42 operations. Submissions are accepted
+    asynchronously and resolve as ORDER and SHIPMENT webhook events.
+  humanURL: https://rxdocs.fuzehealth.com
+  baseURL: https://rxapi.fuzehealth.com/v1
+  tags:
+  - Fulfillment
+  - Dispensing
+  - Orders
+  - Shipping
+  properties:
+  - type: OpenAPI
+    url: openapi/truepill-fulfillment-api-openapi.yml
+  - type: Overlay
+    url: overlays/truepill-fulfillment-api-overlay.yaml
+  - type: Documentation
+    url: https://rxdocs.fuzehealth.com
+- aid: truepill:truepill-consults-api
+  name: Truepill Consults API
+  description: >-
+    Telehealth consult creation, retrieval, media attachment and status simulation. Published at v0
+    under /consults/v0 — pre-1.0 by the provider's own numbering, with no stability statement.
+  humanURL: https://rxdocs.fuzehealth.com
+  baseURL: https://rxapi.fuzehealth.com/consults/v0
+  tags:
+  - Telehealth
+  - Consults
+  properties:
+  - type: OpenAPI
+    url: openapi/truepill-consults-api-openapi.yml
+  - type: Overlay
+    url: overlays/truepill-consults-api-overlay.yaml
+  - type: Documentation
+    url: https://rxdocs.fuzehealth.com
+- aid: truepill:truepill-diagnostics-api
+  name: Truepill Diagnostics API
+  description: >-
+    At-home diagnostics — test catalogue, kit serial validation, order creation and registration,
+    rejection detail and results retrieval. Published at v0, with a v2 results endpoint alongside it.
+  humanURL: https://rxdocs.fuzehealth.com
+  baseURL: https://rxapi.fuzehealth.com/diagnostics/v0
+  tags:
+  - Diagnostics
+  - Lab Testing
+  properties:
+  - type: OpenAPI
+    url: openapi/truepill-diagnostics-api-openapi.yml
+  - type: Overlay
+    url: overlays/truepill-diagnostics-api-overlay.yaml
+  - type: Documentation
+    url: https://rxdocs.fuzehealth.com
+- aid: truepill:truepill-media-api
+  name: Truepill Media API
+  description: >-
+    File records for patient identification photos and selfies, backed by Google Cloud Storage signed
+    URLs — the API mints a read or write signed URL and the client transfers the bytes directly, so
+    no image data transits the API itself. Both v1 and v2 are live.
+  humanURL: https://rxdocs.fuzehealth.com
+  baseURL: https://rxapi.fuzehealth.com/v1
+  tags:
+  - Media
+  - Document Upload
+  properties:
+  - type: OpenAPI
+    url: openapi/truepill-media-api-openapi.yml
+  - type: Overlay
+    url: overlays/truepill-media-api-overlay.yaml
+  - type: Documentation
+    url: https://rxdocs.fuzehealth.com
 common:
 - type: AgenticAccess
   url: agentic-access/truepill-agentic-access.yml
@@ -143,6 +231,53 @@ common:
   url: rate-limits/truepill-rate-limits.yml
 - type: FinOps
   url: finops/truepill-finops.yml
+- type: DeveloperPortal
+  url: https://rx.fuzehealth.com/api-docs
+- type: APIReference
+  url: https://rxdocs.fuzehealth.com
+- type: GettingStarted
+  url: https://rx.fuzehealth.com/api-docs/introduction
+- type: Support
+  url: https://rx.fuzehealth.com/contact
+- type: GitHubOrganization
+  url: https://github.com/truepill
+- type: TermsOfService
+  url: https://rx.fuzehealth.com/legal/terms-and-conditions
+- type: PrivacyPolicy
+  url: https://rx.fuzehealth.com/legal/privacy
+- type: StatusPage
+  url: https://status.rx.fuzehealth.com
+- type: Compliance
+  url: https://rxdocs.fuzehealth.com/#hipaa-amp-security
+- type: Lifecycle
+  url: lifecycle/truepill-lifecycle.yml
+- type: Conventions
+  url: conventions/truepill-conventions.yml
+- type: Conformance
+  url: conformance/truepill-conformance.yml
+- type: DataModel
+  url: data-model/truepill-data-model.yml
+- type: Packages
+  url: packages/truepill-packages.yml
+- type: Sandbox
+  url: sandbox/truepill-sandbox.yml
+- type: Webhooks
+  url: asyncapi/truepill-webhooks.yml
+- type: ErrorCatalog
+  url: errors/truepill-problem-types.yml
+- type: ErrorCodes
+  url: errors/truepill-error-codes.yml
+- type: DeclineCodes
+  url: errors/truepill-decline-codes.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: LLMsTxt
+  url: llms/truepill-llms.txt
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
+x-enrichment:
+  date: '2026-08-15'
+  status: enriched
+  artifacts_added: 18
+  pass: local-v1
