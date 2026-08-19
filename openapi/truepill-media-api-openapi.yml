@@ -1,0 +1,754 @@
+openapi: 3.0.3
+info:
+  title: Truepill Media API
+  description: 'Media upload and retrieval with signed read/write URLs (v1 and v2).
+
+
+    Harvested verbatim from the live Truepill (FuzeRx) Swagger 2.0 contract published at https://rxapi.fuzehealth.com/swagger.json
+    and split by resource domain. Operation summaries, descriptions, parameters, schemas and response
+    codes are the provider''s own; only the Swagger 2.0 -> OpenAPI 3.0.3 conversion and the domain split
+    are ours.'
+  version: 0.0.1
+  contact:
+    name: FuzeRx Support
+    url: https://rxdocs.fuzehealth.com
+servers:
+- url: https://rxapi.fuzehealth.com
+  description: Production
+security:
+- apiKey: []
+tags:
+- name: media
+  description: Media upload and retrieval with signed read/write URLs (v1 and v2).
+paths:
+  /api/v1/media:
+    post:
+      summary: Create media record by file name provided
+      operationId: postApiV1Media
+      tags:
+      - media
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateMedia'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model160'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model3'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model161'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model9'
+  /api/v1/media/{id}:
+    get:
+      summary: Get media by id
+      operationId: getApiV1MediaId
+      tags:
+      - media
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Should be a uuid
+        schema:
+          type: string
+          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model54'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model55'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model56'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model9'
+  /api/v1/media/{id}/signed-url/read:
+    get:
+      summary: Generate signing-url for read file from google storage
+      operationId: getApiV1MediaIdSignedurlRead
+      tags:
+      - media
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Should be a uuid
+        schema:
+          type: string
+          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+                example: https://storage.googleapis.com/1512a193-065b-4360-bd1f-48b8a260f140?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=upload-scanner%40serviceaccount.com%2F20211126%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20211126T130011Z&X-Goog-Expires=900&X-Goog-SignedHeaders=content-type%3Bhost&X-Goog-Signature=123
+                pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model55'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model108'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model56'
+        '422':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model109'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model9'
+  /api/v1/media/{id}/signed-url/write:
+    get:
+      summary: Generate signing-url for write file in to google storage
+      operationId: getApiV1MediaIdSignedurlWrite
+      tags:
+      - media
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Should be a uuid
+        schema:
+          type: string
+          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+                example: https://storage.googleapis.com/1512a193-065b-4360-bd1f-48b8a260f140?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=upload-scanner%40serviceaccount.com%2F20211126%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20211126T130011Z&X-Goog-Expires=900&X-Goog-SignedHeaders=content-type%3Bhost&X-Goog-Signature=123
+                pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model55'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model108'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model56'
+        '422':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model109'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model9'
+  /api/v2/media:
+    post:
+      summary: Create media record by file name provided
+      operationId: postApiV2Media
+      tags:
+      - media
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateMediaV2'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model188'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model3'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model161'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model9'
+  /api/v2/media/{id}:
+    get:
+      summary: Generate signing-url for read file from google storage
+      operationId: getApiV2MediaId
+      tags:
+      - media
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Should be a uuid
+        schema:
+          type: string
+          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model75'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model55'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model56'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model9'
+  /v1/media:
+    post:
+      summary: Create media record by file name provided
+      operationId: postV1Media
+      tags:
+      - media
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateMedia'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model160'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model3'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model161'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model9'
+  /v1/media/{id}:
+    get:
+      summary: Get media by id
+      operationId: getV1MediaId
+      tags:
+      - media
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Should be a uuid
+        schema:
+          type: string
+          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model54'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model55'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model56'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model9'
+  /v1/media/{id}/signed-url/read:
+    get:
+      summary: Generate signing-url for read file from google storage
+      operationId: getV1MediaIdSignedurlRead
+      tags:
+      - media
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Should be a uuid
+        schema:
+          type: string
+          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+                example: https://storage.googleapis.com/1512a193-065b-4360-bd1f-48b8a260f140?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=upload-scanner%40serviceaccount.com%2F20211126%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20211126T130011Z&X-Goog-Expires=900&X-Goog-SignedHeaders=content-type%3Bhost&X-Goog-Signature=123
+                pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model55'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model108'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model56'
+        '422':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model109'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model9'
+  /v1/media/{id}/signed-url/write:
+    get:
+      summary: Generate signing-url for write file in to google storage
+      operationId: getV1MediaIdSignedurlWrite
+      tags:
+      - media
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Should be a uuid
+        schema:
+          type: string
+          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+                example: https://storage.googleapis.com/1512a193-065b-4360-bd1f-48b8a260f140?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=upload-scanner%40serviceaccount.com%2F20211126%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20211126T130011Z&X-Goog-Expires=900&X-Goog-SignedHeaders=content-type%3Bhost&X-Goog-Signature=123
+                pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model55'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model108'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model56'
+        '422':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model109'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model9'
+  /v2/media:
+    post:
+      summary: Create media record by file name provided
+      operationId: postV2Media
+      tags:
+      - media
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateMediaV2'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model188'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model3'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model161'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model9'
+  /v2/media/{id}:
+    get:
+      summary: Generate signing-url for read file from google storage
+      operationId: getV2MediaId
+      tags:
+      - media
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Should be a uuid
+        schema:
+          type: string
+          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model75'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model55'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model56'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model9'
+components:
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: API key passed in the Authorization header. Separate keys are issued for sandbox and
+        production.
+  schemas:
+    CreateMedia:
+      type: object
+      properties:
+        fileName:
+          type: string
+          description: File name which is unique uuid identifier
+          example: 812750e4-1cae-44e5-8212-a9a2f9776fca
+          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+        title:
+          type: string
+          description: Human readable media title
+          example: Skin damage media
+      required:
+      - fileName
+    CreateMediaV2:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Human readable media title
+          example: Skin damage media
+          maxLength: 255
+      required:
+      - name
+    Model108:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 403
+        error:
+          type: string
+          example: Forbidden
+        message:
+          type: string
+          example: This file cannot be downloaded
+    Model109:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 422
+        error:
+          type: string
+          example: Unprocessable Entity
+        message:
+          type: string
+          example: File with this name already exists
+    Model160:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 059d52b6-b2b0-4bd1-97df-082b1e2196c1
+        createdAt:
+          type: string
+          description: Date when media was uploaded to the bucket
+          example: '2021-11-09T08:00:00.000Z'
+        updatedAt:
+          type: string
+          description: Date when media status had been changed
+          example: '2021-11-09T08:00:00.000Z'
+        title:
+          type: string
+          description: Human readable media title
+          example: Skin damage media
+        status:
+          type: string
+          description: Captures whether we are currently scanning the media, or whether it is safe or
+            not. Quarantined medias are inaccessible
+          example: AVAILABLE
+    Model161:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 404
+        error:
+          type: string
+          example: Not Found
+        message:
+          type: string
+          example: Media not found
+    Model188:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 059d52b6-b2b0-4bd1-97df-082b1e2196c1
+          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+        name:
+          type: string
+          description: Human readable media title
+          example: Right ear
+        status:
+          type: string
+          description: Captures whether we are currently scanning the media, or whether it is safe or
+            not. Quarantined medias are inaccessible
+          example: AVAILABLE
+          enum:
+          - REVIEWING
+          - AVAILABLE
+          - QUARANTINE
+          - AWAITING_UPLOADING
+        upload_url:
+          type: string
+          description: 'This link is for file upload using PUT. Lifetime 24h. File limit 4 GB using header:
+            x-goog-content-length-range:0,4000000000'
+          example: https://storage.googleapis.com/1512a193-065b-4360-bd1f-48b8a260f140?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=upload-scanner%40serviceaccount.com%2F20211126%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20211126T130011Z&X-Goog-Expires=900&X-Goog-SignedHeaders=content-type%3Bhost&X-Goog-Signature=123
+          x-format:
+            uri: true
+      required:
+      - id
+      - name
+      - status
+      - upload_url
+    Model3:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 401
+        error:
+          type: string
+          example: Unauthorized
+        message:
+          type: string
+          example: Invalid credentials
+    Model54:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 059d52b6-b2b0-4bd1-97df-082b1e2196c1
+          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+        createdAt:
+          type: string
+          example: '2021-11-09T08:00:00.000Z'
+        updatedAt:
+          type: string
+          example: '2021-11-09T08:00:00.000Z'
+        title:
+          type: string
+          example: Right ear
+        status:
+          type: string
+          example: AVAILABLE
+    Model55:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 401
+        error:
+          type: string
+          example: Unauthorized
+        message:
+          type: string
+          example: Invalid Credentials passed
+    Model56:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 404
+        error:
+          type: string
+          example: Not Found
+        message:
+          type: string
+          example: Media with id not found
+    Model75:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 059d52b6-b2b0-4bd1-97df-082b1e2196c1
+          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+        name:
+          type: string
+          example: Right ear
+        status:
+          type: string
+          example: AVAILABLE
+          enum:
+          - REVIEWING
+          - AVAILABLE
+          - QUARANTINE
+          - AWAITING_UPLOADING
+        url:
+          type: string
+          description: This link is for read file using GET. Lifetime 24h.
+          example: https://storage.googleapis.com/1512a193-065b-4360-bd1f-48b8a260f140?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=upload-scanner%40serviceaccount.com%2F20211126%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20211126T130011Z&X-Goog-Expires=900&X-Goog-SignedHeaders=content-type%3Bhost&X-Goog-Signature=123
+      required:
+      - id
+      - name
+      - status
+      - url
+    Model9:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 500
+        error:
+          type: string
+          example: An internal server error occurred
+        message:
+          type: string
+          example: An internal server error occurred

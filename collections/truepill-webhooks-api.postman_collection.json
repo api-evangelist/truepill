@@ -1,0 +1,142 @@
+{
+  "item": [
+    {
+      "id": "a509bf0f-932e-43cf-be6c-cb771b0a4c79",
+      "name": "Webhooks",
+      "description": {
+        "content": "Asynchronous event retrieval.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "d6ff2f2a-6020-4f53-acd2-914e54cb8479",
+          "name": "Retrieve webhook events by type.",
+          "request": {
+            "name": "Retrieve webhook events by type.",
+            "description": {},
+            "url": {
+              "path": [
+                "webhook_events",
+                ":webhook_type"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "webhook_type",
+                  "description": "(Required) Webhook event type (e.g., notify_rx)."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9210574e-5e9e-44e9-ae84-3e26e53a413f",
+              "name": "Webhook events.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "webhook_events",
+                    ":webhook_type"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "webhook_type",
+                      "description": "(Required) Webhook event type (e.g., notify_rx)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"callback_type\": \"string\",\n    \"status\": \"string\",\n    \"timestamp\": \"1964-08-09T17:03:37.563Z\",\n    \"details\": {}\n  },\n  {\n    \"callback_type\": \"string\",\n    \"status\": \"string\",\n    \"timestamp\": \"1958-04-18T01:21:44.089Z\",\n    \"details\": {}\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://rxapi.fuzehealth.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Authorization"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "03ddc787-7881-41ec-a53f-23cf367e2791",
+    "name": "Truepill (FuzeRx) Insurance Webhooks API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "REST API for Truepill's pharmacy and healthcare-infrastructure platform, now shipping as FuzeRx after LetsGetChecked's 2024 acquisition of Truepill and the May 2025 rebrand to Fuze Health. The API exposes JSON over HTTPS for patient management, prescriptions, pharmacy-to-pharmacy transfers, insurance and copay adjudication, and webhook event retrieval. Endpoints and field names below reflect Truepill/FuzeRx public developer documentation; request and response bodies are summarized and should be reconciled against the live reference at https://rxdocs.fuzehealth.com before production use.\n\nContact Support:\n Name: FuzeRx Support\n Email: rx.support@fuzehealth.com",
+      "type": "text/plain"
+    }
+  }
+}

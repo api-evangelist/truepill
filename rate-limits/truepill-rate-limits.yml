@@ -4,7 +4,23 @@ schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main
 provider: Truepill
 providerId: truepill
 created: '2026-06-21'
-modified: '2026-06-21'
+modified: '2026-08-15'
+method: searched
+source: >-
+  https://rxdocs.fuzehealth.com, https://rx.fuzehealth.com/api-docs and the live Swagger contract at
+  https://rxapi.fuzehealth.com/swagger.json — re-checked 2026-08-15. No rate limit, quota, throttle
+  or concurrency figure is published anywhere, and no rate-limit response header (X-RateLimit-*,
+  RateLimit-*, Retry-After) is declared on any of the 158 operations in the contract.
+limit_count: 0
+limit_count_note: >-
+  limit_count is 0 because the provider publishes NO numeric limits. The entries below name the
+  surfaces a limit would apply to and record that each is undocumented — they are not published
+  values. The 429 in responseCodes is the conventional expectation, NOT an observed or documented
+  behaviour of this API.
+headers_published: []
+headers_note: >-
+  An agent gets no runtime rate-limit signal from this API at all. There is nothing to read on a
+  response to decide whether to back off, which matters more here than the missing numbers.
 reconciled: false
 tags:
 - Pharmacy

@@ -1,0 +1,90 @@
+# Truepill (FuzeRx)
+
+> Truepill is a pharmacy and healthcare-infrastructure company providing API-driven prescription
+> fulfillment, pharmacy dispensing, insurance/copay adjudication, telehealth consults, and at-home
+> diagnostics. After LetsGetChecked's 2024 acquisition of Truepill the combined company rebranded as
+> Fuze Health in May 2025, and the developer platform now ships as FuzeRx. The REST API is a
+> JSON-over-HTTPS surface at https://rxapi.fuzehealth.com, authenticated with a single provisioned
+> API key, and it is asynchronous by design — most business outcomes arrive as webhook events rather
+> than in the response body.
+
+<!--
+generated: '2026-08-15'
+method: generated
+source: apis.yml + repo artifacts (no /llms.txt is published on any Truepill / Fuze Health host —
+  rxdocs.fuzehealth.com/llms.txt returned 403, rxapi.fuzehealth.com/llms.txt returned 401,
+  www.truepill.com/llms.txt, fuzehealth.com/llms.txt and rx.fuzehealth.com/llms.txt returned 404,
+  probed 2026-08-15). This document is written by API Evangelist, not by the provider.
+-->
+
+## What an agent needs to know first
+
+- **Base URL:** `https://rxapi.fuzehealth.com` — production. Sandbox is a separate host,
+  `https://rxapi.sandbox.fuzehealth.com`.
+- **Auth:** one header, `Authorization: ApiKey <YOUR API KEY>`. Production keys are prefixed
+  `tp_live_key_`, sandbox keys `tp_test_key_`. Keys are provisioned during commercial onboarding —
+  there is no self-serve signup, no OAuth, and no scopes.
+- **Versioning:** path prefix. `/v1/` is current; `/v0/` carries consults and diagnostics; `/v2/`
+  exists only for direct transfer, media and diagnostics results. Every `/v1` and `/v2` path is also
+  mounted under `/api` (`/api/v1/patient`); the docs only use the un-prefixed form.
+- **`PUT /v1/patient` CREATES a patient. `POST /v1/patient/{patient_token}` UPDATES one.** This
+  inverts the usual REST convention and is the most common integration mistake on this API.
+- **There is NO idempotency key.** Do not blindly retry a POST to `/v1/fill_request`,
+  `/v1/copay_request`, `/v1/transfer_request`, `/v1/direct_transfer` or `/v1/order` — a retry can
+  dispense a second prescription. Recover by polling the matching GET or the webhook-event feed, and
+  read `R1` / `TRANSFER_DUPLICATE` / `DUPLICATE_REQUEST` as confirmation the first attempt landed.
+- **Errors are proprietary, not RFC 9457.** `{statusCode, error, message, validation_errors[]}` with
+  `application/json`. A 400 carries `validation_errors[]` of `{key, message}` naming the bad field.
+- **This API handles PHI.** Every opaque token (`patient_token`, `prescription_token`, …) is
+  PHI-adjacent. HIPAA applies.
+
+## Machine-readable contract
+
+- [Live Swagger 2.0, production](https://rxapi.fuzehealth.com/swagger.json) — 158 operations, served
+  anonymously, not linked from the documentation
+- [Live Swagger 2.0, sandbox](https://rxapi.sandbox.fuzehealth.com/swagger.json)
+- [Patients API (OpenAPI 3.0.3)](https://raw.githubusercontent.com/api-evangelist/truepill/refs/heads/main/openapi/truepill-patients-api-openapi.yml)
+- [Prescriptions API](https://raw.githubusercontent.com/api-evangelist/truepill/refs/heads/main/openapi/truepill-prescriptions-api-openapi.yml)
+- [Fulfillment API](https://raw.githubusercontent.com/api-evangelist/truepill/refs/heads/main/openapi/truepill-fulfillment-api-openapi.yml)
+- [Insurance API](https://raw.githubusercontent.com/api-evangelist/truepill/refs/heads/main/openapi/truepill-insurance-api-openapi.yml)
+- [Transfers API](https://raw.githubusercontent.com/api-evangelist/truepill/refs/heads/main/openapi/truepill-transfers-api-openapi.yml)
+- [Webhooks API](https://raw.githubusercontent.com/api-evangelist/truepill/refs/heads/main/openapi/truepill-webhooks-api-openapi.yml)
+- [Consults API](https://raw.githubusercontent.com/api-evangelist/truepill/refs/heads/main/openapi/truepill-consults-api-openapi.yml)
+- [Diagnostics API](https://raw.githubusercontent.com/api-evangelist/truepill/refs/heads/main/openapi/truepill-diagnostics-api-openapi.yml)
+- [Media API](https://raw.githubusercontent.com/api-evangelist/truepill/refs/heads/main/openapi/truepill-media-api-openapi.yml)
+
+## Provider documentation
+
+- [FuzeRx API reference](https://rxdocs.fuzehealth.com) — the full endpoint reference
+- [FuzeRx developer portal](https://rx.fuzehealth.com/api-docs)
+- [Getting started](https://rx.fuzehealth.com/api-docs/introduction)
+- [Status page](https://status.rx.fuzehealth.com) — Atlassian Statuspage; Core APIs, Webhooks,
+  Pharmacy Systems, Virtual Pharmacy, Truepill Dashboard
+- [Terms and conditions](https://rx.fuzehealth.com/legal/terms-and-conditions)
+- [Privacy policy](https://rx.fuzehealth.com/legal/privacy)
+- [Notice of privacy practices](https://rx.fuzehealth.com/legal/nopp)
+- Support: rx.support@fuzehealth.com · 1-833-860-1057
+
+## Derived artifacts (API Evangelist)
+
+- [Authentication profile](https://raw.githubusercontent.com/api-evangelist/truepill/refs/heads/main/authentication/truepill-authentication.yml)
+- [API conventions](https://raw.githubusercontent.com/api-evangelist/truepill/refs/heads/main/conventions/truepill-conventions.yml)
+- [Webhook / event catalogue](https://raw.githubusercontent.com/api-evangelist/truepill/refs/heads/main/asyncapi/truepill-webhooks.yml)
+- [HTTP problem types](https://raw.githubusercontent.com/api-evangelist/truepill/refs/heads/main/errors/truepill-problem-types.yml)
+- [Business error codes](https://raw.githubusercontent.com/api-evangelist/truepill/refs/heads/main/errors/truepill-error-codes.yml)
+- [Copay decline codes](https://raw.githubusercontent.com/api-evangelist/truepill/refs/heads/main/errors/truepill-decline-codes.yml)
+- [Sandbox and simulations](https://raw.githubusercontent.com/api-evangelist/truepill/refs/heads/main/sandbox/truepill-sandbox.yml)
+- [Lifecycle and versioning](https://raw.githubusercontent.com/api-evangelist/truepill/refs/heads/main/lifecycle/truepill-lifecycle.yml)
+- [Conformance](https://raw.githubusercontent.com/api-evangelist/truepill/refs/heads/main/conformance/truepill-conformance.yml)
+- [Data model](https://raw.githubusercontent.com/api-evangelist/truepill/refs/heads/main/data-model/truepill-data-model.yml)
+- [Agent skills](https://raw.githubusercontent.com/api-evangelist/truepill/refs/heads/main/skills/_index.yml)
+- [apis.yml](https://raw.githubusercontent.com/api-evangelist/truepill/refs/heads/main/apis.yml)
+
+## Optional — what this provider does NOT publish
+
+- No MCP server, no A2A agent card, no GraphQL, no gRPC, no AsyncAPI document.
+- No first-party SDK in any package registry; docs show raw curl and `fetch()` only.
+- No `/.well-known/` documents on any host, no `llms.txt`, no public Postman workspace.
+- No public pricing, no self-serve signup, no changelog, no deprecation policy, no SLA.
+- No documented rate limits and no rate-limit response headers.
+- No webhook signature or verification mechanism.

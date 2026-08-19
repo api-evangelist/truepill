@@ -1,0 +1,994 @@
+openapi: 3.0.3
+info:
+  title: Truepill Diagnostics API
+  description: 'At-home diagnostics: test and kit catalogs, order creation and registration, kit serial
+    validation, results and rejections.
+
+
+    Harvested verbatim from the live Truepill (FuzeRx) Swagger 2.0 contract published at https://rxapi.fuzehealth.com/swagger.json
+    and split by resource domain. Operation summaries, descriptions, parameters, schemas and response
+    codes are the provider''s own; only the Swagger 2.0 -> OpenAPI 3.0.3 conversion and the domain split
+    are ours.'
+  version: 0.0.1
+  contact:
+    name: FuzeRx Support
+    url: https://rxdocs.fuzehealth.com
+servers:
+- url: https://rxapi.fuzehealth.com
+  description: Production
+security:
+- apiKey: []
+tags:
+- name: diagnostics
+  description: 'At-home diagnostics: test and kit catalogs, order creation and registration, kit serial
+    validation, results and rejections.'
+paths:
+  /diagnostics/v0/kits:
+    get:
+      summary: Get Kits
+      description: Get available kits.
+      operationId: getDiagnosticsV0Kits
+      tags:
+      - diagnostics
+      responses:
+        '200':
+          description: The set of all test kits
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KitResponse'
+        '400':
+          description: There is an issue with your request. Inspection of the response body will yield
+            more details
+        '401':
+          description: Authorization missing or invalid
+        '404':
+          description: Kit not found
+        '500':
+          description: An unexpected, likely ephemeral scenario occurred. The request will have to be
+            retried later. We recommend reaching out to Truepill if this is a persistent issue.
+  /diagnostics/v0/kits/{kit_id}/validation/kit_serial:
+    get:
+      summary: Validate Kit Serial
+      description: Validate that the kit serial is valid for use, according to checks in the diagnostic-api.
+      operationId: getDiagnosticsV0KitsKit_idValidationKit_serial
+      tags:
+      - diagnostics
+      parameters:
+      - name: kit_id
+        in: path
+        required: true
+        description: Kit ID
+        schema:
+          type: string
+      - name: test
+        in: query
+        required: true
+        description: Kit Serial
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The kit serial is valid
+          content:
+            application/json:
+              schema:
+                type: boolean
+        '400':
+          description: There is an issue with your request. Inspection of the response body will yield
+            more details
+        '401':
+          description: Authorization missing or invalid
+        '404':
+          description: Kit not found
+        '500':
+          description: An unexpected, likely ephemeral scenario occurred. The request will have to be
+            retried later. We recommend reaching out to Truepill if this is a persistent issue.
+  /diagnostics/v0/orders:
+    get:
+      summary: Get Orders
+      description: "Get all orders. Supports searching with a simple DSL: \n        [operator]:value where\
+        \ [operator] is one of: '$lt' for \"less than\" '$lte' for \"less than or equal to\" '$eq' for\
+        \ \"equal to\" '$gte' for \"greater than or equal to\" '$gt' for \"greater than\""
+      operationId: getDiagnosticsV0Orders
+      tags:
+      - diagnostics
+      parameters:
+      - name: limit
+        in: query
+        description: Limited Quantity information
+        schema:
+          type: number
+      - name: test_id
+        in: query
+        description: 'query + ID indicating which test should to be ordered. Acceptable query values include:
+          ''$eq:'' (equals), ''$gt:'' (greater than), ''$gte:'' (greater than or equal to), ''$lt:'' (less
+          than), ''$lte:'' (less than or equal to)'
+        schema:
+          type: string
+          pattern: ^(\$gt:|\$gte:|\$lt:|\$lte:|\$eq:)[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+      - name: kit_id
+        in: query
+        description: 'query + ID indicating which kit should be ordered. Acceptable query values include:
+          ''$eq:'' (equals), ''$gt:'' (greater than), ''$gte:'' (greater than or equal to), ''$lt:'' (less
+          than), ''$lte:'' (less than or equal to)'
+        schema:
+          type: string
+          pattern: ^(\$gt:|\$gte:|\$lt:|\$lte:|\$eq:)[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+      - name: custom_data_1
+        in: query
+        description: A custom data string for external use. This can be any arbitrary UTF-8 string
+        schema:
+          type: string
+          pattern: ^(\$gt:|\$gte:|\$lt:|\$lte:|\$eq:).+$
+      - name: custom_data_2
+        in: query
+        description: A custom data string for external use. This can be any arbitrary UTF-8 string
+        schema:
+          type: string
+          pattern: ^(\$gt:|\$gte:|\$lt:|\$lte:|\$eq:).+$
+      - name: custom_data_3
+        in: query
+        description: A custom data string for external use. This can be any arbitrary UTF-8 string
+        schema:
+          type: string
+          pattern: ^(\$gt:|\$gte:|\$lt:|\$lte:|\$eq:).+$
+      - name: panels
+        in: query
+        schema:
+          type: array
+          items:
+            type: string
+      - name: pageToken
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The set of all orders
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderResponse'
+        '400':
+          description: There is an issue with your request. Inspection of the response body will yield
+            more details
+        '401':
+          description: Authorization missing or invalid
+        '500':
+          description: An unexpected, likely ephemeral scenario occurred. The request will have to be
+            retried later. We recommend reaching out to Truepill if this is a persistent issue.
+    post:
+      summary: Post Order
+      description: Create a new order, and fulfill a new kit to the patient for that order. If there's
+        already a kit for this patient, use the "register" endpoint instead of this endpoint.
+      operationId: postDiagnosticsV0Orders
+      tags:
+      - diagnostics
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostOrders'
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '201':
+          description: The created order
+        '400':
+          description: There is an issue with your request. Inspection of the response body will yield
+            more details
+        '401':
+          description: Authorization missing or invalid
+        '500':
+          description: An unexpected, likely ephemeral scenario occurred. The request will have to be
+            retried later. We recommend reaching out to Truepill if this is a persistent issue.
+  /diagnostics/v0/orders/register:
+    post:
+      summary: Register Order
+      description: Register a new order using an existing kit serial.
+      operationId: postDiagnosticsV0OrdersRegister
+      tags:
+      - diagnostics
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterOrder'
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '201':
+          description: The created order
+        '400':
+          description: There is an issue with your request. Inspection of the response body will yield
+            more details
+        '401':
+          description: Authorization missing or invalid
+        '500':
+          description: An unexpected, likely ephemeral scenario occurred. The request will have to be
+            retried later. We recommend reaching out to Truepill if this is a persistent issue.
+  /diagnostics/v0/orders/{order_id}:
+    get:
+      summary: Get Order By Id
+      description: Get order
+      operationId: getDiagnosticsV0OrdersOrder_id
+      tags:
+      - diagnostics
+      parameters:
+      - name: order_id
+        in: path
+        required: true
+        description: Order ID
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The given order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          description: There is an issue with your request. Inspection of the response body will yield
+            more details
+        '401':
+          description: Authorization missing or invalid
+        '500':
+          description: An unexpected, likely ephemeral scenario occurred. The request will have to be
+            retried later. We recommend reaching out to Truepill if this is a persistent issue.
+  /diagnostics/v0/orders/{order_id}/rejection:
+    get:
+      summary: Get Orders Rejection
+      description: Get test rejections for order
+      operationId: getDiagnosticsV0OrdersOrder_idRejection
+      tags:
+      - diagnostics
+      parameters:
+      - name: order_id
+        in: path
+        required: true
+        description: Diagnostics-specific order UUID (not used by other APIs)
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The rejections
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetOrderRejectionResponse'
+        '400':
+          description: There is an issue with your request. Inspection of the response body will yield
+            more details
+        '401':
+          description: Authorization missing or invalid
+        '500':
+          description: An unexpected, likely ephemeral scenario occurred. The request will have to be
+            retried later. We recommend reaching out to Truepill if this is a persistent issue.
+  /diagnostics/v0/orders/{order_id}/results:
+    get:
+      summary: Get Order Results
+      description: Get test results for order
+      operationId: getDiagnosticsV0OrdersOrder_idResults
+      tags:
+      - diagnostics
+      parameters:
+      - name: order_id
+        in: path
+        required: true
+        description: Diagnostics-specific order UUID (not used by other APIs)
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The set of all tests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderResultResponse'
+        '400':
+          description: There is an issue with your request. Inspection of the response body will yield
+            more details
+        '401':
+          description: Authorization missing or invalid
+        '500':
+          description: An unexpected, likely ephemeral scenario occurred. The request will have to be
+            retried later. We recommend reaching out to Truepill if this is a persistent issue.
+  /diagnostics/v0/tests:
+    get:
+      summary: Get Tests
+      description: Get available tests
+      operationId: getDiagnosticsV0Tests
+      tags:
+      - diagnostics
+      responses:
+        '200':
+          description: The set of all tests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestResponse'
+        '400':
+          description: There is an issue with your request. Inspection of the response body will yield
+            more details
+        '401':
+          description: Authorization missing or invalid
+        '500':
+          description: An unexpected, likely ephemeral scenario occurred. The request will have to be
+            retried later. We recommend reaching out to Truepill if this is a persistent issue.
+  /diagnostics/v2/orders/{order_id}/results:
+    get:
+      summary: Get Order Results
+      description: Get test results for order
+      operationId: getDiagnosticsV2OrdersOrder_idResults
+      tags:
+      - diagnostics
+      parameters:
+      - name: order_id
+        in: path
+        required: true
+        description: Diagnostics-specific order UUID (not used by other APIs)
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The set of all tests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderResultResponseV2'
+        '400':
+          description: There is an issue with your request. Inspection of the response body will yield
+            more details
+        '401':
+          description: Authorization missing or invalid
+        '500':
+          description: An unexpected, likely ephemeral scenario occurred. The request will have to be
+            retried later. We recommend reaching out to Truepill if this is a persistent issue.
+components:
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: API key passed in the Authorization header. Separate keys are issued for sandbox and
+        production.
+  schemas:
+    Address:
+      type: object
+      description: Shipping Address Object
+      properties:
+        name:
+          type: string
+          description: Name
+          example: Bill Lumbergh
+        street1:
+          type: string
+          description: Shipping street 1
+          example: 1234 Main St
+        street2:
+          type: string
+          description: Shipping street 2
+          example: Apt 9B
+        city:
+          type: string
+          description: Shipping city
+          example: San Mateo
+        state:
+          type: string
+          description: Shipping state
+          example: CA
+          x-constraint:
+            length: 2
+        zip:
+          type: string
+          description: Shipping postal code
+          example: '60660'
+          pattern: ^\d{5}(-\d{4})?$
+      required:
+      - name
+      - street1
+      - city
+      - zip
+    DOB:
+      type: object
+      description: Patient date of birth
+      properties:
+        day:
+          type: number
+          example: 12
+        month:
+          type: number
+          example: 7
+        year:
+          type: number
+          example: 1997
+    GetOrderRejectionResponse:
+      type: object
+      properties:
+        reason:
+          type: string
+          description: Reason
+        rejected_at:
+          type: string
+          format: date
+          description: Reason where was rejected
+          example: '2011-10-05T14:48:00.000Z'
+        fixable:
+          type: boolean
+          description: Could be fixeable or not
+          example: false
+        panel_name:
+          type: string
+      required:
+      - rejected_at
+    Insurance:
+      type: object
+      description: Insurance information
+      properties:
+        payer_name:
+          type: string
+          description: Payer name
+          example: Bruce Banner
+        group_id:
+          type: string
+          description: Group ID on insurance card
+          example: '006726'
+        member_id:
+          type: string
+          description: Member ID on insurance card
+          example: A9321328
+        bin:
+          type: string
+          description: RX Bin on card, always 6 characters
+          example: '997928'
+      required:
+      - payer_name
+      - group_id
+      - member_id
+      - bin
+    Kit:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Kit id
+          example: f4fa75be-7112-4d0b-8f4d-97fe81bddfa8
+          x-format:
+            guid: true
+        sku:
+          type: string
+          description: Order stock-keeping unit
+          example: Abbott Rapid Antigen Kit
+        serial:
+          type: string
+          description: Serial number of the kit to associate with this order
+          example: 010081187701133017333333101H
+        return_shipment:
+          $ref: '#/components/schemas/return_shipment'
+    KitResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/KitWithoutSerial'
+    KitWithoutSerial:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Kit ID
+          example: 5d03c2b9-9a92-4745-83b1-2312599ca1c3
+          x-format:
+            guid: true
+        sku:
+          type: string
+          description: SKU of items as specified on kit
+          example: SampleCorp Covid Antigen Kit
+    Media IDs:
+      type: array
+      description: Used to request media files.
+      example:
+      - 5201130d-118e-439a-9343-b8d23dee4fe3
+      items:
+        type: string
+    Model107:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Result name
+          example: FEVER CHECK
+        quantitative_value:
+          type: string
+          example: '100.4'
+        qualitative_value:
+          type: string
+          example: POSITIVE
+        measured_at:
+          type: string
+          format: date
+          description: 'Date of receipt of the result '
+          example: '2011-10-05T14:48:00.000Z'
+        panel_name:
+          type: string
+        severity:
+          type: string
+          description: Severity of drug warning for this patient
+          example: moderate
+        media_ids:
+          $ref: '#/components/schemas/Media IDs'
+      required:
+      - name
+      - measured_at
+    Model204:
+      type: object
+      description: Patient information
+      properties:
+        first_name:
+          type: string
+          description: Patient first name
+          example: John
+        last_name:
+          type: string
+          description: Patient last name
+          example: Doe
+        dob:
+          type: string
+          description: Patient date of birth
+          example: '19950503'
+          pattern: ^(19|20)\d\d(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])$
+        gender:
+          type: string
+          description: Patient gender
+          example: male
+          enum:
+          - male
+          - female
+          - unknown
+        email:
+          type: string
+          description: Patient contact email address
+          example: some_mail@gmail.com
+          x-format:
+            email: true
+        phone:
+          type: string
+          description: Patient contact phone number
+          example: 430-304-3949
+        street1:
+          type: string
+          description: Patient street 1
+          example: 1234 Main St
+        street2:
+          type: string
+          description: Patient street 2
+          example: Apt 9B
+        city:
+          type: string
+          description: Patient city
+          example: San Mateo
+        state:
+          type: string
+          description: Patient state
+          example: CA
+          x-constraint:
+            length: 2
+        zip:
+          type: string
+          description: Location postal code
+          example: '60660'
+          pattern: ^\d{5}(-\d{4})?$
+      required:
+      - first_name
+      - last_name
+      - dob
+      - gender
+      - zip
+    Model205:
+      type: array
+      minItems: 1
+      items:
+        type: string
+    Model38:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Creatinine
+        description:
+          type: string
+      required:
+      - name
+    Model39:
+      type: object
+      properties:
+        valueCoding:
+          $ref: '#/components/schemas/valueCoding'
+        valueBoolean:
+          type: boolean
+        valueString:
+          type: string
+        valueDate:
+          type: string
+    Model40:
+      type: object
+      properties:
+        linkId:
+          type: string
+        answer:
+          $ref: '#/components/schemas/answer'
+    Order:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Order ID
+          example: e457d2e7-ebf4-403c-b2c1-a1970f16d011
+          x-format:
+            guid: true
+        test:
+          $ref: '#/components/schemas/Test'
+        panels:
+          $ref: '#/components/schemas/Panels'
+        kit:
+          $ref: '#/components/schemas/Kit'
+        status:
+          type: string
+          description: Order status
+          example: PENDING
+        updated_at:
+          type: string
+          format: date
+          description: Update date
+          example: '2021-06-08T14:10:08.512Z'
+        patient:
+          $ref: '#/components/schemas/PatientResponse'
+        address:
+          $ref: '#/components/schemas/Address'
+        physician:
+          $ref: '#/components/schemas/Physician'
+        insurance:
+          $ref: '#/components/schemas/Insurance'
+        fill_request_id:
+          type: string
+          description: Fill request ID to associate with this order
+          example: fill_request_bd6825a9d66a49b3d7a7
+        accession_id:
+          type: string
+        custom_data_1:
+          type: string
+          description: A custom data string for external use. This can be any arbitrary UTF-8 string
+          example: '2012-01-26T13:51:50.417-07:00'
+        custom_data_2:
+          type: string
+          description: A custom data string for external use. This can be any arbitrary UTF-8 string
+          example: '2012-01-26T13:51:50.417-07:00'
+        custom_data_3:
+          type: string
+          description: A custom data string for external use. This can be any arbitrary UTF-8 string
+          example: '2012-01-26T13:51:50.417-07:00'
+        media_ids:
+          $ref: '#/components/schemas/Media%20IDs'
+        specimen:
+          $ref: '#/components/schemas/specimen'
+      required:
+      - patient
+    OrderArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/Order'
+    OrderResponse:
+      type: object
+      properties:
+        nextPageToken:
+          type: string
+        results:
+          $ref: '#/components/schemas/OrderArray'
+    OrderResult:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Result name
+          example: FEVER CHECK
+        quantitative_value:
+          type: string
+          example: '100.4'
+        qualitative_value:
+          type: string
+          example: POSITIVE
+        measured_at:
+          type: string
+          format: date
+          description: 'Date of receipt of the result '
+          example: '2011-10-05T14:48:00.000Z'
+        panel_name:
+          type: string
+        severity:
+          type: string
+          description: Severity of drug warning for this patient
+          example: moderate
+      required:
+      - name
+      - measured_at
+    OrderResultResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/OrderResult'
+    OrderResultResponseV2:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model107'
+    Panels:
+      type: array
+      description: Essentially used for blood tests to ask for certain items to be run
+      items:
+        $ref: '#/components/schemas/Model38'
+    PatientResponse:
+      type: object
+      properties:
+        first_name:
+          type: string
+          description: Patient first name
+          example: John
+        last_name:
+          type: string
+          description: Patient last name
+          example: Doe
+        dob:
+          $ref: '#/components/schemas/DOB'
+        gender:
+          type: string
+          description: Patient gender
+          example: male
+          enum:
+          - male
+          - female
+          - unknown
+        email:
+          type: string
+          description: Patient contact email address
+          example: some_mail@gmail.com
+          x-format:
+            email: true
+        phone:
+          type: string
+          description: Patient contact phone number
+          example: 430-304-3949
+        street1:
+          type: string
+          description: Patient street 1
+          example: 1234 Main St
+        street2:
+          type: string
+          description: Patient street 2
+          example: Apt 9B
+        city:
+          type: string
+          description: Patient city
+          example: San Mateo
+        state:
+          type: string
+          description: Patient state
+          example: CA
+          x-constraint:
+            length: 2
+        zip:
+          type: string
+          description: Location postal code
+          example: '60660'
+          pattern: ^\d{5}(-\d{4})?$
+      required:
+      - first_name
+      - last_name
+      - gender
+      - zip
+    Physician:
+      type: object
+      description: Physician providing requisition
+      properties:
+        first_name:
+          type: string
+          description: Physician first name
+        last_name:
+          type: string
+          description: Physician last name
+        npi:
+          type: string
+          description: National provider identifier
+          example: '1234567890'
+        facility:
+          type: string
+          description: Physician Facility
+        address:
+          type: string
+          description: Physician Address
+        city:
+          type: string
+          description: Physician city
+          example: San Mateo
+        state:
+          type: string
+          description: Physician state
+          example: CA
+        zip:
+          type: string
+          description: Physician postal code
+          example: '60660'
+          pattern: ^\d{5}(-\d{4})?$
+        phone:
+          type: string
+          description: Physician contact phone number
+          example: 430-304-3949
+        credential:
+          type: string
+          description: Physician credential
+          example: MD
+      required:
+      - first_name
+      - last_name
+      - npi
+    PostOrders:
+      type: object
+      properties:
+        patient:
+          $ref: '#/components/schemas/Model204'
+        patient_token:
+          type: string
+          description: Token to reference Patient record. Only one of patient_token or patient will be
+            accepted
+          example: p4t13ntt0k3n
+        panels:
+          $ref: '#/components/schemas/Model205'
+        address:
+          $ref: '#/components/schemas/Address'
+        physician:
+          $ref: '#/components/schemas/Physician'
+        insurance:
+          $ref: '#/components/schemas/Insurance'
+        insurance_token:
+          type: string
+          description: Only one of insurance_token or insurance will be accepted
+          example: 9502a8162af55927
+        kit_id:
+          type: string
+          description: ID indicating which kit should be ordered
+          example: e457d2e7-ebf4-403c-b2c1-a1970f16d011
+          x-format:
+            guid: true
+        test_id:
+          type: string
+          description: ID indicating which test should to be ordered
+          example: 84e14b68-0372-4d5b-9a33-5e3fe5b43247
+          x-format:
+            guid: true
+        custom_data_1:
+          type: string
+          description: A custom data string for external use. This can be any arbitrary UTF-8 string
+          example: '2012-01-26T13:51:50.417-07:00'
+        custom_data_2:
+          type: string
+          description: A custom data string for external use. This can be any arbitrary UTF-8 string
+          example: '2012-01-26T13:51:50.417-07:00'
+        custom_data_3:
+          type: string
+          description: A custom data string for external use. This can be any arbitrary UTF-8 string
+          example: '2012-01-26T13:51:50.417-07:00'
+        specimen:
+          $ref: '#/components/schemas/specimen'
+      required:
+      - address
+      - test_id
+    RegisterOrder:
+      type: object
+      description: Register a new order using the existing kit serial
+      properties:
+        patient:
+          $ref: '#/components/schemas/Model204'
+        patient_token:
+          type: string
+          description: Token to reference Patient record. Only one of patient_token or patient will be
+            accepted
+          example: p4t13ntt0k3n
+        panels:
+          $ref: '#/components/schemas/Model205'
+        address:
+          $ref: '#/components/schemas/Address'
+        physician:
+          $ref: '#/components/schemas/Physician'
+        insurance:
+          $ref: '#/components/schemas/Insurance'
+        insurance_token:
+          type: string
+          description: "\tToken to reference a Patient's insurance. Only one of insurance_token or insurance\
+            \ will be accepted"
+          example: 19sienglo92831n5
+        kit_id:
+          type: string
+          description: ID indicating which kit should be ordered
+          example: e457d2e7-ebf4-403c-b2c1-a1970f16d011
+          x-format:
+            guid: true
+        kit_serial:
+          type: string
+          description: Serial number of the kit to associate with this order
+          example: ABBAHAHAHAHAHAHSINZN
+          minLength: 1
+        custom_data_1:
+          type: string
+          description: A custom data string for external use. This can be any arbitrary UTF-8 string
+          example: '2012-01-26T13:51:50.417-07:00'
+        custom_data_2:
+          type: string
+          description: A custom data string for external use. This can be any arbitrary UTF-8 string
+          example: '2012-01-26T13:51:50.417-07:00'
+        custom_data_3:
+          type: string
+          description: A custom data string for external use. This can be any arbitrary UTF-8 string
+          example: '2012-01-26T13:51:50.417-07:00'
+        test_id:
+          type: string
+          description: ID indicating which test should to be ordered
+          example: 84e14b68-0372-4d5b-9a33-5e3fe5b43247
+          x-format:
+            guid: true
+      required:
+      - kit_serial
+      - test_id
+    Test:
+      type: object
+      description: Test description
+      properties:
+        id:
+          type: string
+          description: Test ID
+          example: 5d03c2b9-9a92-4745-83b1-2312599ca1c3
+          x-format:
+            guid: true
+        name:
+          type: string
+          description: Result name
+          example: FEVER CHECK
+    TestResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/Test'
+    answer:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model39'
+    questionnaireResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model40'
+    return_shipment:
+      type: object
+      properties:
+        carrier:
+          type: string
+          example: usps
+        tracking_number:
+          type: string
+          example: 9400 1234 5678 9999 8765 00
+    specimen:
+      type: object
+      properties:
+        specimenCollectedDate:
+          type: string
+        questionnaireResponse:
+          $ref: '#/components/schemas/questionnaireResponse'
+    valueCoding:
+      type: object
+      properties:
+        code:
+          type: string
+        display:
+          type: string

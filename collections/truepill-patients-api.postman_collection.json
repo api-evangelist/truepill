@@ -1,0 +1,554 @@
+{
+  "item": [
+    {
+      "id": "e7ca6507-afcb-4606-be72-fc62c11f039e",
+      "name": "Patients",
+      "description": {
+        "content": "Patient records and demographics.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ac7fde73-166d-4f25-afc5-cc43ba8eaf85",
+          "name": "Create a patient record.",
+          "request": {
+            "name": "Create a patient record.",
+            "description": {
+              "content": "Creates a patient and returns an opaque patient_token used to reference the patient on subsequent requests.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "patient"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"<string>\",\n  \"last_name\": \"<string>\",\n  \"dob\": \"<date>\",\n  \"gender\": \"<string>\",\n  \"ssn\": \"<string>\",\n  \"address_1\": \"<string>\",\n  \"address_2\": \"<string>\",\n  \"city\": \"<string>\",\n  \"state\": \"<string>\",\n  \"zip\": \"<string>\",\n  \"phone_number\": \"<string>\",\n  \"email\": \"<string>\",\n  \"language_preference\": \"<string>\",\n  \"species\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "fc50d8c9-3846-450a-bb67-9ec95bd00057",
+              "name": "Patient created.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "patient"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"first_name\": \"<string>\",\n  \"last_name\": \"<string>\",\n  \"dob\": \"<date>\",\n  \"gender\": \"<string>\",\n  \"ssn\": \"<string>\",\n  \"address_1\": \"<string>\",\n  \"address_2\": \"<string>\",\n  \"city\": \"<string>\",\n  \"state\": \"<string>\",\n  \"zip\": \"<string>\",\n  \"phone_number\": \"<string>\",\n  \"email\": \"<string>\",\n  \"language_preference\": \"<string>\",\n  \"species\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"string\",\n  \"timestamp\": \"1991-12-20T01:03:43.184Z\",\n  \"request_id\": \"string\",\n  \"details\": {\n    \"patient_token\": \"string\",\n    \"first_name\": \"string\",\n    \"last_name\": \"string\",\n    \"dob\": \"2008-05-28\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "85c02820-b3d9-4f3c-bf2c-7b3fd9ba4cf1",
+          "name": "Find a patient by demographics.",
+          "request": {
+            "name": "Find a patient by demographics.",
+            "description": {},
+            "url": {
+              "path": [
+                "patient"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "first_name",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "last_name",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "dob",
+                  "value": "<date>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "800f3b63-86db-472c-a75e-412681bd5114",
+              "name": "Matching patient(s).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "patient"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "first_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "last_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "dob",
+                      "value": "<date>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"string\",\n  \"timestamp\": \"1991-12-20T01:03:43.184Z\",\n  \"request_id\": \"string\",\n  \"details\": {\n    \"patient_token\": \"string\",\n    \"first_name\": \"string\",\n    \"last_name\": \"string\",\n    \"dob\": \"2008-05-28\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "33733dde-a3d4-4a56-8496-37d57b434f29",
+          "name": "Retrieve patient details.",
+          "request": {
+            "name": "Retrieve patient details.",
+            "description": {},
+            "url": {
+              "path": [
+                "patient",
+                ":patient_token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "patient_token",
+                  "description": "(Required) Opaque token identifying the patient."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "54edfd21-8553-4933-902c-d70f9a11b2e0",
+              "name": "Patient details.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "patient",
+                    ":patient_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "patient_token",
+                      "description": "(Required) Opaque token identifying the patient."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"string\",\n  \"timestamp\": \"1991-12-20T01:03:43.184Z\",\n  \"request_id\": \"string\",\n  \"details\": {\n    \"patient_token\": \"string\",\n    \"first_name\": \"string\",\n    \"last_name\": \"string\",\n    \"dob\": \"2008-05-28\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4dfb76d0-7d37-4ded-910e-84e9b23c984b",
+          "name": "Update patient information.",
+          "request": {
+            "name": "Update patient information.",
+            "description": {},
+            "url": {
+              "path": [
+                "patient",
+                ":patient_token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "patient_token",
+                  "description": "(Required) Opaque token identifying the patient."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"<string>\",\n  \"last_name\": \"<string>\",\n  \"dob\": \"<date>\",\n  \"gender\": \"<string>\",\n  \"ssn\": \"<string>\",\n  \"address_1\": \"<string>\",\n  \"address_2\": \"<string>\",\n  \"city\": \"<string>\",\n  \"state\": \"<string>\",\n  \"zip\": \"<string>\",\n  \"phone_number\": \"<string>\",\n  \"email\": \"<string>\",\n  \"language_preference\": \"<string>\",\n  \"species\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "865f9ae2-d876-4b68-8ee0-06541c6e518d",
+              "name": "Patient updated.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "patient",
+                    ":patient_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "patient_token",
+                      "description": "(Required) Opaque token identifying the patient."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"first_name\": \"<string>\",\n  \"last_name\": \"<string>\",\n  \"dob\": \"<date>\",\n  \"gender\": \"<string>\",\n  \"ssn\": \"<string>\",\n  \"address_1\": \"<string>\",\n  \"address_2\": \"<string>\",\n  \"city\": \"<string>\",\n  \"state\": \"<string>\",\n  \"zip\": \"<string>\",\n  \"phone_number\": \"<string>\",\n  \"email\": \"<string>\",\n  \"language_preference\": \"<string>\",\n  \"species\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"string\",\n  \"timestamp\": \"1991-12-20T01:03:43.184Z\",\n  \"request_id\": \"string\",\n  \"details\": {\n    \"patient_token\": \"string\",\n    \"first_name\": \"string\",\n    \"last_name\": \"string\",\n    \"dob\": \"2008-05-28\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3c3f24f4-ce2b-45b5-be69-681c4e495669",
+          "name": "List a patient's prescriptions.",
+          "request": {
+            "name": "List a patient's prescriptions.",
+            "description": {},
+            "url": {
+              "path": [
+                "patient",
+                ":patient_token",
+                "prescriptions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "patient_token",
+                  "description": "(Required) Opaque token identifying the patient."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4f6ba4fc-776a-43db-aa33-407e84de76d9",
+              "name": "Prescriptions for the patient.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "patient",
+                    ":patient_token",
+                    "prescriptions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "patient_token",
+                      "description": "(Required) Opaque token identifying the patient."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"prescription_token\": \"string\",\n    \"patient_token\": \"string\",\n    \"medication_name\": \"string\",\n    \"ndc\": \"string\",\n    \"quantity\": 7606.424672873189,\n    \"days_supply\": 7196,\n    \"directions\": \"string\",\n    \"status\": \"string\",\n    \"refills_remaining\": 9760\n  },\n  {\n    \"prescription_token\": \"string\",\n    \"patient_token\": \"string\",\n    \"medication_name\": \"string\",\n    \"ndc\": \"string\",\n    \"quantity\": 4338.360102779732,\n    \"days_supply\": 1828,\n    \"directions\": \"string\",\n    \"status\": \"string\",\n    \"refills_remaining\": 7690\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://rxapi.fuzehealth.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Authorization"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "2c865931-2ada-428d-8d0b-fe0be4d6ea72",
+    "name": "Truepill (FuzeRx) Insurance Patients API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "REST API for Truepill's pharmacy and healthcare-infrastructure platform, now shipping as FuzeRx after LetsGetChecked's 2024 acquisition of Truepill and the May 2025 rebrand to Fuze Health. The API exposes JSON over HTTPS for patient management, prescriptions, pharmacy-to-pharmacy transfers, insurance and copay adjudication, and webhook event retrieval. Endpoints and field names below reflect Truepill/FuzeRx public developer documentation; request and response bodies are summarized and should be reconciled against the live reference at https://rxdocs.fuzehealth.com before production use.\n\nContact Support:\n Name: FuzeRx Support\n Email: rx.support@fuzehealth.com",
+      "type": "text/plain"
+    }
+  }
+}

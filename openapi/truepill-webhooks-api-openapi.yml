@@ -1,64 +1,677 @@
-openapi: 3.0.1
+openapi: 3.0.3
 info:
-  title: Truepill (FuzeRx) Insurance Webhooks API
-  description: REST API for Truepill's pharmacy and healthcare-infrastructure platform, now shipping as FuzeRx after LetsGetChecked's 2024 acquisition of Truepill and the May 2025 rebrand to Fuze Health. The API exposes JSON over HTTPS for patient management, prescriptions, pharmacy-to-pharmacy transfers, insurance and copay adjudication, and webhook event retrieval. Endpoints and field names below reflect Truepill/FuzeRx public developer documentation; request and response bodies are summarized and should be reconciled against the live reference at https://rxdocs.fuzehealth.com before production use.
-  termsOfService: https://www.truepill.com/terms-of-service
+  title: Truepill Webhooks API
+  description: 'Asynchronous event retrieval by webhook type and per direct transfer / fill request.
+
+
+    Harvested verbatim from the live Truepill (FuzeRx) Swagger 2.0 contract published at https://rxapi.fuzehealth.com/swagger.json
+    and split by resource domain. Operation summaries, descriptions, parameters, schemas and response
+    codes are the provider''s own; only the Swagger 2.0 -> OpenAPI 3.0.3 conversion and the domain split
+    are ours.'
+  version: 0.0.1
   contact:
     name: FuzeRx Support
-    email: rx.support@fuzehealth.com
-  version: v1
+    url: https://rxdocs.fuzehealth.com
 servers:
-- url: https://rxapi.fuzehealth.com/v1
+- url: https://rxapi.fuzehealth.com
   description: Production
-- url: https://rxapi.sandbox.fuzehealth.com/v1
-  description: Sandbox
 security:
-- ApiKeyAuth: []
+- apiKey: []
 tags:
-- name: Webhooks
-  description: Asynchronous event retrieval.
+- name: webhooks
+  description: Asynchronous event retrieval by webhook type and per direct transfer / fill request.
 paths:
-  /webhook_events/{webhook_type}:
+  /api/v1/direct_transfer/{direct_transfer_token}/webhook_events:
     get:
-      operationId: getWebhookEvents
+      summary: Get Direct Transfer webhook events by token
+      description: You will receive a Notify Rx Webhook Event for each prescription that is transferred
+        to Truepill.<br/><br/>After a Direct Transfer Request has been successfully completed, you will
+        receive a Notify Rx Webhook Event for the prescription transferred to Truepill, along with a Direct
+        Transfer webhook event. This will contain the `prescription_token` to utilize the prescription
+        within Truepill.<br/><br/>If a Direct Transfer is unable to be successfully processed, only an
+        error Direct Transfer webhook event will be sent.<br/><br/>Direct Transfer Webhook Events are
+        sent with text `DIRECT_TRANSFER` in the `callback_type` field and, like with other webhook events,
+        the `status` field indicating whether or not it was successful.<br/><br/>In an error webhook event
+        for a Direct Transfer, the `prescription_token` will not be provided as it was unable to be added
+        into the Truepill system.
+      operationId: getApiV1Direct_transferDirect_transfer_tokenWebhook_events
       tags:
-      - Webhooks
-      summary: Retrieve webhook events by type.
+      - webhooks
+      parameters:
+      - name: direct_transfer_token
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model100'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model48'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model49'
+  /api/v1/fill_request/{url_token}/webhook_events:
+    get:
+      summary: Get list of webhook events
+      description: Return a list of webhook events and allows for the use of query parameters to scope
+        the results of the request<br/><br/>A request payload represents the request's timestamp, type,
+        and details.<br/><br/>A request's delivery_data represents the request's status information.
+      operationId: getApiV1Fill_requestUrl_tokenWebhook_events
+      tags:
+      - webhooks
+      parameters:
+      - name: url_token
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: timestamp
+        in: query
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: number
+          maximum: 100
+      - name: next
+        in: query
+        schema:
+          type: string
+      - name: status
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model103'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model50'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model51'
+  /api/v1/webhook_events:
+    get:
+      summary: List all Webhook Events
+      operationId: getApiV1Webhook_events
+      tags:
+      - webhooks
+      parameters:
+      - name: timestamp
+        in: query
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: number
+          maximum: 100
+      - name: next
+        in: query
+        schema:
+          type: string
+      - name: status
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model37'
+  /api/v1/webhook_events/{webhook_type}:
+    get:
+      summary: List NotifyRx Webhook Events
+      description: Webhook Events can be retrieved via API to be reprocessed.<br/><br/>This endpoint returns
+        a list of webhook events and allows for the use of query parameters to scope the results of the
+        request. A request `payload` represents the request's timestamp, type, and details. A request's
+        `delivery_data` represents the request's status information.<br/><br/>Supported `webhook_types`
+        are `notify_rx`
+      operationId: getApiV1Webhook_eventsWebhook_type
+      tags:
+      - webhooks
       parameters:
       - name: webhook_type
         in: path
         required: true
         schema:
           type: string
-        description: Webhook event type (e.g., notify_rx).
+          enum:
+          - notify_rx
+          - FILE
+          - CONSULT
+          - CONSULT_TASK
+          - CONTACT
+          - TRANSFER_OUT
+          - VISIT
+      - name: timestamp
+        in: query
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: number
+          maximum: 100
+      - name: next
+        in: query
+        schema:
+          type: string
+      - name: status
+        in: query
+        schema:
+          type: string
+      - name: request_id
+        in: query
+        schema:
+          type: string
       responses:
         '200':
-          description: Webhook events.
+          description: OK
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/WebhookEvent'
+                $ref: '#/components/schemas/Model74'
+  /v1/direct_transfer/{direct_transfer_token}/webhook_events:
+    get:
+      summary: Get Direct Transfer webhook events by token
+      description: You will receive a Notify Rx Webhook Event for each prescription that is transferred
+        to Truepill.<br/><br/>After a Direct Transfer Request has been successfully completed, you will
+        receive a Notify Rx Webhook Event for the prescription transferred to Truepill, along with a Direct
+        Transfer webhook event. This will contain the `prescription_token` to utilize the prescription
+        within Truepill.<br/><br/>If a Direct Transfer is unable to be successfully processed, only an
+        error Direct Transfer webhook event will be sent.<br/><br/>Direct Transfer Webhook Events are
+        sent with text `DIRECT_TRANSFER` in the `callback_type` field and, like with other webhook events,
+        the `status` field indicating whether or not it was successful.<br/><br/>In an error webhook event
+        for a Direct Transfer, the `prescription_token` will not be provided as it was unable to be added
+        into the Truepill system.
+      operationId: getV1Direct_transferDirect_transfer_tokenWebhook_events
+      tags:
+      - webhooks
+      parameters:
+      - name: direct_transfer_token
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model100'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model48'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model49'
+  /v1/fill_request/{url_token}/webhook_events:
+    get:
+      summary: Get list of webhook events
+      description: Return a list of webhook events and allows for the use of query parameters to scope
+        the results of the request<br/><br/>A request payload represents the request's timestamp, type,
+        and details.<br/><br/>A request's delivery_data represents the request's status information.
+      operationId: getV1Fill_requestUrl_tokenWebhook_events
+      tags:
+      - webhooks
+      parameters:
+      - name: url_token
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: timestamp
+        in: query
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: number
+          maximum: 100
+      - name: next
+        in: query
+        schema:
+          type: string
+      - name: status
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model103'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model50'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model51'
+  /v1/webhook_events:
+    get:
+      summary: List all Webhook Events
+      operationId: getV1Webhook_events
+      tags:
+      - webhooks
+      parameters:
+      - name: timestamp
+        in: query
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: number
+          maximum: 100
+      - name: next
+        in: query
+        schema:
+          type: string
+      - name: status
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model37'
+  /v1/webhook_events/{webhook_type}:
+    get:
+      summary: List NotifyRx Webhook Events
+      description: Webhook Events can be retrieved via API to be reprocessed.<br/><br/>This endpoint returns
+        a list of webhook events and allows for the use of query parameters to scope the results of the
+        request. A request `payload` represents the request's timestamp, type, and details. A request's
+        `delivery_data` represents the request's status information.<br/><br/>Supported `webhook_types`
+        are `notify_rx`
+      operationId: getV1Webhook_eventsWebhook_type
+      tags:
+      - webhooks
+      parameters:
+      - name: webhook_type
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - notify_rx
+          - FILE
+          - CONSULT
+          - CONSULT_TASK
+          - CONTACT
+          - TRANSFER_OUT
+          - VISIT
+      - name: timestamp
+        in: query
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: number
+          maximum: 100
+      - name: next
+        in: query
+        schema:
+          type: string
+      - name: status
+        in: query
+        schema:
+          type: string
+      - name: request_id
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model74'
 components:
-  schemas:
-    WebhookEvent:
-      type: object
-      properties:
-        callback_type:
-          type: string
-        status:
-          type: string
-          description: success or error.
-        timestamp:
-          type: string
-          format: date-time
-        details:
-          type: object
-          description: Event-specific payload.
   securitySchemes:
-    ApiKeyAuth:
+    apiKey:
       type: apiKey
       in: header
       name: Authorization
-      description: 'API key passed as `Authorization: ApiKey <YOUR_API_KEY>`. Separate keys are issued for the sandbox and production environments.'
+      description: API key passed in the Authorization header. Separate keys are issued for sandbox and
+        production.
+  schemas:
+    Model100:
+      type: object
+      properties:
+        results:
+          $ref: '#/components/schemas/Model99'
+    Model101:
+      type: object
+      properties:
+        payload:
+          $ref: '#/components/schemas/payload'
+        delivery_data:
+          $ref: '#/components/schemas/delivery_data'
+    Model102:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model101'
+    Model103:
+      type: object
+      properties:
+        results:
+          $ref: '#/components/schemas/Model102'
+    Model32:
+      type: object
+      properties:
+        medication_name:
+          type: string
+          example: Bupropion Hcl XL 150 mg tablet
+        dispensed_medication_name:
+          type: string
+          example: Bupropion Hcl XL 150 mg tablet
+        requested_medication_name:
+          type: string
+          example: Bupropion Hcl XL 150 mg tablet
+        original_requested_prescription_token:
+          type: string
+          example: e61e324f9018
+        days_supply:
+          type: number
+          example: 30
+        quantity:
+          type: number
+          example: 30
+        fill_number:
+          type: number
+          example: 0
+        rx_number:
+          type: string
+          example: '201877000'
+        total_refills_allowed:
+          type: number
+          example: 5
+        prescription_token:
+          type: string
+          example: e61e324f9018
+        medication_token:
+          type: string
+          example: 11bb9146f972
+        remaining_refills:
+          $ref: '#/components/schemas/remaining_refills'
+        patient_cash_amount:
+          type: number
+          example: 10.5
+        rx_link:
+          type: string
+          example: rxl_d374bfb72980319f2a80f8af
+    Model33:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model32'
+    Model34:
+      type: object
+      properties:
+        metadata:
+          type: string
+          example: some metadata
+        message:
+          type: string
+          example: Your fill request was processed and is pending shipment.
+        date_filled:
+          type: string
+          example: Wed, 08 Sep 2021 10:04:25 GMT
+        order_token:
+          type: string
+          example: e4469e
+        medications:
+          $ref: '#/components/schemas/Model33'
+        tracking_url:
+          type: string
+          example: https://tools.usps.com/go/TrackConfirmAction_input?origTrackNum=48081107879780000000000000
+        location:
+          type: string
+          example: Brooklyn, NY
+        patient_token:
+          type: string
+          example: fa4ca2d7c1214214
+    Model35:
+      type: object
+      properties:
+        payload:
+          $ref: '#/components/schemas/payload'
+        delivery_data:
+          $ref: '#/components/schemas/delivery_data'
+        next_page_token:
+          type: string
+          example: eyJpdiI6IjRiNDc2ODM3ODI2MWU4N2Q1ZmQwNzQ2MzhlZWFiZmQ3IiwiY29udGVudCI6IjY3YWYxNGRmYTQ4Mzg1ZTMzMjBhZTA0MjAwODBhOTQ4OTIzNjMzYzIxODIwMzIifZ==
+    Model36:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model35'
+    Model37:
+      type: object
+      properties:
+        results:
+          $ref: '#/components/schemas/Model36'
+    Model48:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 403
+        error:
+          type: string
+          example: Forbidden
+        message:
+          type: string
+          example: Unauthorized from viewing this direct transfer
+    Model49:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 404
+        error:
+          type: string
+          example: Not Found
+        message:
+          type: string
+          example: Unable to find direct transfer.
+    Model50:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 403
+        error:
+          type: string
+          example: Forbidden
+        message:
+          type: string
+          example: Unauthorized from viewing this fill request
+    Model51:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 404
+        error:
+          type: string
+          example: Not Found
+        message:
+          type: string
+          example: Unable to find Fill Request.
+    Model70:
+      type: object
+      properties:
+        medication_name:
+          type: string
+          example: Brand Label 10mg Tablet
+        prescriber:
+          type: string
+          example: Dr. P. Scribe
+        prescription_token:
+          type: string
+          example: bac3aa39d938
+        patient_token:
+          type: string
+          example: a842f3e8112c916d
+        patient_token_duplicates:
+          $ref: '#/components/schemas/insurance_tokens'
+        merged_patients:
+          $ref: '#/components/schemas/insurance_tokens'
+        location:
+          type: string
+          example: hayward
+        rx_link:
+          type: string
+          example: rxl_750b5e71eb4261c1f73066ee
+    Model71:
+      type: object
+      properties:
+        timestamp:
+          type: number
+          example: 1631593381
+        callback_type:
+          type: string
+          example: NOTIFY_RX
+        details:
+          $ref: '#/components/schemas/Model70'
+    Model72:
+      type: object
+      properties:
+        payload:
+          $ref: '#/components/schemas/Model71'
+        delivery_data:
+          $ref: '#/components/schemas/delivery_data'
+        next_page_token:
+          type: string
+          example: eyJpdiI6IjRiNDc2ODM3ODI2MWU4N2Q1ZmQwNzQ2MzhlZWFiZmQ3IiwiY29udGVudCI6IjY3YWYxNGRmYTQ4Mzg1ZTMzMjBhZTA0MjAwODBhOTQ4OTIzNjMzYzIxODIwMzIifZ==
+    Model73:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model72'
+    Model74:
+      type: object
+      properties:
+        results:
+          $ref: '#/components/schemas/Model73'
+    Model96:
+      type: object
+      properties:
+        metadata:
+          type: string
+          example: my_identifier
+        message:
+          type: string
+          example: Direct Transfer Accepted.
+        patient_token:
+          type: string
+          example: 221e6f904c32faac
+        direct_transfer_token:
+          type: string
+          example: b5338d53e5
+        prescription_token:
+          type: string
+          example: 622b9f344fa7
+        rx_link:
+          type: string
+          example: rxl_31ad83984d0404f7109f0992
+    Model97:
+      type: object
+      properties:
+        timestamp:
+          type: number
+          example: 1631593381
+        callback_type:
+          type: string
+          example: DIRECT_TRANSFER
+        details:
+          $ref: '#/components/schemas/Model96'
+    Model98:
+      type: object
+      properties:
+        payload:
+          $ref: '#/components/schemas/Model97'
+        delivery_data:
+          $ref: '#/components/schemas/delivery_data'
+    Model99:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model98'
+    delivery_data:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        status_code:
+          type: number
+          example: 204
+    insurance_tokens:
+      type: array
+      items:
+        type: string
+    payload:
+      type: object
+      properties:
+        timestamp:
+          type: number
+          example: 1631593381
+        callback_type:
+          type: string
+          example: ORDER
+        details:
+          $ref: '#/components/schemas/Model34'
+    remaining_refills:
+      type: object
+      properties:
+        total_remaining_refills:
+          type: number
+          example: 5
+        total_quantity_remaining:
+          type: number
+          example: 150

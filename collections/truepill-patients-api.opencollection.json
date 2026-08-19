@@ -1,0 +1,130 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Truepill (FuzeRx) Insurance Patients API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Patients",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Find a patient by demographics.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://rxapi.fuzehealth.com/v1/patient",
+            "params": [
+              {
+                "name": "first_name",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "last_name",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "dob",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Find a patient by demographics."
+        },
+        {
+          "info": {
+            "name": "Create a patient record.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://rxapi.fuzehealth.com/v1/patient",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a patient and returns an opaque patient_token used to reference the patient on subsequent requests."
+        },
+        {
+          "info": {
+            "name": "Retrieve patient details.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://rxapi.fuzehealth.com/v1/patient/:patient_token",
+            "params": [
+              {
+                "name": "patient_token",
+                "value": "",
+                "type": "path",
+                "description": "Opaque token identifying the patient."
+              }
+            ]
+          },
+          "docs": "Retrieve patient details."
+        },
+        {
+          "info": {
+            "name": "Update patient information.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://rxapi.fuzehealth.com/v1/patient/:patient_token",
+            "params": [
+              {
+                "name": "patient_token",
+                "value": "",
+                "type": "path",
+                "description": "Opaque token identifying the patient."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update patient information."
+        },
+        {
+          "info": {
+            "name": "List a patient's prescriptions.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://rxapi.fuzehealth.com/v1/patient/:patient_token/prescriptions",
+            "params": [
+              {
+                "name": "patient_token",
+                "value": "",
+                "type": "path",
+                "description": "Opaque token identifying the patient."
+              }
+            ]
+          },
+          "docs": "List a patient's prescriptions."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

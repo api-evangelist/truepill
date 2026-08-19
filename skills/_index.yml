@@ -1,0 +1,82 @@
+generated: '2026-08-15'
+method: generated
+source: >-
+  openapi/truepill-*-openapi.yml + https://rxdocs.fuzehealth.com. Truepill / Fuze Health publishes no
+  AGENTS.md, no skills files and no agent guidance of any kind — probes of the docs host, the
+  marketing hosts and both GitHub organizations found nothing. These skills are written by API
+  Evangelist from the provider's own published contract; every operationId named in them was
+  verified present in the refined specs in this repo.
+provider: Truepill
+providerId: truepill
+skill_count: 5
+skills:
+- file: truepill-create-patient-and-fill.md
+  name: Create a patient and submit a fill request
+  api: openapi/truepill-patients-api-openapi.yml, openapi/truepill-fulfillment-api-openapi.yml
+  operations:
+  - putV1Patient
+  - getV1PatientPatient_tokenPrescriptions
+  - getV1Availability
+  - postV1Fill_request
+  - getV1Fill_requestUrl_token
+  - getV1Fill_requestUrl_tokenWebhook_events
+  - postV1Cancel_request
+- file: truepill-copay-and-coverage.md
+  name: Determine a patient's copay and coverage
+  api: openapi/truepill-insurance-api-openapi.yml
+  operations:
+  - postV1Insurance
+  - getV1InsuranceInsurance_token
+  - postV1InsuranceEligibilitycheck
+  - postV1Copay_request
+  - getV1Copay_requestRequest_id
+  - postV1Copay_requestCancel
+  - postV1Coverage_request
+  - postV1Prior_authorization
+  - getV1Pharmacycoverage
+  - getV1Webhook_eventsWebhook_type
+- file: truepill-transfer-prescription-in.md
+  name: Transfer a prescription into FuzeRx from another pharmacy
+  api: openapi/truepill-transfers-api-openapi.yml
+  operations:
+  - getV1External_locations
+  - getV1External_location_matches
+  - postV1External_location_matches
+  - getV1External_locationsId
+  - postV1Transfer_request
+  - getV1Transfer_requestToken
+  - getV1Transfer_request
+  - postV1Direct_transfer
+  - postV2Direct_transfer
+  - getV1Direct_transferDirect_transfer_token
+  - getV1Direct_transferDirect_transfer_tokenWebhook_events
+  - postV1PrescriptionPrescription_tokenTransfer_out
+- file: truepill-consume-webhook-events.md
+  name: Consume and reconcile FuzeRx webhook events
+  api: openapi/truepill-webhooks-api-openapi.yml
+  operations:
+  - getV1Webhook_events
+  - getV1Webhook_eventsWebhook_type
+  - getV1Fill_requestUrl_tokenWebhook_events
+  - getV1Direct_transferDirect_transfer_tokenWebhook_events
+- file: truepill-sandbox-simulation.md
+  name: Run a FuzeRx integration end-to-end in the sandbox
+  api: openapi/truepill-patients-api-openapi.yml, openapi/truepill-consults-api-openapi.yml
+  operations:
+  - putV1Patient
+  - getV1PatientPatient_tokenPrescriptions
+  - postV1Fill_request
+  - getV1Webhook_eventsWebhook_type
+  - patchConsultsV0ConsultConsult_idSimulate
+cross_cutting_rules:
+  note: Every skill above restates these because they are the rules an agent gets wrong on this API.
+  rules:
+  - PUT /v1/patient CREATES; POST /v1/patient/{patient_token} UPDATES.
+  - No idempotency key exists. Never blind-retry a POST — poll or read the webhook feed instead.
+  - R1, TRANSFER_DUPLICATE and DUPLICATE_REQUEST mean the FIRST attempt landed.
+  - A 200/202 means accepted, not completed. The outcome arrives as a webhook event.
+  - Webhook events are unsigned; treat the pull feed as the system of record.
+  - Tokens are environment-scoped; a sandbox token 404s against production.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

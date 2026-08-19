@@ -1,0 +1,362 @@
+generated: '2026-08-15'
+method: derived
+source: openapi/truepill-*-openapi.yml (schema $ref graph + id-reference field census across all 9 specs)
+docs: https://rxdocs.fuzehealth.com
+provider: Truepill
+providerId: truepill
+summary: >-
+  The FuzeRx data model is a token graph. Every entity is addressed by an opaque string token rather
+  than a numeric id, and the published rationale is explicit — tokens "ensure we limit the amount of
+  sensitive and patient-identifiable data sent using webhook events". Patient is the root: a
+  patient_token appears in 27 schema definitions across the contract, more than twice any other
+  reference. Prescription hangs off Patient, and every downstream request object (fill request,
+  copay request, transfer, order, consult, diagnostics order) references Patient and/or Prescription
+  rather than embedding them. There are no $ref-linked entity schemas in the published Swagger to
+  traverse — the source contract names its object schemas Model23, Model104, Model230 and so on, so
+  the relationships below are derived from the id-reference FIELDS and the path hierarchy, which is
+  the only structure the provider actually exposes.
+caveats:
+- >-
+  The provider's Swagger uses generated schema names (Model1..Model280+) with no semantic entity
+  names, so entity naming here is API Evangelist's, taken from the path segments and token field
+  names, not from the provider's own vocabulary.
+- >-
+  Relationship cardinality is inferred from path nesting and field plurality. Where the contract is
+  silent the relationship is recorded with confidence: medium.
+id_conventions:
+  style: opaque string token
+  naming: <entity>_token
+  formats:
+  - entity: patient
+    field: patient_token
+    example: a35be240f1f5da6b
+    length: 16 hex chars (observed in spec examples)
+  - entity: prescription
+    field: prescription_token
+    example: deb071563ead
+  - entity: fill request
+    field: url_token
+    note: the fill request is addressed by url_token, not fill_request_token
+  - entity: request (generic async)
+    field: request_id
+    example: fill_request_991e90fa6b367cf72032
+    note: '<object-type>_<hex token> — the join key between a synchronous response and its later webhook events'
+  - entity: insurance
+    field: insurance_token
+  - entity: prescriber
+    field: prescriber_token
+  - entity: direct transfer
+    field: direct_transfer_token
+  - entity: transfer
+    field: transfer_token
+  - entity: order
+    field: order_token
+  - entity: consult
+    field: consult_id
+  - entity: diagnostics order
+    field: order_id
+  - entity: diagnostics kit
+    field: kit_id
+  - entity: media
+    field: id
+reference_field_census:
+  note: Count of schema definitions in which each reference field appears, across all 9 refined specs.
+  patient_token: 27
+  prescription_token: 17
+  request_id: 14
+  url_token: 8
+  insurance_token: 5
+  rx_number: 3
+  prescriber_token: 2
+  order_id: 2
+  kit_id: 2
+  direct_transfer_token: 2
+  transfer_token: 1
+  order_token: 1
+  medication_id: 1
+  media_id: 1
+  consult_id: 1
+entity_count: 14
+entities:
+- name: Patient
+  id_field: patient_token
+  spec: openapi/truepill-patients-api-openapi.yml
+  operations:
+  - putV1Patient
+  - getV1PatientPatient_token
+  - postV1PatientPatient_token
+  - getV1Patient
+  description: >-
+    The root of the graph. Demographics, address, contact, SSN, MBI and privacy-notice
+    acknowledgement. Created with PUT (not POST); an exact-match create returns the existing token.
+- name: PatientSurvey
+  id_field: url_token
+  spec: openapi/truepill-patients-api-openapi.yml
+  operations:
+  - getV1PatientPatient_tokenPatient_survey
+  description: A patient-reported health history (conditions, allergies, pregnancy, smoking/drinking).
+- name: Prescription
+  id_field: prescription_token
+  spec: openapi/truepill-prescriptions-api-openapi.yml
+  operations:
+  - getV1PrescriptionToken
+  - getV1PrescriptionPrescription_tokenEscript
+  - postV1PrescriptionDiscontinuePrescription_token
+  - postV1PrescriptionPrescription_tokenTransfer_out
+  description: >-
+    Medication, sig, NDC, strength, quantity, refills, prescriber and NPI, fillable flag. Arrives
+    over Surescripts as an eScript or via transfer; it is not created through the REST API.
+- name: AutoRefillSubscription
+  id_field: prescription_token
+  spec: openapi/truepill-prescriptions-api-openapi.yml
+  operations:
+  - postV1AutorefillPrescription_token
+  - getV1AutorefillPrescription_token
+  - deleteV1AutorefillPrescription_token
+  - postV1AutorefillPrescription_tokenEarlyrefill
+  - deleteV1AutorefillPrescription_tokenSkiprefill
+  description: A standing refill schedule keyed on the prescription, not on a subscription id of its own.
+- name: Claim
+  id_field: null
+  spec: openapi/truepill-prescriptions-api-openapi.yml
+  operations:
+  - getV1PrescriptionPrescription_tokenFillFill_numberClaims
+  description: Adjudicated claim detail for one numbered fill of a prescription.
+- name: FillRequest
+  id_field: url_token
+  spec: openapi/truepill-fulfillment-api-openapi.yml
+  operations:
+  - postV1Fill_request
+  - getV1Fill_requestUrl_token
+  - getV1Fill_requests
+  - postV1Cancel_request
+  - postV1Update_request
+  description: >-
+    The request to dispense. Asynchronous — a 200/202 means accepted, and the outcome arrives as an
+    ORDER webhook event.
+- name: Order
+  id_field: order_token
+  spec: openapi/truepill-fulfillment-api-openapi.yml
+  operations:
+  - postV1Order
+  - getV1OrderToken
+  description: The dispensed order produced by a fill request, or created directly.
+- name: Shipment
+  id_field: tracking_number
+  spec: asyncapi/truepill-webhooks.yml
+  operations: []
+  description: >-
+    Carrier movement for a dispensed order. Exists only as a SHIPMENT webhook event — there is no
+    REST resource for it, which is a real surface gap.
+- name: Prescriber
+  id_field: prescriber_token
+  spec: openapi/truepill-fulfillment-api-openapi.yml
+  operations:
+  - postV1Prescriber
+  - getV1PrescriberPrescriber_token
+  description: The writing clinician, identified by NPI.
+- name: Insurance
+  id_field: insurance_token
+  spec: openapi/truepill-insurance-api-openapi.yml
+  operations:
+  - postV1Insurance
+  - getV1InsuranceInsurance_token
+  - postV1InsuranceEligibilitycheck
+  description: A patient's pharmacy benefit record — BIN, PCN, group, cardholder id.
+- name: CopayRequest
+  id_field: request_id
+  spec: openapi/truepill-insurance-api-openapi.yml
+  operations:
+  - postV1Copay_request
+  - getV1Copay_requestRequest_id
+  - postV1Copay_requestCancel
+  description: >-
+    Real-time out-of-pocket determination against a prescription and an insurance record.
+    Asynchronous — resolves as a COPAY webhook event carrying success, error or triage.
+- name: TransferRequest
+  id_field: transfer_token
+  spec: openapi/truepill-transfers-api-openapi.yml
+  operations:
+  - postV1Transfer_request
+  - getV1Transfer_requestToken
+  - getV1Transfer_request
+  description: A request to pull a prescription into FuzeRx from an external pharmacy.
+- name: DirectTransfer
+  id_field: direct_transfer_token
+  spec: openapi/truepill-transfers-api-openapi.yml
+  operations:
+  - postV1Direct_transfer
+  - getV1Direct_transferDirect_transfer_token
+  - postV2Direct_transfer
+  description: The RxForward / RxTransfer path. v1 and v2 both live, with no deprecation statement on v1.
+- name: ExternalLocation
+  id_field: id
+  spec: openapi/truepill-transfers-api-openapi.yml
+  operations:
+  - getV1External_locations
+  - getV1External_locationsId
+  - getV1External_location_matches
+  description: The losing pharmacy in a transfer, resolved by zip or address match.
+- name: Consult
+  id_field: consult_id
+  spec: openapi/truepill-consults-api-openapi.yml
+  operations:
+  - postConsultsV0Consult
+  - getConsultsV0ConsultConsult_id
+  - deleteConsultsV0ConsultConsult_id
+  - patchConsultsV0ConsultConsult_idMedia
+  description: A telehealth encounter. v0 — pre-1.0 by the provider's own numbering.
+- name: DiagnosticsOrder
+  id_field: order_id
+  spec: openapi/truepill-diagnostics-api-openapi.yml
+  operations:
+  - postDiagnosticsV0Orders
+  - getDiagnosticsV0OrdersOrder_id
+  - postDiagnosticsV0OrdersRegister
+  - getDiagnosticsV0OrdersOrder_idResults
+  - getDiagnosticsV2OrdersOrder_idResults
+  description: An at-home diagnostics kit order, registered against a kit serial and resolving to results.
+- name: Media
+  id_field: id
+  spec: openapi/truepill-media-api-openapi.yml
+  operations:
+  - postV1Media
+  - getV1MediaId
+  - getV1MediaIdSignedurlRead
+  - getV1MediaIdSignedurlWrite
+  description: >-
+    A file record (patient ID photo, selfie) backed by Google Cloud Storage signed URLs. Bytes never
+    transit the API — the API mints a signed URL and the client uploads or downloads directly.
+relationships:
+- from: Patient
+  to: Prescription
+  type: has_many
+  via: patient_token
+  operation: getV1PatientPatient_tokenPrescriptions
+  confidence: high
+- from: Patient
+  to: PatientSurvey
+  type: has_one
+  via: patient_token
+  operation: getV1PatientPatient_tokenPatient_survey
+  confidence: high
+  note: The endpoint returns "the most recent patient_survey", so only the latest is addressable.
+- from: Patient
+  to: Insurance
+  type: has_many
+  via: patient_token
+  confidence: high
+- from: Prescription
+  to: Patient
+  type: belongs_to
+  via: patient_token
+  confidence: high
+- from: Prescription
+  to: Prescriber
+  type: belongs_to
+  via: prescriber_npi
+  confidence: medium
+  note: The prescription schema carries prescriber and prescriber_npi as strings, not a prescriber_token.
+- from: Prescription
+  to: AutoRefillSubscription
+  type: has_one
+  via: prescription_token
+  confidence: high
+- from: Prescription
+  to: Claim
+  type: has_many
+  via: prescription_token + fill_number
+  confidence: high
+- from: FillRequest
+  to: Patient
+  type: belongs_to
+  via: patient_token
+  confidence: high
+- from: FillRequest
+  to: Prescription
+  type: has_many
+  via: prescription_token
+  confidence: high
+  note: A fill request carries a medications[] array, so one request can cover several prescriptions.
+- from: FillRequest
+  to: Order
+  type: has_many
+  via: order_token
+  confidence: high
+  note: Delivered asynchronously — the ORDER webhook event carries the order_token for the fill request.
+- from: Order
+  to: Shipment
+  type: has_many
+  via: order_token
+  confidence: medium
+  note: Only observable through SHIPMENT webhook events; no REST operation lists shipments for an order.
+- from: CopayRequest
+  to: Patient
+  type: belongs_to
+  via: patient_token
+  confidence: high
+- from: CopayRequest
+  to: Prescription
+  type: belongs_to
+  via: prescription_token
+  confidence: high
+- from: CopayRequest
+  to: Insurance
+  type: belongs_to
+  via: insurance_token
+  confidence: high
+- from: Insurance
+  to: Patient
+  type: belongs_to
+  via: patient_token
+  confidence: high
+- from: TransferRequest
+  to: Patient
+  type: belongs_to
+  via: patient_token
+  confidence: high
+- from: TransferRequest
+  to: ExternalLocation
+  type: belongs_to
+  via: external location id / address match
+  confidence: medium
+- from: DirectTransfer
+  to: Patient
+  type: belongs_to
+  via: patient_token
+  confidence: high
+- from: Consult
+  to: Patient
+  type: belongs_to
+  via: patient_token
+  confidence: high
+- from: Consult
+  to: Media
+  type: has_many
+  via: media id
+  operation: patchConsultsV0ConsultConsult_idMedia
+  confidence: high
+  note: FILE webhook events carry documents[] tagged SELFIE or PHOTO_ID against a consult_id.
+- from: DiagnosticsOrder
+  to: Patient
+  type: belongs_to
+  via: patient_token
+  confidence: medium
+- from: Media
+  to: Patient
+  type: belongs_to
+  via: patient_token
+  confidence: medium
+  note: The patient schema carries id_image as a URL, which is the media surface's practical anchor.
+correlation:
+  note: >-
+    Across every asynchronous flow, request_id joins the synchronous response to its later webhook
+    events, and a customer-supplied metadata string is echoed through the whole lifecycle. Those two
+    fields — not any entity token — are what an integrator actually reconciles on.
+  see:
+  - conventions/truepill-conventions.yml
+  - asyncapi/truepill-webhooks.yml
+render: null
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

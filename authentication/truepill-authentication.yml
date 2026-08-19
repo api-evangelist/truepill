@@ -1,17 +1,75 @@
-generated: '2026-07-11'
-method: derived
-source: openapi/truepill-openapi.yml
+generated: '2026-08-14'
+method: searched
+source: https://rxdocs.fuzehealth.com (Overview → Authentication, Making Requests, Environments)
+docs: https://rxdocs.fuzehealth.com
+spec_source: openapi/_original/truepill-fuzerx-swagger.json
 summary:
   types:
   - apiKey
   api_key_in:
   - header
+  oauth2: false
+  openid_connect: false
+  mutual_tls: false
+  environments: 2
 schemes:
-- name: ApiKeyAuth
+- name: apiKey
   type: apiKey
   in: header
   parameter: Authorization
-  description: 'API key passed as `Authorization: ApiKey <YOUR_API_KEY>`. Separate keys are
-    issued for the sandbox and production environments.'
+  scheme_prefix: ApiKey
+  format: 'Authorization: ApiKey <YOUR API KEY>'
+  description: >-
+    Every FuzeRx endpoint is authenticated with a single provisioned API key sent
+    in the Authorization header, prefixed with the literal token "ApiKey". The
+    published documentation calls this "HTTP Basic Auth" but the wire format is a
+    bearer-style opaque key, not RFC 7617 base64 credentials. The key is
+    provisioned by Fuze Health during commercial onboarding — there is no
+    self-serve key issuance, no OAuth authorization server, and no scope model.
+  applied_globally: true
   sources:
-  - openapi/truepill-openapi.yml
+  - openapi/truepill-patients-api-openapi.yml
+  - openapi/truepill-prescriptions-api-openapi.yml
+  - openapi/truepill-transfers-api-openapi.yml
+  - openapi/truepill-insurance-api-openapi.yml
+  - openapi/truepill-webhooks-api-openapi.yml
+  - openapi/truepill-fulfillment-api-openapi.yml
+  - openapi/truepill-diagnostics-api-openapi.yml
+  - openapi/truepill-consults-api-openapi.yml
+  - openapi/truepill-media-api-openapi.yml
+  - https://rxdocs.fuzehealth.com
+key_issuance:
+  self_serve: false
+  process: >-
+    Two keys are issued per customer during onboarding — one sandbox key and one
+    production key. The environment is selected purely by which key is presented,
+    together with the matching base host.
+  contact: rx.support@fuzehealth.com
+key_prefixes:
+- environment: production
+  prefix: tp_live_key_
+  source: https://rxdocs.fuzehealth.com (Create a Patient curl example)
+- environment: sandbox
+  prefix: tp_test_key_
+  source: https://rxdocs.fuzehealth.com (Sandbox Testing with Simulations curl examples)
+failure_response:
+  status: 401
+  body_shape: '{"statusCode": 401, "error": "Unauthorized", "message": "Please Send an Api Key"}'
+  observed: https://rxapi.fuzehealth.com/ (unauthenticated GET, probed 2026-08-14)
+  note: >-
+    The API host returns this challenge for every path except /swagger.json,
+    which is served anonymously.
+transport:
+  tls: TLS 1.2 or higher
+  source: https://rxdocs.fuzehealth.com (HIPAA & Security)
+  note: Documentation states all API requests are transmitted over TLS 1.2 and all data is encrypted in transit and at rest.
+scopes: none
+notes: >-
+  There is no OAuth 2.0 or OpenID Connect surface, so no scopes/ artifact is
+  emitted for this provider. Authorization is coarse: one key grants the whole
+  contracted surface. The /v1/insurance_claim family is described in the docs as
+  access-restricted, which implies per-account entitlements rather than
+  token-level scoping.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

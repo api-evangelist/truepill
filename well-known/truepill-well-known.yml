@@ -1,0 +1,77 @@
+generated: '2026-08-14'
+method: probed
+source: live HTTPS probes of every apis.yml host and every OpenAPI servers[] host
+summary: >-
+  No /.well-known/ discovery surface is served on ANY Truepill / Fuze Health
+  host. The API host (rxapi.fuzehealth.com) answers every /.well-known/* path
+  with its global 401 API-key challenge rather than serving a document; the
+  docs host (rxdocs.fuzehealth.com) is an S3-backed single-page document that
+  returns 403 AccessDenied for every path other than the index; and the two
+  marketing hosts return 404 with an explicit "Invalid .well-known request"
+  body. NO WellKnown or SecurityTxt pointer is emitted for this provider —
+  every probe below is an absence, not a presence.
+documents_found: 0
+hosts:
+- host: https://rxapi.fuzehealth.com
+  role: production API host (OpenAPI servers[] + apis.yml baseURL)
+  documents:
+  - path: /.well-known/security.txt
+    status: 401
+    note: global API-key challenge, not a document
+  - path: /.well-known/openid-configuration
+    status: 401
+  - path: /.well-known/oauth-authorization-server
+    status: 401
+  - path: /.well-known/api-catalog
+    status: 401
+  - path: /.well-known/ai-plugin.json
+    status: 401
+  - path: /.well-known/agent-card.json
+    status: 401
+  - path: /.well-known/agent.json
+    status: 401
+- host: https://rxdocs.fuzehealth.com
+  role: developer documentation host
+  documents:
+  - path: /.well-known/security.txt
+    status: 403
+    note: S3 AccessDenied — the bucket serves only the index document
+  - path: /.well-known/agent-card.json
+    status: 403
+  - path: /.well-known/agent.json
+    status: 403
+- host: https://www.truepill.com
+  role: legacy corporate website
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    note: 'body is the literal HTML string "Invalid .well-known request"'
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: https://fuzehealth.com
+  role: current corporate website
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: https://rx.fuzehealth.com
+  role: FuzeRx product / api-docs landing host
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

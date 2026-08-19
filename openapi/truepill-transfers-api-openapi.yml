@@ -1,143 +1,1106 @@
-openapi: 3.0.1
+openapi: 3.0.3
 info:
-  title: Truepill (FuzeRx) Insurance Transfers API
-  description: REST API for Truepill's pharmacy and healthcare-infrastructure platform, now shipping as FuzeRx after LetsGetChecked's 2024 acquisition of Truepill and the May 2025 rebrand to Fuze Health. The API exposes JSON over HTTPS for patient management, prescriptions, pharmacy-to-pharmacy transfers, insurance and copay adjudication, and webhook event retrieval. Endpoints and field names below reflect Truepill/FuzeRx public developer documentation; request and response bodies are summarized and should be reconciled against the live reference at https://rxdocs.fuzehealth.com before production use.
-  termsOfService: https://www.truepill.com/terms-of-service
+  title: Truepill Transfers API
+  description: 'Pharmacy-to-pharmacy prescription movement: transfer requests, direct transfers (v1/v2),
+    external transfers, and external pharmacy location matching.
+
+
+    Harvested verbatim from the live Truepill (FuzeRx) Swagger 2.0 contract published at https://rxapi.fuzehealth.com/swagger.json
+    and split by resource domain. Operation summaries, descriptions, parameters, schemas and response
+    codes are the provider''s own; only the Swagger 2.0 -> OpenAPI 3.0.3 conversion and the domain split
+    are ours.'
+  version: 0.0.1
   contact:
     name: FuzeRx Support
-    email: rx.support@fuzehealth.com
-  version: v1
+    url: https://rxdocs.fuzehealth.com
 servers:
-- url: https://rxapi.fuzehealth.com/v1
+- url: https://rxapi.fuzehealth.com
   description: Production
-- url: https://rxapi.sandbox.fuzehealth.com/v1
-  description: Sandbox
 security:
-- ApiKeyAuth: []
+- apiKey: []
 tags:
-- name: Transfers
-  description: Pharmacy-to-pharmacy prescription transfers.
+- name: transfers
+  description: 'Pharmacy-to-pharmacy prescription movement: transfer requests, direct transfers (v1/v2),
+    external transfers, and external pharmacy location matching.'
 paths:
-  /transfer_request:
+  /api/v1/direct_transfer:
     post:
-      operationId: createTransferRequest
+      summary: Create Direct Transfer
+      description: Create a direct pharmacy-to-pharmacy transfer of the prescription<br/><br/>A direct
+        transfer is a pharmacy-to-pharmacy transfer of the prescription between your pharmacy and a Truepill
+        pharmacy. This method works best for customers that operate their own pharmacies and are looking
+        for a programmatic way to transfer a prescription.<br/><br/>And similar to a traditional transfer
+        request, there are required fields related to the pharmacist transferring out the prescription,
+        and the pharmacist transferring in the prescription.<br/><br/>This approach requires a digital
+        copy of the original prescription.
+      operationId: postApiV1Direct_transfer
       tags:
-      - Transfers
-      summary: Initiate a pharmacy transfer request.
+      - transfers
       requestBody:
-        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TransferRequest'
+              $ref: '#/components/schemas/CreateDirectTransfer'
       responses:
-        '200':
-          description: Transfer request created.
+        '202':
+          description: Accepted
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TransferResponse'
-    get:
-      operationId: listTransferRequests
-      tags:
-      - Transfers
-      summary: List all transfer requests.
-      responses:
-        '200':
-          description: Transfer requests.
+                $ref: '#/components/schemas/Model141'
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/TransferResponse'
-  /transfer_request/{transfer_token}:
+                $ref: '#/components/schemas/Model142'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model143'
+  /api/v1/direct_transfer/{direct_transfer_token}:
     get:
-      operationId: getTransferRequest
+      summary: Get Direct Transfer by token
+      operationId: getApiV1Direct_transferDirect_transfer_token
       tags:
-      - Transfers
-      summary: Get a specific transfer request.
+      - transfers
       parameters:
-      - name: transfer_token
+      - name: direct_transfer_token
         in: path
         required: true
         schema:
           type: string
       responses:
         '200':
-          description: Transfer request details.
+          description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TransferResponse'
-  /direct_transfer:
-    post:
-      operationId: createDirectTransfer
+                $ref: '#/components/schemas/Model47'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model48'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model49'
+  /api/v1/external_location_matches:
+    get:
+      summary: Search for specific external location using address information
+      operationId: getApiV1External_location_matches
       tags:
-      - Transfers
-      summary: Create a direct transfer (v1).
+      - transfers
+      responses:
+        default:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: string
+    post:
+      summary: 'Query external locations for multiple addresses, and will reply back with a map linking
+        to the matched external location, or indication that one does not exist yet '
+      operationId: postApiV1External_location_matches
+      tags:
+      - transfers
+      responses:
+        default:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: string
+  /api/v1/external_locations:
+    get:
+      summary: Search for external locations using zip code
+      operationId: getApiV1External_locations
+      tags:
+      - transfers
+      responses:
+        default:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: string
+  /api/v1/external_locations/{id}:
+    get:
+      summary: Get a specific external location by id
+      operationId: getApiV1External_locationsId
+      tags:
+      - transfers
+      responses:
+        default:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: string
+  /api/v1/external_transfers/{id}:
+    get:
+      summary: Get external transfer details
+      description: Get the details of an external transfer<br/><br/>This endpoints needs the external
+        transfer id to retrieve the right data
+      operationId: getApiV1External_transfersId
+      tags:
+      - transfers
+      responses:
+        default:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: string
+  /api/v1/transfer_request:
+    get:
+      summary: Get a list of Transfers
+      description: This endpoint retrieves a list of all the transfer requests you have made to the Truepill
+        ecosystem.<br/><br/>List transfers utilizes an optional pagination functionality when retrieving
+        a large number of transfers. By default, this endpoint retrieves 50 transfers at a time, starting
+        with the earliest transfers.<br/><br/>For example, if you were looking to retrieve the 70-80th
+        transfers made to Truepill, you would use a pagination of 1 (zero base indexing).<br/><br/>To
+        paginate, append a `?` at the end of the API endpoint along with the `page=[PAGE_NUMBER]`, and
+        replace<br/><br/>`[PAGE_NUMBER]` with an integer.<br/><br/>If the pagination value surpasses the
+        number of transfers in the system, an empty array `[]` will be returned.<br/><br/>This endpoint
+        retrieves 50 transfers at a time, starting with the earliest-made transfers. If you have a large
+        number of transfers and are looking to retrieve more recent transfers, you will need to paginate.
+      operationId: getApiV1Transfer_request
+      tags:
+      - transfers
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model31'
+    post:
+      summary: Create a Transfer
+      description: 'A transfer request can be created using our `transfer_request` API endpoint. Truepill
+        will provide a receipt confirmation of the request, but please note the subsequent webhook event
+        notifying you of a successful transfer may take 1-3 days.<br/><br/>The following endpoint requests
+        the transfer of a prescription from a third-party pharmacy to Truepill’s pharmacy. If the prescription
+        in question was generated by a physician contracted by the API User then this endpoint does not
+        need to be called; otherwise this request is necessary for the Fill Request to be fulfilled.<br/><br/>Note:
+        You MUST send either pharmacy contact information or prescriber contact information to avoid an
+        error.<br/><br/>If `medications` field is not provided in the request, Truepill will transfer
+        all possible patient prescriptions.'
+      operationId: postApiV1Transfer_request
+      tags:
+      - transfers
       requestBody:
-        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TransferRequest'
+              $ref: '#/components/schemas/Transfer%20request'
       responses:
-        '200':
-          description: Direct transfer created.
+        '201':
+          description: Created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TransferResponse'
+                $ref: '#/components/schemas/Model178'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model181'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model24'
+  /api/v1/transfer_request/{token}:
+    get:
+      summary: Get a Transfer by token
+      description: Once a transfer has been created in the Truepill ecosystem, you can access the transfer
+        information at any time using the `transfer_token` that was provided on the Create Transfer response.<br/><br/>If
+        the `transfer_token` does not map to a transfer record, a `404 Not Found` will be returned.<br/><br/>Querying
+        for transfer information that does not belong to you will return an error response.
+      operationId: getApiV1Transfer_requestToken
+      tags:
+      - transfers
+      parameters:
+      - name: token
+        in: path
+        required: true
+        description: Transfer token
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model68'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model69'
+  /api/v2/direct_transfer:
+    post:
+      summary: Create Direct Transfer v2
+      description: Create a direct pharmacy-to-pharmacy transfer of the prescription<br/><br/>A direct
+        transfer is a pharmacy-to-pharmacy transfer of the prescription between your pharmacy and a Truepill
+        pharmacy. This method works best for customers that operate their own pharmacies and are looking
+        for a programmatic way to transfer a prescription.<br/><br/>And similar to a traditional transfer
+        request, there are required fields related to the pharmacist transferring out the prescription,
+        and the pharmacist transferring in the prescription.<br/><br/>This approach requires a digital
+        copy of the original prescription.
+      operationId: postApiV2Direct_transfer
+      tags:
+      - transfers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/icd_codes'
+      responses:
+        '200':
+          description: '200'
+        '400':
+          description: '400'
+        '404':
+          description: '404'
+  /v1/direct_transfer:
+    post:
+      summary: Create Direct Transfer
+      description: Create a direct pharmacy-to-pharmacy transfer of the prescription<br/><br/>A direct
+        transfer is a pharmacy-to-pharmacy transfer of the prescription between your pharmacy and a Truepill
+        pharmacy. This method works best for customers that operate their own pharmacies and are looking
+        for a programmatic way to transfer a prescription.<br/><br/>And similar to a traditional transfer
+        request, there are required fields related to the pharmacist transferring out the prescription,
+        and the pharmacist transferring in the prescription.<br/><br/>This approach requires a digital
+        copy of the original prescription.
+      operationId: postV1Direct_transfer
+      tags:
+      - transfers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDirectTransfer'
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model141'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model142'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model143'
+  /v1/direct_transfer/{direct_transfer_token}:
+    get:
+      summary: Get Direct Transfer by token
+      operationId: getV1Direct_transferDirect_transfer_token
+      tags:
+      - transfers
+      parameters:
+      - name: direct_transfer_token
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model47'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model48'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model49'
+  /v1/external_location_matches:
+    get:
+      summary: Search for specific external location using address information
+      operationId: getV1External_location_matches
+      tags:
+      - transfers
+      responses:
+        default:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: string
+    post:
+      summary: 'Query external locations for multiple addresses, and will reply back with a map linking
+        to the matched external location, or indication that one does not exist yet '
+      operationId: postV1External_location_matches
+      tags:
+      - transfers
+      responses:
+        default:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: string
+  /v1/external_locations:
+    get:
+      summary: Search for external locations using zip code
+      operationId: getV1External_locations
+      tags:
+      - transfers
+      responses:
+        default:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: string
+  /v1/external_locations/{id}:
+    get:
+      summary: Get a specific external location by id
+      operationId: getV1External_locationsId
+      tags:
+      - transfers
+      responses:
+        default:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: string
+  /v1/external_transfers/{id}:
+    get:
+      summary: Get external transfer details
+      description: Get the details of an external transfer<br/><br/>This endpoints needs the external
+        transfer id to retrieve the right data
+      operationId: getV1External_transfersId
+      tags:
+      - transfers
+      responses:
+        default:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: string
+  /v1/transfer_request:
+    get:
+      summary: Get a list of Transfers
+      description: This endpoint retrieves a list of all the transfer requests you have made to the Truepill
+        ecosystem.<br/><br/>List transfers utilizes an optional pagination functionality when retrieving
+        a large number of transfers. By default, this endpoint retrieves 50 transfers at a time, starting
+        with the earliest transfers.<br/><br/>For example, if you were looking to retrieve the 70-80th
+        transfers made to Truepill, you would use a pagination of 1 (zero base indexing).<br/><br/>To
+        paginate, append a `?` at the end of the API endpoint along with the `page=[PAGE_NUMBER]`, and
+        replace<br/><br/>`[PAGE_NUMBER]` with an integer.<br/><br/>If the pagination value surpasses the
+        number of transfers in the system, an empty array `[]` will be returned.<br/><br/>This endpoint
+        retrieves 50 transfers at a time, starting with the earliest-made transfers. If you have a large
+        number of transfers and are looking to retrieve more recent transfers, you will need to paginate.
+      operationId: getV1Transfer_request
+      tags:
+      - transfers
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model31'
+    post:
+      summary: Create a Transfer
+      description: 'A transfer request can be created using our `transfer_request` API endpoint. Truepill
+        will provide a receipt confirmation of the request, but please note the subsequent webhook event
+        notifying you of a successful transfer may take 1-3 days.<br/><br/>The following endpoint requests
+        the transfer of a prescription from a third-party pharmacy to Truepill’s pharmacy. If the prescription
+        in question was generated by a physician contracted by the API User then this endpoint does not
+        need to be called; otherwise this request is necessary for the Fill Request to be fulfilled.<br/><br/>Note:
+        You MUST send either pharmacy contact information or prescriber contact information to avoid an
+        error.<br/><br/>If `medications` field is not provided in the request, Truepill will transfer
+        all possible patient prescriptions.'
+      operationId: postV1Transfer_request
+      tags:
+      - transfers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transfer%20request'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model178'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model181'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model24'
+  /v1/transfer_request/{token}:
+    get:
+      summary: Get a Transfer by token
+      description: Once a transfer has been created in the Truepill ecosystem, you can access the transfer
+        information at any time using the `transfer_token` that was provided on the Create Transfer response.<br/><br/>If
+        the `transfer_token` does not map to a transfer record, a `404 Not Found` will be returned.<br/><br/>Querying
+        for transfer information that does not belong to you will return an error response.
+      operationId: getV1Transfer_requestToken
+      tags:
+      - transfers
+      parameters:
+      - name: token
+        in: path
+        required: true
+        description: Transfer token
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model68'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model69'
   /v2/direct_transfer:
     post:
-      operationId: createDirectTransferV2
+      summary: Create Direct Transfer v2
+      description: Create a direct pharmacy-to-pharmacy transfer of the prescription<br/><br/>A direct
+        transfer is a pharmacy-to-pharmacy transfer of the prescription between your pharmacy and a Truepill
+        pharmacy. This method works best for customers that operate their own pharmacies and are looking
+        for a programmatic way to transfer a prescription.<br/><br/>And similar to a traditional transfer
+        request, there are required fields related to the pharmacist transferring out the prescription,
+        and the pharmacist transferring in the prescription.<br/><br/>This approach requires a digital
+        copy of the original prescription.
+      operationId: postV2Direct_transfer
       tags:
-      - Transfers
-      summary: Create a direct transfer (v2).
+      - transfers
       requestBody:
-        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TransferRequest'
+              $ref: '#/components/schemas/icd_codes'
       responses:
         '200':
-          description: Direct transfer created.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TransferResponse'
+          description: '200'
+        '400':
+          description: '400'
+        '404':
+          description: '404'
 components:
-  schemas:
-    TransferResponse:
-      type: object
-      properties:
-        transfer_token:
-          type: string
-        status:
-          type: string
-        timestamp:
-          type: string
-          format: date-time
-        details:
-          type: object
-    TransferRequest:
-      type: object
-      properties:
-        patient_token:
-          type: string
-        prescription_token:
-          type: string
-        from_pharmacy:
-          type: string
-        to_pharmacy:
-          type: string
-        medication_name:
-          type: string
   securitySchemes:
-    ApiKeyAuth:
+    apiKey:
       type: apiKey
       in: header
       name: Authorization
-      description: 'API key passed as `Authorization: ApiKey <YOUR_API_KEY>`. Separate keys are issued for the sandbox and production environments.'
+      description: API key passed in the Authorization header. Separate keys are issued for sandbox and
+        production.
+  schemas:
+    CreateDirectTransfer:
+      type: object
+      description: Create new direct transfer
+      properties:
+        metadata:
+          type: string
+        prescriber:
+          $ref: '#/components/schemas/Prescriber'
+        patient_token:
+          type: string
+          description: Token to reference patient record
+          example: 4526d90a
+        transfer_from:
+          $ref: '#/components/schemas/TransferFrom'
+        transfer_to:
+          $ref: '#/components/schemas/TransferTo'
+        prescription:
+          $ref: '#/components/schemas/Model139'
+        source:
+          type: string
+      required:
+      - prescriber
+      - transfer_from
+      - transfer_to
+      - prescription
+    Model138:
+      type: object
+      properties:
+        name:
+          type: string
+          x-convert:
+            trim: true
+        street1:
+          type: string
+          description: Primary street where the company is located
+          example: 123 Some Lane
+          x-convert:
+            trim: true
+        city:
+          type: string
+          description: City where the company is located
+          example: San Mateo
+          x-convert:
+            trim: true
+        state:
+          type: string
+          description: State where the company is located
+          example: CA
+          x-convert:
+            trim: true
+        zip:
+          type: string
+          description: Postal code where the company is located
+          example: '94538'
+          pattern: ^\d{5}(-\d{4})?$
+      required:
+      - name
+      - street1
+      - city
+      - state
+      - zip
+    Model139:
+      type: object
+      description: Prescription description
+      properties:
+        medication_name:
+          type: string
+          description: Medication name
+          example: Finasteride
+        quantity_written:
+          type: string
+          description: Written medication quantity
+          example: '60'
+        quantity_dispensed:
+          type: string
+          description: Dispensed medication
+          example: '60'
+        medication_sig:
+          type: string
+          description: Recommendations for medicines
+          example: Apply daily.
+        written_date:
+          type: string
+          description: Written date
+          example: '20180401'
+          pattern: ^((1|2)\d{3}[01][0-9][0-3][0-9]$)
+        expiration_date:
+          type: string
+          description: Expiration date
+          example: '20180401'
+          pattern: ^((1|2)\d{3}[01][0-9][0-3][0-9]$)
+        last_fill_date:
+          type: string
+          description: Last fill date
+          example: '20180401'
+          pattern: ^((1|2)\d{3}[01][0-9][0-3][0-9]$)
+        first_fill_date:
+          type: string
+          description: First fill date
+          example: '20180401'
+          pattern: ^((1|2)\d{3}[01][0-9][0-3][0-9]$)
+        number:
+          type: string
+          example: '4567'
+        direct_transfer_url:
+          type: string
+          example: https://user:securelogin@www.assets.com/rx/saijhofiasjfoasoi2f.png
+          x-format:
+            uri:
+              scheme:
+              - https
+              - s3
+        can_substitute:
+          type: boolean
+          example: true
+        prescribed_ndc:
+          type: string
+          description: National drug code
+          example: '12345678912'
+          pattern: ^(\d{10,11})$
+        days_supply:
+          type: integer
+          description: Days supply
+          example: 30
+        icd10_code:
+          type: string
+          example: G43.909
+        notes:
+          type: string
+          description: Text note
+          example: A note here
+        annotation:
+          type: string
+          description: Short annotation
+          example: Hair loss treatment
+        diagnosis:
+          type: string
+          description: Diagnosis
+          example: Male pattern baldness
+        quantity_transferred:
+          type: string
+          description: Quantity of medication transferred
+          example: '60'
+        original_refills:
+          type: integer
+          description: Original number of refills
+          example: 3
+      required:
+      - medication_name
+      - quantity_written
+      - medication_sig
+      - written_date
+      - number
+      - can_substitute
+    Model140:
+      type: object
+      properties:
+        direct_transfer_id:
+          type: string
+          example: 9a8b9e4161
+    Model141:
+      type: object
+      properties:
+        request_id:
+          type: string
+          example: 40277544de5c6ba685dc4161e189d3e2
+        timestamp:
+          type: integer
+          example: 1631571795.423
+        status:
+          type: string
+          example: success
+        details:
+          $ref: '#/components/schemas/Model140'
+    Model142:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 400
+        error:
+          type: string
+          example: Bad Request
+        message:
+          type: string
+          example: Direct transfer already exists with token 4009e71e42
+    Model143:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Unable to find Patient.
+    Model175:
+      type: object
+      properties:
+        transfer_medication_id:
+          type: string
+          example: a4d262ba4793835c
+        transfer_medication_token:
+          type: string
+          example: a4d262ba4793835c
+        medication_name:
+          type: string
+          example: Lisinopril 5 mg Oral Tablet *[41]*
+    Model176:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model175'
+    Model177:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Your transfer request has been received.
+        transfer_id:
+          type: string
+          example: d01f30b320
+        transfer_token:
+          type: string
+          example: d01f30b320
+        transfer_medications:
+          $ref: '#/components/schemas/Model176'
+        patient_id:
+          type: string
+          example: 507ee4b3ea5318b7
+        patient_token:
+          type: string
+          example: 507ee4b3ea5318b7
+    Model178:
+      type: object
+      properties:
+        request_id:
+          type: string
+          example: 7b8b4ed9ef459888d6bbb503363e5f00
+        timestamp:
+          type: integer
+          example: 1631571795
+        status:
+          type: string
+          example: success
+        details:
+          $ref: '#/components/schemas/Model177'
+    Model179:
+      type: object
+      properties:
+        key:
+          type: string
+          example: ''
+        message:
+          type: string
+          example: Transfer request must contain at least one of [patient_token, patient_first_name]
+    Model180:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model179'
+    Model181:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 400
+        error:
+          type: string
+          example: Bad Request
+        validation_errors:
+          $ref: '#/components/schemas/Model180'
+    Model24:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 404
+        error:
+          type: string
+          example: Not Found
+        message:
+          type: string
+          example: Unable to find Patient.
+    Model29:
+      type: object
+      properties:
+        url_token:
+          type: string
+          example: e6014ac9da658c1c
+        medication_name:
+          type: string
+          example: duloxetine 30mg capsule
+    Model30:
+      type: object
+      properties:
+        created_at:
+          type: string
+          format: date
+          example: '2021-02-28T22:34:50.000Z'
+        url_token:
+          type: string
+          example: e4bce6d1e2
+        status:
+          type: string
+          example: completed
+        transfer_medications:
+          $ref: '#/components/schemas/transfer_medications'
+    Model31:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model30'
+    Model47:
+      type: object
+      properties:
+        status:
+          type: string
+          example: pending
+        rejection_reason:
+          type: string
+        additional_rejection_details:
+          type: string
+        prescription_token:
+          type: string
+          example: 61323ceea1da89001d154adc
+        metadata:
+          type: string
+          example: some metadata
+        created_at:
+          type: string
+          example: '2021-09-14T04:49:12.000Z'
+    Model48:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 403
+        error:
+          type: string
+          example: Forbidden
+        message:
+          type: string
+          example: Unauthorized from viewing this direct transfer
+    Model49:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 404
+        error:
+          type: string
+          example: Not Found
+        message:
+          type: string
+          example: Unable to find direct transfer.
+    Model64:
+      type: object
+      properties:
+        url_token:
+          type: string
+          example: 0a5211b5f1db
+        prescribed_written_name:
+          type: string
+          example: Lisinopril 5 mg Oral Tablet
+        prescribed_generic_name:
+          type: string
+          example: Generic 10mg tablet
+        last_filled_date:
+          type: string
+          example: '2021-02-28T22:34:50.000Z'
+        prescribed_quantity:
+          type: number
+          example: 60
+        prescriber:
+          type: string
+          example: Dr. Nick Rivera
+        num_refills_remaining:
+          type: number
+          example: 0
+        medication_name:
+          type: string
+          example: Generic 10mg tablet
+        prescription_date:
+          type: string
+        days_supply:
+          type: string
+          example: '30'
+        num_refills_filled:
+          type: string
+          example: '0'
+    Model65:
+      type: object
+      properties:
+        url_token:
+          type: string
+          example: e6014ac9da658c1c
+        medication_name:
+          type: string
+          example: duloxetine 30mg capsule
+        rejection_reason:
+          type: string
+        rejection_reason_other:
+          type: string
+        prescription:
+          $ref: '#/components/schemas/Model64'
+    Model66:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model65'
+    Model67:
+      type: object
+      properties:
+        created_at:
+          type: string
+          example: '2021-02-28T22:34:50.000Z'
+        url_token:
+          type: string
+          example: e4bce6d1e2
+        status:
+          type: string
+          example: completed
+        cancel_reason:
+          type: string
+        cancel_reason_other:
+          type: string
+        pharmacy_name:
+          type: string
+          example: Test
+        pharmacy_phone:
+          type: string
+          example: +1 (111) 222-3333
+        prescriber_name:
+          type: string
+        prescriber_phone:
+          type: string
+        notes:
+          type: string
+          example: A note
+        metadata:
+          type: string
+          example: m3t4
+        reject_reason:
+          type: string
+        reject_reason_other:
+          type: string
+        transfer_medications:
+          $ref: '#/components/schemas/Model66'
+    Model68:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model67'
+    Model69:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 404
+        error:
+          type: string
+          example: Not Found
+        message:
+          type: string
+          example: Transfer not found.
+    Prescriber:
+      type: object
+      description: Prescriber description
+      properties:
+        prescriber_type:
+          type: string
+          example: OD
+          enum:
+          - OD
+          - PMHNP
+          - MBBS
+          - DNP
+          - D.O.
+          - DPT
+          - D.D.S.
+          - F.N.P.
+          - CPP
+          - N.D.
+          - P.A.
+          - APNP
+          - V.M.D.
+          - RPh
+          - APRN
+          - DC APC
+          - PsyD
+          - CRNA
+          - PharmD
+          - B.V.M.S.
+          - WHNP
+          - PhD
+          - ARNP
+          - PT
+          - CRNP
+          - DPM
+          - CNP
+          - N.P.
+          - CDH
+          - D.M.D.
+          - D.V.M.
+          - M.D.
+          - CNM
+        first_name:
+          type: string
+          description: Prescriber's first name
+          example: Stephen
+          x-convert:
+            trim: true
+        last_name:
+          type: string
+          description: Prescriber's last name
+          example: Strange
+          x-convert:
+            trim: true
+        address:
+          $ref: '#/components/schemas/Model138'
+        dea:
+          type: string
+        npi:
+          type: string
+          description: National provider identifier
+          example: '123123123'
+      required:
+      - first_name
+      - last_name
+      - address
+      - npi
+    TransferFrom:
+      type: object
+      description: Pharmacy to transfer prescriptions from
+      properties:
+        name:
+          type: string
+          description: Name of pharmacy
+          example: Walmart Pharmacy
+        dea:
+          type: string
+        pharmacist:
+          type: string
+          example: Dr. Storm
+        id_number:
+          type: string
+          example: '490382308'
+        address:
+          $ref: '#/components/schemas/Model138'
+      required:
+      - name
+      - pharmacist
+      - id_number
+      - address
+    TransferTo:
+      type: object
+      description: Pharmacy to transfer prescriptions to
+      properties:
+        name:
+          type: string
+          description: Name of pharmacy
+          example: Walmart Pharmacy
+        dea:
+          type: string
+        pharmacist:
+          type: string
+          example: Dr. Storm
+        id_number:
+          type: string
+      required:
+      - name
+      - pharmacist
+    icd_codes:
+      type: object
+    transfer_medications:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model29'

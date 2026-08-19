@@ -1,0 +1,116 @@
+generated: '2026-08-14'
+method: searched
+source: https://rxdocs.fuzehealth.com (Errors, Common HTTP Responses, Making Requests)
+derived_from: openapi/_original/truepill-fuzerx-swagger.json
+provider: Truepill
+providerId: truepill
+format: proprietary
+rfc9457: false
+content_type: application/json
+summary: >-
+  FuzeRx returns standard HTTP status codes with a proprietary JSON error
+  envelope. It does NOT implement RFC 9457 problem+json — there is no type, title,
+  detail, instance or status member and no application/problem+json media type
+  anywhere in the 158-operation published contract. Validation failures are the
+  only machine-actionable shape: a 400 carries validation_errors[], an array of
+  {key, message} pairs naming the offending request field.
+envelope:
+  fields:
+  - name: statusCode
+    type: integer
+    required: true
+    description: The HTTP status code, repeated in the body.
+  - name: error
+    type: string
+    required: true
+    description: HTTP reason phrase, e.g. "Bad Request", "Unauthorized", "Not Found".
+  - name: message
+    type: string
+    required: false
+    description: Human-readable explanation. Present on 401 and 404 responses.
+  - name: validation_errors
+    type: array
+    required: false
+    description: Present on 400. Each entry is {key, message} identifying a field that failed validation.
+  examples:
+  - status: 400
+    body: '{"statusCode": 400, "error": "Bad Request", "validation_errors": [{"key": "last_name", "message": "is required"}]}'
+  - status: 400
+    body: '{"statusCode": 400, "error": "Bad Request", "validation_errors": [{"key": "street1", "message": "is not allowed to be empty"}]}'
+  - status: 404
+    body: '{"statusCode": 404, "error": "Not Found", "message": "Resource Not Found."}'
+  - status: 401
+    body: '{"statusCode": 401, "error": "Unauthorized", "message": "Please Send an Api Key"}'
+    note: Observed live on an unauthenticated request to https://rxapi.fuzehealth.com/ on 2026-08-14.
+problem_types:
+- status: 200
+  title: OK
+  description: Success.
+  spec_occurrences: 94
+- status: 201
+  title: Created
+  description: Resource created.
+  spec_occurrences: 8
+- status: 202
+  title: Accepted
+  description: >-
+    Success — the request was accepted for asynchronous processing. The outcome
+    arrives as a webhook event, not in this response body. Returned by
+    POST /v1/copay_request and other request-style operations.
+  spec_occurrences: 26
+- status: 400
+  title: Bad Request
+  description: >-
+    Request body is not correctly formatted; a validation error or a missing
+    field. Read validation_errors[] to find the offending key. An empty string is
+    never accepted for a required OR optional string — omit the field instead.
+  remediation: Fix the named field and resubmit. Do not retry unchanged.
+  spec_occurrences: 68
+- status: 401
+  title: Unauthorized
+  description: Authentication credentials were missing or incorrect — the API key is absent or not valid.
+  remediation: >-
+    Send `Authorization: ApiKey <key>` and confirm the key matches the environment host being called.
+  spec_occurrences: 41
+- status: 403
+  title: Forbidden
+  description: >-
+    The key is valid but the account is not entitled to the operation. The
+    insurance-claim family is documented as access-restricted.
+  remediation: Request the entitlement from Fuze Health during or after onboarding.
+  spec_occurrences: 20
+- status: 404
+  title: Not Found
+  description: Some entity in the request was not found, most often an unknown token.
+  remediation: Verify the token; tokens are environment-scoped and a sandbox token will 404 in production.
+  spec_occurrences: 75
+- status: 409
+  title: Conflict
+  description: Conflicting state for the target resource.
+  spec_occurrences: 2
+- status: 422
+  title: Unprocessable Entity
+  description: Semantically invalid request.
+  spec_occurrences: 4
+- status: 500
+  title: Internal Server Error
+  description: Server-side failure.
+  remediation: Retry with backoff on safe (GET) calls only; see the idempotency warning in conventions/truepill-conventions.yml before retrying a POST.
+  spec_occurrences: 53
+- status: 503
+  title: Service Unavailable
+  spec_occurrences: 2
+- status: 504
+  title: Gateway Timeout
+  spec_occurrences: 2
+domain_error_codes:
+  note: >-
+    The HTTP layer above is only half of the error surface. Business rejections
+    are delivered asynchronously as webhook events carrying string/numeric codes,
+    catalogued separately.
+  see:
+  - errors/truepill-error-codes.yml
+  - errors/truepill-decline-codes.yml
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

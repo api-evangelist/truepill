@@ -1,0 +1,45 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Truepill (FuzeRx) Insurance Webhooks API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Webhooks",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve webhook events by type.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://rxapi.fuzehealth.com/v1/webhook_events/:webhook_type",
+            "params": [
+              {
+                "name": "webhook_type",
+                "value": "",
+                "type": "path",
+                "description": "Webhook event type (e.g., notify_rx)."
+              }
+            ]
+          },
+          "docs": "Retrieve webhook events by type."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

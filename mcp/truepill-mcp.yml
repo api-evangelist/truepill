@@ -1,0 +1,164 @@
+generated: '2026-08-15'
+method: derived
+source: openapi/truepill-*-openapi.yml (candidate tools derived from published operationIds)
+status: candidate
+provider: Truepill
+providerId: truepill
+summary: >-
+  Truepill / Fuze Health ships NO MCP server. Searches of the provider documentation
+  (rxdocs.fuzehealth.com, rx.fuzehealth.com/api-docs), the github.com/truepill and
+  github.com/FuzeHealth organizations, npm (@truepill/*, @fuzehealth/*, fuzerx), PyPI and the
+  public MCP registries returned nothing, and no MCP endpoint is advertised on any Truepill or
+  Fuze Health host. The tools below are a CANDIDATE surface derived by API Evangelist from the
+  provider's own published Swagger contract — they are a proposal for what a FuzeRx MCP server
+  would expose, not something an agent can call today. Every tool names the exact operationId it
+  would bind to, so each inherits a real inputSchema from the spec rather than a guessed one.
+search:
+  date: '2026-08-15'
+  queried:
+  - https://rxdocs.fuzehealth.com
+  - https://rx.fuzehealth.com/api-docs
+  - https://github.com/truepill
+  - https://github.com/FuzeHealth
+  - npm registry (truepill, fuzerx, fuzehealth, @truepill/*)
+  - PyPI (truepill, fuzerx)
+  - public MCP server registries / directories
+  result: no official or community MCP server found
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: api-key
+  verified: derived
+  note: >-
+    mode is `none` because nobody ships a server. If FuzeRx ever publishes one, auth would be the
+    same provisioned `Authorization: ApiKey <key>` header the REST API uses — there is no OAuth
+    authorization server on any host (/.well-known/oauth-authorization-server returns the global
+    401 API-key challenge).
+server:
+  name: truepill
+  transport: null
+  url: null
+apis_yml_pointer:
+  emitted: false
+  reason: >-
+    NO `type: MCPServer` pointer is emitted in apis.yml for this provider. That pointer asserts the
+    PROVIDER operates an MCP server, and Truepill / Fuze Health does not. Wiring it for a derived
+    candidate would credit them with an agent surface an agent cannot reach — the same rule this
+    pipeline applies to WellKnown and AgentCard. This file stands as the honest record that the
+    surface was looked for, was not found, and what one would look like if it existed.
+agent_safety:
+  note: >-
+    This API dispenses controlled and non-controlled medication to real people. Any MCP server
+    built over it must treat the write operations below as safety-critical: there is no
+    idempotency key, so a retried tool call can dispense a second prescription. See
+    conventions/truepill-conventions.yml and agentic-access/truepill-agentic-access.yml.
+  human_in_the_loop_recommended:
+  - create_fill_request
+  - create_order
+  - create_transfer_request
+  - create_direct_transfer
+  - discontinue_prescription
+  - transfer_out_prescription
+tool_count: 24
+tools:
+- name: create_patient
+  description: Create a patient record and receive an opaque patient_token. Note this is a PUT, not a POST.
+  source_operation: openapi/truepill-patients-api-openapi.yml#putV1Patient
+  write: true
+- name: get_patient
+  description: Retrieve a patient record by patient_token.
+  source_operation: openapi/truepill-patients-api-openapi.yml#getV1PatientPatient_token
+  write: false
+- name: update_patient
+  description: Update non-required fields on an existing patient record.
+  source_operation: openapi/truepill-patients-api-openapi.yml#postV1PatientPatient_token
+  write: true
+- name: search_patients
+  description: Find a patient by first name, last name, gender and date of birth without a token.
+  source_operation: openapi/truepill-patients-api-openapi.yml#getV1Patient
+  write: false
+- name: list_patient_prescriptions
+  description: List a patient's prescriptions with tokens, medication, refills and fillable status.
+  source_operation: openapi/truepill-patients-api-openapi.yml#getV1PatientPatient_tokenPrescriptions
+  write: false
+- name: get_patient_survey
+  description: Retrieve the most recent patient health survey submitted for a patient.
+  source_operation: openapi/truepill-patients-api-openapi.yml#getV1PatientPatient_tokenPatient_survey
+  write: false
+- name: get_prescription
+  description: Retrieve a prescription by token.
+  source_operation: openapi/truepill-prescriptions-api-openapi.yml#getV1PrescriptionToken
+  write: false
+- name: get_prescription_escript
+  description: Retrieve the electronic prescription (eScript) behind a prescription token.
+  source_operation: openapi/truepill-prescriptions-api-openapi.yml#getV1PrescriptionPrescription_tokenEscript
+  write: false
+- name: discontinue_prescription
+  description: Discontinue a prescription so it can no longer be filled.
+  source_operation: openapi/truepill-prescriptions-api-openapi.yml#postV1PrescriptionDiscontinuePrescription_token
+  write: true
+- name: transfer_out_prescription
+  description: Transfer a prescription out of the FuzeRx pharmacy.
+  source_operation: openapi/truepill-prescriptions-api-openapi.yml#postV1PrescriptionPrescription_tokenTransfer_out
+  write: true
+- name: get_prescription_claims
+  description: Retrieve claim information for a specific fill of a prescription.
+  source_operation: openapi/truepill-prescriptions-api-openapi.yml#getV1PrescriptionPrescription_tokenFillFill_numberClaims
+  write: false
+- name: subscribe_auto_refill
+  description: Create an auto-refill subscription for a prescription.
+  source_operation: openapi/truepill-prescriptions-api-openapi.yml#postV1AutorefillPrescription_token
+  write: true
+- name: cancel_auto_refill
+  description: Cancel an auto-refill subscription.
+  source_operation: openapi/truepill-prescriptions-api-openapi.yml#deleteV1AutorefillPrescription_token
+  write: true
+- name: check_ndc_availability
+  description: Check whether a given NDC is available for dispensing.
+  source_operation: openapi/truepill-fulfillment-api-openapi.yml#getV1Availability
+  write: false
+- name: create_fill_request
+  description: Submit a fill request for a prescription. Asynchronous — the outcome arrives as an ORDER webhook event.
+  source_operation: openapi/truepill-fulfillment-api-openapi.yml#postV1Fill_request
+  write: true
+- name: get_fill_request
+  description: Retrieve a fill request by url_token.
+  source_operation: openapi/truepill-fulfillment-api-openapi.yml#getV1Fill_requestUrl_token
+  write: false
+- name: cancel_fill_request
+  description: Cancel a submitted fill request.
+  source_operation: openapi/truepill-fulfillment-api-openapi.yml#postV1Cancel_request
+  write: true
+- name: create_order
+  description: Create an order directly, bypassing the fill-request flow.
+  source_operation: openapi/truepill-fulfillment-api-openapi.yml#postV1Order
+  write: true
+- name: get_order
+  description: Retrieve an order by token.
+  source_operation: openapi/truepill-fulfillment-api-openapi.yml#getV1OrderToken
+  write: false
+- name: create_insurance
+  description: Attach an insurance record to a patient and receive an insurance_token.
+  source_operation: openapi/truepill-insurance-api-openapi.yml#postV1Insurance
+  write: true
+- name: create_copay_request
+  description: Request a real-time copay / out-of-pocket determination. Asynchronous — the result arrives as a COPAY webhook event.
+  source_operation: openapi/truepill-insurance-api-openapi.yml#postV1Copay_request
+  write: true
+- name: get_copay_request
+  description: Retrieve a copay request by request_id.
+  source_operation: openapi/truepill-insurance-api-openapi.yml#getV1Copay_requestRequest_id
+  write: false
+- name: create_transfer_request
+  description: Request a pharmacy-to-pharmacy prescription transfer into FuzeRx.
+  source_operation: openapi/truepill-transfers-api-openapi.yml#postV1Transfer_request
+  write: true
+- name: list_webhook_events
+  description: Pull webhook events of a given type with cursor pagination — the recovery path for missed deliveries.
+  source_operation: openapi/truepill-webhooks-api-openapi.yml#getV1Webhook_eventsWebhook_type
+  write: false
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

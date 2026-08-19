@@ -1,0 +1,2837 @@
+openapi: 3.0.3
+info:
+  title: Truepill Fulfillment & Orders API
+  description: 'Order placement and fulfillment operations: orders, fill requests and scheduled fill requests,
+    cancel/update requests, same-day delivery and pickup locations, specialty pharmacies, availability,
+    scheduling, and prescriber records.
+
+
+    Harvested verbatim from the live Truepill (FuzeRx) Swagger 2.0 contract published at https://rxapi.fuzehealth.com/swagger.json
+    and split by resource domain. Operation summaries, descriptions, parameters, schemas and response
+    codes are the provider''s own; only the Swagger 2.0 -> OpenAPI 3.0.3 conversion and the domain split
+    are ours.'
+  version: 0.0.1
+  contact:
+    name: FuzeRx Support
+    url: https://rxdocs.fuzehealth.com
+servers:
+- url: https://rxapi.fuzehealth.com
+  description: Production
+security:
+- apiKey: []
+tags:
+- name: fulfillment
+  description: 'Order placement and fulfillment operations: orders, fill requests and scheduled fill requests,
+    cancel/update requests, same-day delivery and pickup locations, specialty pharmacies, availability,
+    scheduling, and prescriber records.'
+paths:
+  /api/v1/availability:
+    get:
+      summary: Get NDC availability
+      operationId: getApiV1Availability
+      tags:
+      - fulfillment
+      responses:
+        default:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: string
+  /api/v1/cancel_request:
+    post:
+      summary: Cancel Fill Request
+      description: Cancel a Fill Request whose `request_id` field matches the respective user provided
+        text parameter
+      operationId: postApiV1Cancel_request
+      tags:
+      - fulfillment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Model118'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model124'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model125'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model126'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model127'
+  /api/v1/fill_request:
+    post:
+      summary: Create Fill Request
+      description: Generate a Fill Request to fill/refill prescriptions and order Over-the-Counter (OTC)
+        products<br/><br/>The prescriptions and products requested can be shipped to your patient with
+        various shipping methods.<br/><br/>When making a Fill Request, the patient will be referenced
+        with a `patient_token` being passed into the request body. If you do not have a `patient_token`
+        for your Patient, one can be created using the Patient Create endpoint.<br/><br/>On a successful
+        submission of the Fill Request, a fill request token will be provided that is used to reference
+        the Fill Request (similar to `prescription_token` and `patient_token`).<br/><br/>This attribute
+        is returned under the field `request_id`.<br/><br/>Many fields for the Fill Request may or may
+        not be required depending on what values are passed in. Please reference the field information
+        carefully.<br/><br/>The `metadata` field acts as a link between the Fill Request in the Truepill
+        and the customer systems. It will be provided in all subsequent Fill Request notifications as
+        the order is processed.
+      operationId: postApiV1Fill_request
+      tags:
+      - fulfillment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Model147'
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model149'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model152'
+  /api/v1/fill_request/{url_token}:
+    get:
+      summary: Get Fill Request by token
+      description: Once a Fill Request has been submitted, you can look up the request payload that was
+        submitted at any time for reference with an API request<br/><br/>This endpoint requires a `request_token`.
+        You will receive a `request_token` upon a successful Fill Request API submission response in the
+        `request_id` field.
+      operationId: getApiV1Fill_requestUrl_token
+      tags:
+      - fulfillment
+      parameters:
+      - name: url_token
+        in: path
+        required: true
+        description: URL token
+        schema:
+          type: string
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model21'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model50'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model51'
+  /api/v1/fill_request/{url_token}/stripe_payment:
+    put:
+      summary: Update a Fill Request's stripe payment
+      operationId: putApiV1Fill_requestUrl_tokenStripe_payment
+      tags:
+      - fulfillment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Model235'
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model237'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model238'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model239'
+  /api/v1/fill_requests:
+    get:
+      summary: Get a list of fill requests
+      description: Returns a list of fill requests and allows for the use of query parameters to scope
+        the results of the request
+      operationId: getApiV1Fill_requests
+      tags:
+      - fulfillment
+      parameters:
+      - name: created_at
+        in: query
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: number
+          maximum: 100
+      - name: next
+        in: query
+        schema:
+          type: string
+      - name: metadata
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model22'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model9'
+  /api/v1/fuzion_test:
+    post:
+      summary: Fuzion test endpoint
+      operationId: postApiV1Fuzion_test
+      tags:
+      - fulfillment
+      responses:
+        default:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: string
+  /api/v1/nearby_same_day_pickup_locations:
+    get:
+      summary: Search for nearby same day pickup locations using address details
+      operationId: getApiV1Nearby_same_day_pickup_locations
+      tags:
+      - fulfillment
+      responses:
+        default:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: string
+  /api/v1/open-api/api.yml:
+    get:
+      summary: Get current OpenAPI spec for Truepill APIs
+      operationId: getApiV1OpenapiApiyml
+      tags:
+      - fulfillment
+      responses:
+        default:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: string
+  /api/v1/order:
+    post:
+      summary: Create Order
+      description: Generate an order to fill/refill prescriptions and order Over-the-Counter (OTC) products,
+        allowing multiple patient's prescriptions to be filled as part of the same order<br/><br/>The
+        prescriptions and products requested can be shipped to your patient with various shipping methods.<br/><br/>When
+        making an order, the patients will be referenced with a `patient_token` being passed into the
+        request body, inside the items array. If you do not have a `patient_token` for your patients,
+        they can be created using the Patient Create endpoint.<br/><br/>On a successful submission of
+        the order, an order token will be provided that is used to reference the Order (similar to `prescription_token`
+        and `patient_token`).<br/><br/>This attribute is returned under the field `order_id`.<br/><br/>Many
+        fields for the Order may or may not be required depending on what values are passed in. Please
+        reference the field information carefully.<br/><br/>The `metadata` field acts as a link between
+        the Order in the Truepill and the customer systems. It will be provided in all subsequent Order
+        notifications as the order is processed.
+      operationId: postApiV1Order
+      tags:
+      - fulfillment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/icd_codes'
+      responses:
+        '202':
+          description: '202'
+        '400':
+          description: '400'
+        '401':
+          description: '401'
+        '404':
+          description: '404'
+  /api/v1/order/{token}:
+    get:
+      summary: Get Order
+      description: Get the details of an order<br/><br/>This endpoints needs the url_token to retrieve
+        the right data
+      operationId: getApiV1OrderToken
+      tags:
+      - fulfillment
+      responses:
+        '400':
+          description: '400'
+        '401':
+          description: '401'
+        '404':
+          description: '404'
+  /api/v1/prescriber:
+    post:
+      summary: Create Prescriber
+      description: Create a prescriber in the Truepill ecosystem that is assigned to you as a customer
+      operationId: postApiV1Prescriber
+      tags:
+      - fulfillment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Model163'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model164'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model167'
+  /api/v1/prescriber/{prescriber_token}:
+    get:
+      summary: Get Prescriber
+      description: Get the prescriber information at any time using the `prescriber_token` that was provided
+        in the Create Prescriber response
+      operationId: getApiV1PrescriberPrescriber_token
+      tags:
+      - fulfillment
+      parameters:
+      - name: prescriber_token
+        in: path
+        required: true
+        description: Prescriber token
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model60'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model61'
+  /api/v1/same_day_delivery:
+    get:
+      summary: Get same day delivery orders
+      description: Get same day delivery orders
+      operationId: getApiV1Same_day_delivery
+      tags:
+      - fulfillment
+      parameters:
+      - name: next_page_token
+        in: query
+        schema:
+          type: string
+          minLength: 0
+      - name: status
+        in: query
+        schema:
+          type: string
+          enum:
+          - PENDING
+          - FAILED
+          - AWAITING_PICKUP
+          - IN_TRANSIT
+          - DELIVERED
+          - CANCELED
+          - INCOMPLETE
+      - name: limit
+        in: query
+        schema:
+          type: number
+          default: 20
+          minimum: 1
+          maximum: 1000
+      responses:
+        default:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: string
+    post:
+      summary: Create a same day delivery order
+      description: Create a same day delivery order
+      operationId: postApiV1Same_day_delivery
+      tags:
+      - fulfillment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Model173'
+      responses:
+        default:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: string
+  /api/v1/same_day_delivery/{id}:
+    get:
+      summary: Get a specific same day delivery order by ID
+      description: Get a specific same day delivery order by ID
+      operationId: getApiV1Same_day_deliveryId
+      tags:
+      - fulfillment
+      responses:
+        default:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: string
+  /api/v1/specialty_pharmacies:
+    get:
+      summary: Fetch specialty pharmacies based on Rx token (for prescriber NPI) and insurance token (for
+        bin, pcn, group)
+      operationId: getApiV1Specialty_pharmacies
+      tags:
+      - fulfillment
+      responses:
+        default:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: string
+  /api/v1/update_request:
+    post:
+      summary: Update Fill Request
+      description: Amend the fields of an existing Fill Request, such as for correcting an address or
+        changing the shipping method to expedite your order.<br/><br/>When using this endpoint, all the
+        Fill Request fields must be provided with their appropriate values even if they are not to be
+        updated.
+      operationId: postApiV1Update_request
+      tags:
+      - fulfillment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Model182'
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model184'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model187'
+  /scheduled-actions:
+    get:
+      summary: Get scheduled actions list with any action type by current customer
+      operationId: getScheduledactions
+      tags:
+      - fulfillment
+      parameters:
+      - name: limit
+        in: query
+        description: The quantity of scheduled actions items per query/page
+        schema:
+          type: integer
+          default: 20
+          minimum: 1
+          maximum: 100
+      - name: nextPageToken
+        in: query
+        description: Next page token is the base64 encoded cursor (created action date) from which to
+          start paginated list
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getScheduledActions.data'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model2'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model3'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model2'
+  /scheduled-fill-requests:
+    get:
+      summary: Retrieve details for a scheduled fill request by id.
+      description: Include either original_fill_request_token or id in the query parameters.
+      operationId: getScheduledfillrequests
+      tags:
+      - fulfillment
+      parameters:
+      - name: id
+        in: query
+        schema:
+          type: string
+      - name: original_fill_request_token
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model4'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model2'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model3'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model2'
+    post:
+      summary: Reschedule a fill request that was submitted too soon.
+      operationId: postScheduledfillrequests
+      tags:
+      - fulfillment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/POST%20ScheduledFill%20Request%20Payload'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model113'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model2'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model3'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model2'
+  /scheduled-fill-requests/{id}:
+    put:
+      summary: Update details for on scheduled fill request.
+      operationId: putScheduledfillrequestsId
+      tags:
+      - fulfillment
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PUT%20ScheduledFill%20Request%20Payload'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model113'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model2'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model3'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model2'
+    delete:
+      summary: Delete a scheduled fill request.
+      operationId: deleteScheduledfillrequestsId
+      tags:
+      - fulfillment
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model240'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model2'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model3'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model2'
+  /v0/schedule:
+    get:
+      summary: Return available open slots for any provider that can be used to create consults and schedule
+        appointments on these slots.
+      description: Returns schedule availability of providers based on given parameters
+      operationId: getV0Schedule
+      tags:
+      - fulfillment
+      parameters:
+      - name: start
+        in: query
+        required: true
+        description: The time starting from which free slots will be returned. Should be greater than
+          the current time.
+        schema:
+          type: string
+          format: date-time
+      - name: end
+        in: query
+        required: true
+        description: The end time up to which free slots will be returned.
+        schema:
+          type: string
+          format: date-time
+      - name: questionnaire
+        in: query
+        required: true
+        description: Unique identifier for the questionnaire that providers have enabled scheduling for.
+        schema:
+          type: string
+      - name: state
+        in: query
+        required: true
+        description: Two letter abbreviation of provider’s licensed state used as a filter.
+        schema:
+          type: string
+          pattern: ^[A-Z]{2}$
+      - name: duration
+        in: query
+        description: The duration of each returned slot in minutes.
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model11'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model13'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model8'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model14'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model9'
+  /v1/availability:
+    get:
+      summary: Get NDC availability
+      operationId: getV1Availability
+      tags:
+      - fulfillment
+      responses:
+        default:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: string
+  /v1/cancel_request:
+    post:
+      summary: Cancel Fill Request
+      description: Cancel a Fill Request whose `request_id` field matches the respective user provided
+        text parameter
+      operationId: postV1Cancel_request
+      tags:
+      - fulfillment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Model118'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model124'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model125'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model126'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model127'
+  /v1/fill_request:
+    post:
+      summary: Create Fill Request
+      description: Generate a Fill Request to fill/refill prescriptions and order Over-the-Counter (OTC)
+        products<br/><br/>The prescriptions and products requested can be shipped to your patient with
+        various shipping methods.<br/><br/>When making a Fill Request, the patient will be referenced
+        with a `patient_token` being passed into the request body. If you do not have a `patient_token`
+        for your Patient, one can be created using the Patient Create endpoint.<br/><br/>On a successful
+        submission of the Fill Request, a fill request token will be provided that is used to reference
+        the Fill Request (similar to `prescription_token` and `patient_token`).<br/><br/>This attribute
+        is returned under the field `request_id`.<br/><br/>Many fields for the Fill Request may or may
+        not be required depending on what values are passed in. Please reference the field information
+        carefully.<br/><br/>The `metadata` field acts as a link between the Fill Request in the Truepill
+        and the customer systems. It will be provided in all subsequent Fill Request notifications as
+        the order is processed.
+      operationId: postV1Fill_request
+      tags:
+      - fulfillment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Model147'
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model149'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model152'
+  /v1/fill_request/{url_token}:
+    get:
+      summary: Get Fill Request by token
+      description: Once a Fill Request has been submitted, you can look up the request payload that was
+        submitted at any time for reference with an API request<br/><br/>This endpoint requires a `request_token`.
+        You will receive a `request_token` upon a successful Fill Request API submission response in the
+        `request_id` field.
+      operationId: getV1Fill_requestUrl_token
+      tags:
+      - fulfillment
+      parameters:
+      - name: url_token
+        in: path
+        required: true
+        description: URL token
+        schema:
+          type: string
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model21'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model50'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model51'
+  /v1/fill_request/{url_token}/stripe_payment:
+    put:
+      summary: Update a Fill Request's stripe payment
+      operationId: putV1Fill_requestUrl_tokenStripe_payment
+      tags:
+      - fulfillment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Model235'
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model237'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model238'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model239'
+  /v1/fill_requests:
+    get:
+      summary: Get a list of fill requests
+      description: Returns a list of fill requests and allows for the use of query parameters to scope
+        the results of the request
+      operationId: getV1Fill_requests
+      tags:
+      - fulfillment
+      parameters:
+      - name: created_at
+        in: query
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: number
+          maximum: 100
+      - name: next
+        in: query
+        schema:
+          type: string
+      - name: metadata
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model22'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model9'
+  /v1/fuzion_test:
+    post:
+      summary: Fuzion test endpoint
+      operationId: postV1Fuzion_test
+      tags:
+      - fulfillment
+      responses:
+        default:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: string
+  /v1/nearby_same_day_pickup_locations:
+    get:
+      summary: Search for nearby same day pickup locations using address details
+      operationId: getV1Nearby_same_day_pickup_locations
+      tags:
+      - fulfillment
+      responses:
+        default:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: string
+  /v1/open-api/api.yml:
+    get:
+      summary: Get current OpenAPI spec for Truepill APIs
+      operationId: getV1OpenapiApiyml
+      tags:
+      - fulfillment
+      responses:
+        default:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: string
+  /v1/order:
+    post:
+      summary: Create Order
+      description: Generate an order to fill/refill prescriptions and order Over-the-Counter (OTC) products,
+        allowing multiple patient's prescriptions to be filled as part of the same order<br/><br/>The
+        prescriptions and products requested can be shipped to your patient with various shipping methods.<br/><br/>When
+        making an order, the patients will be referenced with a `patient_token` being passed into the
+        request body, inside the items array. If you do not have a `patient_token` for your patients,
+        they can be created using the Patient Create endpoint.<br/><br/>On a successful submission of
+        the order, an order token will be provided that is used to reference the Order (similar to `prescription_token`
+        and `patient_token`).<br/><br/>This attribute is returned under the field `order_id`.<br/><br/>Many
+        fields for the Order may or may not be required depending on what values are passed in. Please
+        reference the field information carefully.<br/><br/>The `metadata` field acts as a link between
+        the Order in the Truepill and the customer systems. It will be provided in all subsequent Order
+        notifications as the order is processed.
+      operationId: postV1Order
+      tags:
+      - fulfillment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/icd_codes'
+      responses:
+        '202':
+          description: '202'
+        '400':
+          description: '400'
+        '401':
+          description: '401'
+        '404':
+          description: '404'
+  /v1/order/{token}:
+    get:
+      summary: Get Order
+      description: Get the details of an order<br/><br/>This endpoints needs the url_token to retrieve
+        the right data
+      operationId: getV1OrderToken
+      tags:
+      - fulfillment
+      responses:
+        '400':
+          description: '400'
+        '401':
+          description: '401'
+        '404':
+          description: '404'
+  /v1/prescriber:
+    post:
+      summary: Create Prescriber
+      description: Create a prescriber in the Truepill ecosystem that is assigned to you as a customer
+      operationId: postV1Prescriber
+      tags:
+      - fulfillment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Model163'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model164'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model167'
+  /v1/prescriber/{prescriber_token}:
+    get:
+      summary: Get Prescriber
+      description: Get the prescriber information at any time using the `prescriber_token` that was provided
+        in the Create Prescriber response
+      operationId: getV1PrescriberPrescriber_token
+      tags:
+      - fulfillment
+      parameters:
+      - name: prescriber_token
+        in: path
+        required: true
+        description: Prescriber token
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model60'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model61'
+  /v1/same_day_delivery:
+    get:
+      summary: Get same day delivery orders
+      description: Get same day delivery orders
+      operationId: getV1Same_day_delivery
+      tags:
+      - fulfillment
+      parameters:
+      - name: next_page_token
+        in: query
+        schema:
+          type: string
+          minLength: 0
+      - name: status
+        in: query
+        schema:
+          type: string
+          enum:
+          - PENDING
+          - FAILED
+          - AWAITING_PICKUP
+          - IN_TRANSIT
+          - DELIVERED
+          - CANCELED
+          - INCOMPLETE
+      - name: limit
+        in: query
+        schema:
+          type: number
+          default: 20
+          minimum: 1
+          maximum: 1000
+      responses:
+        default:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: string
+    post:
+      summary: Create a same day delivery order
+      description: Create a same day delivery order
+      operationId: postV1Same_day_delivery
+      tags:
+      - fulfillment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Model173'
+      responses:
+        default:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: string
+  /v1/same_day_delivery/{id}:
+    get:
+      summary: Get a specific same day delivery order by ID
+      description: Get a specific same day delivery order by ID
+      operationId: getV1Same_day_deliveryId
+      tags:
+      - fulfillment
+      responses:
+        default:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: string
+  /v1/specialty_pharmacies:
+    get:
+      summary: Fetch specialty pharmacies based on Rx token (for prescriber NPI) and insurance token (for
+        bin, pcn, group)
+      operationId: getV1Specialty_pharmacies
+      tags:
+      - fulfillment
+      responses:
+        default:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: string
+  /v1/update_request:
+    post:
+      summary: Update Fill Request
+      description: Amend the fields of an existing Fill Request, such as for correcting an address or
+        changing the shipping method to expedite your order.<br/><br/>When using this endpoint, all the
+        Fill Request fields must be provided with their appropriate values even if they are not to be
+        updated.
+      operationId: postV1Update_request
+      tags:
+      - fulfillment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Model182'
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model184'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model187'
+components:
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: API key passed in the Authorization header. Separate keys are issued for sandbox and
+        production.
+  schemas:
+    Medication:
+      type: object
+      description: Medication description
+      example:
+      - prescription_token: z3q2jr
+      - prescription_token: 3cs873
+      properties:
+        medication_name:
+          type: string
+          description: Medication name
+          example: Ritalin
+          maxLength: 255
+        quantity_dispensed:
+          type: number
+          description: Dispensed medication quantity
+          example: 60
+        days_supply:
+          type: number
+          description: Days supply
+          example: 30
+        is_refill:
+          type: boolean
+          description: Is prescription a refill or new fill
+          example: true
+        medication_sig:
+          type: string
+          description: Recommendations for medicines
+          example: Apply daily.
+        prescribing_doctor:
+          type: string
+          description: Prescribing doctor
+          example: Dr. Storm
+        prescription_token:
+          type: string
+          description: Prescription token
+          example: 4526d90a
+          minLength: 1
+        rx_link:
+          type: string
+          minLength: 1
+        quantity:
+          type: number
+          description: Quantity sent
+          example: 30
+          x-constraint:
+            greater: 0
+        copay_payment:
+          $ref: '#/components/schemas/copay_payment'
+        ndc:
+          type: string
+          description: National drug code
+          example: '12345678901'
+          pattern: ^[0-9]{11}$
+        daw:
+          type: string
+          example: '2'
+          enum:
+          - '0'
+          - '2'
+        patient_consent:
+          $ref: '#/components/schemas/patient_consent'
+      required:
+      - daw
+    MedicationArray:
+      type: array
+      x-constraint: {}
+      items:
+        $ref: '#/components/schemas/Medication'
+    Model1:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique uuid for scheduled action
+          example: b5220786-0636-48c9-a9a0-087d17d15d9f
+          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+          x-format:
+            guid: true
+        created_at:
+          type: string
+          description: The scheduled action created date
+          example: '2022-03-08T14:20:08.000Z'
+        updated_at:
+          type: string
+          description: The scheduled action updated date
+          example: '2022-03-08T14:20:08.000Z'
+        submit_on:
+          type: string
+          format: date
+          description: The datetime when scheduled action will be executed
+          example: '2022-04-08T13:20:08.000Z'
+        metadata:
+          $ref: '#/components/schemas/metadata'
+        action_type:
+          type: string
+          description: The type of scheduled action
+          example: PENDING
+        status:
+          type: string
+          description: The executing status for the scheduled action
+          example: PENDING
+          enum:
+          - PENDING
+          - CANCELLED
+          - COMPLETE
+        customer_id:
+          type: number
+          description: The id of the customer for current scheduled action
+          example: 21
+      required:
+      - id
+      - created_at
+      - submit_on
+    Model10:
+      type: object
+      properties:
+        start:
+          type: string
+          format: date-time
+          example: '2022-04-06T05:00:00.000Z'
+        end:
+          type: string
+          format: date-time
+          example: '2022-04-07T08:00:00.000Z'
+      required:
+      - start
+      - end
+    Model11:
+      type: object
+      properties:
+        availabilities:
+          $ref: '#/components/schemas/availabilities'
+    Model113:
+      type: object
+      properties:
+        id:
+          type: string
+          example: f716ba1c-bd4b-43c7-9395-84255cd943cd
+          x-format:
+            guid: true
+        submit_on:
+          type: string
+          format: date
+          example: '2022-01-01T00:00:00.000Z'
+        original_fill_request_token:
+          type: string
+          example: fill_request_token_abc123
+      required:
+      - id
+      - submit_on
+      - original_fill_request_token
+    Model114:
+      type: object
+      properties:
+        sku:
+          type: string
+          description: SKU of the OTC product to cancel
+      required:
+      - sku
+    Model115:
+      type: array
+      description: Array of OTC products to cancel. If provided, only these OTC products will be cancelled.
+        If all OTC products on the order are cancelled, the entire order will be cancelled.
+      items:
+        $ref: '#/components/schemas/Model114'
+    Model116:
+      type: object
+      properties:
+        prescription_token:
+          type: string
+          description: Prescription token to cancel
+      required:
+      - prescription_token
+    Model117:
+      type: array
+      description: Array of medications to cancel. If provided, only these medications will be cancelled.
+        If all medications on the order are cancelled, the entire order will be cancelled.
+      items:
+        $ref: '#/components/schemas/Model116'
+    Model118:
+      type: object
+      properties:
+        request_id:
+          type: string
+          description: Request id
+          example: fill_request_5c4b21b9aecaea155d67
+        otc_products:
+          $ref: '#/components/schemas/Model115'
+        medications:
+          $ref: '#/components/schemas/Model117'
+      required:
+      - request_id
+    Model119:
+      type: object
+      properties:
+        prescription_token:
+          type: string
+          example: e61e324f9018
+    Model12:
+      type: object
+      properties:
+        key:
+          type: string
+          example: questionnaire
+        message:
+          type: string
+          example: length must be 24 characters long
+    Model120:
+      type: object
+      properties:
+        prescription_token:
+          type: string
+          example: e61e324f9018
+        reason:
+          type: string
+          example: Medication already cancelled or cancellation failed
+    Model121:
+      type: object
+      properties:
+        sku:
+          type: string
+          example: SKU-123-456
+    Model122:
+      type: object
+      properties:
+        sku:
+          type: string
+          example: SKU-123-456
+        reason:
+          type: string
+          example: OTC Product already cancelled or cancellation failed
+    Model123:
+      type: object
+      properties:
+        code:
+          type: string
+          example: '03'
+        description:
+          type: string
+          example: Fill Request Cancelled by Customer Request
+        message:
+          type: string
+          example: 'Accepted: Fill Request fill_request_5c4b21b9aecaea155d67 has been cancelled.'
+        cancelled_medications:
+          $ref: '#/components/schemas/cancelled_medications'
+        failed_medications:
+          $ref: '#/components/schemas/failed_medications'
+        cancelled_otc_products:
+          $ref: '#/components/schemas/cancelled_otc_products'
+        failed_otc_products:
+          $ref: '#/components/schemas/failed_otc_products'
+    Model124:
+      type: object
+      properties:
+        request_id:
+          type: string
+          example: cancel_request_a11d9497b96e188365e41fecadb947df
+        timestamp:
+          type: integer
+          example: 1631571795.423
+        status:
+          type: string
+          example: success
+        details:
+          $ref: '#/components/schemas/Model123'
+    Model125:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 400
+        error:
+          type: string
+          example: Bad Request
+        message:
+          type: string
+          example: There was an error cancelling this request (fill_request_5c4b21b9aecaea155d67), either
+            you are not the owner of the request, or have already cancelled the request. Please contact
+            us at (855) 910-8606 for help if neither is the case.
+    Model126:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 403
+        error:
+          type: string
+          example: Forbidden
+        message:
+          type: string
+          example: There was an error cancelling this request (fill_request_5c4b21b9aecaea155d67), either
+            you are not the owner of the request, or have already cancelled the request. Please contact
+            us at (855) 910-8606 for help if neither is the case.
+    Model127:
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          example: 1631571795.423
+        status:
+          type: string
+          example: error
+        message:
+          type: string
+          example: There was an error cancelling this request (fill_request_5c4b21b9aecaea155d67), either
+            you are not the owner of the request, or have already cancelled the request. Please contact
+            us at (855) 910-8606 for help if neither is the case.
+    Model13:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 400
+        error:
+          type: string
+          example: Bad Request
+        validation_errors:
+          $ref: '#/components/schemas/validation_errors'
+    Model14:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 404
+        error:
+          type: string
+          example: Not Found
+        message:
+          type: string
+          example: Consult questionnaire not found. (You may not be authorized to it)
+    Model144:
+      type: object
+      properties:
+        sku:
+          type: string
+          description: Store keeping unit
+          example: '14147565'
+        quantity:
+          type: number
+          description: Quantity
+          example: 30
+          minimum: 1
+      required:
+      - sku
+      - quantity
+    Model145:
+      type: object
+      properties:
+        item:
+          type: string
+          example: Vitamin B
+        sku:
+          type: string
+          description: Store keeping unit
+          example: '14147565'
+        bundle_id:
+          type: string
+        bundle_item_partial_return_allowed:
+          type: boolean
+          default: false
+        quantity:
+          type: number
+          description: Quantity
+          example: 30
+          minimum: 1
+        customer_item_id:
+          type: string
+          description: Customer item ID
+        days_supply:
+          type: number
+          description: Days supply
+        pricing:
+          $ref: '#/components/schemas/pricing'
+        patient_consent:
+          $ref: '#/components/schemas/patient_consent'
+      required:
+      - quantity
+    Model146:
+      type: array
+      example:
+      - item: Vitamin B
+        quantity: 30
+      items:
+        $ref: '#/components/schemas/Model145'
+    Model147:
+      type: object
+      properties:
+        patient_token:
+          type: string
+          description: Patient token
+          example: 4526d90a
+          minLength: 1
+        patient_payment_type:
+          type: string
+          example: insurance
+          enum:
+          - cash
+          - insurance
+          x-convert:
+            case: lower
+        insurances:
+          type: string
+          example:
+          - insurance_token: 19sienglo92831n5
+          - cardholder_id: '112233445566'
+            rx_bin: '172020'
+            pcn: HDMI
+            rx_group: '444555'
+        medications:
+          $ref: '#/components/schemas/MedicationArray'
+          x-alternatives:
+          - $ref: '#/x-alt-definitions/MedicationArray'
+          - $ref: '#/x-alt-definitions/Model7'
+        packing_materials:
+          $ref: '#/components/schemas/packing_materials'
+        otc_products:
+          $ref: '#/components/schemas/Model146'
+        address_to_name:
+          type: string
+          example: Bruce Banner
+          x-convert:
+            trim: true
+        address_to_company:
+          type: string
+          example: Avengers
+          default: ''
+          x-convert:
+            trim: true
+        address_to_street1:
+          type: string
+          example: 1700 S Amphlett Blvd
+          maxLength: 100
+          x-convert:
+            trim: true
+        address_to_street2:
+          type: string
+          example: '#221'
+          default: ''
+          x-convert:
+            trim: true
+        address_to_city:
+          type: string
+          example: San Mateo
+          x-convert:
+            trim: true
+        address_to_state:
+          type: string
+          example: CA
+          x-convert:
+            trim: true
+        address_to_zip:
+          type: string
+          example: '94402'
+          x-convert:
+            trim: true
+        address_to_country:
+          type: string
+          example: US
+          default: US
+          x-convert:
+            trim: true
+        address_to_phone:
+          type: string
+          example: (347) 610-8896
+          x-convert:
+            trim: true
+        address_to_email:
+          type: string
+          example: bruce.banner@avengers.com
+          x-convert:
+            trim: true
+        shipping_method:
+          type: string
+          description: Shipping method
+          example: usps_ground_advantage
+          default: usps_ground_advantage
+          enum:
+          - standard
+          - priority
+          - overnight
+          - usps_ground_advantage
+          - usps_priority
+          - usps_priority_express
+          - fedex_ground
+          - fedex_2_day
+          - fedex_smart_post
+          - fedex_standard_overnight
+          - fedex_priority_overnight
+          - ups_mail_innovations_domestic
+          - ups_next_day_air
+          - ups_next_day_air_saver
+          - ups_second_day_air
+          - ups_ground
+          - dhl_ecommerce_parcels_ground
+          - dhl_ecommerce_parcels_expedited
+          - dhl_ecommerce_parcels_expedited_max
+          - dhl_ecommerce_parcel_plus_ground
+          - dhl_ecommerce_parcel_plus_expedited
+          - dhl_ecommerce_parcel_plus_expedited_max
+          x-convert:
+            case: lower
+        signature_confirmation:
+          type: boolean
+          description: Is signature required by patient upon delivery
+          example: false
+        replacement_order:
+          type: string
+          description: Fill Request token of the order that this Fill request is replacing
+          example: fill_request_cb619ca2e133d37daefc
+        metadata:
+          type: string
+          example: cfe146
+        notes:
+          type: string
+          example: Here are some special instructions on how to fill this order
+        patient_survey:
+          $ref: '#/components/schemas/Patient%20survey'
+        check_in:
+          type: boolean
+          description: Set to true to request a consultation with a Truepill pharmacist prior to completing
+            the Fill request
+          example: false
+        is_priority:
+          type: boolean
+        packaging_instructions:
+          type: string
+          maxLength: 40
+        receipt_items:
+          $ref: '#/components/schemas/receipt_items'
+        stripe_payment:
+          $ref: '#/components/schemas/stripe_payment'
+      required:
+      - patient_payment_type
+      - address_to_name
+      - address_to_street1
+      - address_to_city
+      - address_to_state
+      - address_to_zip
+      - address_to_phone
+      - patient_survey
+    Model148:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Your fill request has been processed successfully.
+        metadata:
+          type: string
+          example: Some metadata
+    Model149:
+      type: object
+      properties:
+        request_id:
+          type: string
+          example: fill_request_d1f54cea86bb7e030f09
+        timestamp:
+          type: integer
+          example: 1631571795
+        status:
+          type: string
+          example: success
+        details:
+          $ref: '#/components/schemas/Model148'
+    Model150:
+      type: object
+      properties:
+        key:
+          type: string
+          example: address_to_phone
+        message:
+          type: string
+          example: X is not a valid phone number of the form +17895551234 (10-15 digits)
+    Model151:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model150'
+    Model152:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 400
+        error:
+          type: string
+          example: Bad Request
+        validation_errors:
+          $ref: '#/components/schemas/Model151'
+    Model162:
+      type: object
+      description: Prescriber's address details
+      properties:
+        clinic_name:
+          type: string
+          description: Clinic name that the prescriber works at
+          example: True Clinic
+        street1:
+          type: string
+          description: Street 1 of prescriber’s working address
+          example: 3121 Diablo Ave
+        street2:
+          type: string
+          description: Street 2 of prescriber’s working address
+          example: 123 Some Lane
+        city:
+          type: string
+          description: City of prescriber’s working address
+          example: Hayward
+        state:
+          type: string
+          description: State of prescriber’s working address. Two-letter state abbreviation
+          example: CA
+        country:
+          type: string
+          description: US (default)
+          example: US
+          default: US
+        zip:
+          type: string
+          description: Zip code of prescriber’s working address
+          example: '94545'
+          pattern: ^\d{5}(-\d{4})?$
+        phone:
+          type: string
+          description: Prescriber’s phone number
+          example: (855) 910-8606
+        email:
+          type: string
+          description: Prescriber’s email
+          example: truepill@truepill.com
+          x-format:
+            email: true
+        fax:
+          type: string
+          description: Prescriber’s fax number
+          example: (855) 910-8606
+      required:
+      - street1
+      - city
+      - state
+      - zip
+      - phone
+    Model163:
+      type: object
+      properties:
+        prescriber_type:
+          type: string
+          example: OD
+          enum:
+          - OD
+          - PMHNP
+          - MBBS
+          - DNP
+          - D.O.
+          - DPT
+          - D.D.S.
+          - F.N.P.
+          - CPP
+          - N.D.
+          - P.A.
+          - APNP
+          - V.M.D.
+          - RPh
+          - APRN
+          - DC APC
+          - PsyD
+          - CRNA
+          - PharmD
+          - B.V.M.S.
+          - WHNP
+          - PhD
+          - ARNP
+          - PT
+          - CRNP
+          - DPM
+          - CNP
+          - N.P.
+          - CDH
+          - D.M.D.
+          - D.V.M.
+          - M.D.
+          - CNM
+        first_name:
+          type: string
+          description: Prescriber’s first name
+          example: 'True'
+        last_name:
+          type: string
+          description: Prescriber’s last name
+          example: Pill
+        dea:
+          type: string
+          description: Prescriber’s DEA license ID
+          example: BI7884668
+        npi:
+          type: string
+          description: Prescriber’s National Provider Identifier
+          example: '2888888888'
+        active:
+          type: boolean
+          description: Whether the prescriber is actively prescribing
+          example: true
+        address:
+          $ref: '#/components/schemas/Model162'
+      required:
+      - first_name
+      - last_name
+      - npi
+      - active
+      - address
+    Model164:
+      type: object
+      properties:
+        prescriber_token:
+          type: string
+          example: e9c4778365b209a81bc9
+    Model165:
+      type: object
+      properties:
+        key:
+          type: string
+          example: address.phone
+        message:
+          type: string
+          example: is required
+    Model166:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model165'
+    Model167:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 400
+        error:
+          type: string
+          example: Bad Request
+        validation_errors:
+          $ref: '#/components/schemas/Model166'
+    Model171:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 'Stringified UUIDv4.
+
+            See [RFC 4112](https://tools.ietf.org/html/rfc4122)'
+          minLength: 0
+          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+        pharmacy:
+          type: string
+          description: References GET /v1/external_location_pharmacies
+          minLength: 0
+        npi:
+          type: string
+          description: NPI - likely type 2
+          minLength: 0
+          maxLength: 10
+          pattern: ^[0-9]{10}$
+        address_to_street1:
+          type: string
+          minLength: 0
+        address_to_street2:
+          type: string
+          minLength: 0
+        address_to_city:
+          type: string
+          minLength: 0
+        address_to_state:
+          type: string
+          minLength: 0
+          pattern: ^[A-Z]{2}$
+        address_to_zip:
+          type: string
+          minLength: 0
+          pattern: ^\d{5}(-?\d{4})?$
+        address_to_country:
+          type: string
+          minLength: 0
+          pattern: ^[A-Z]{2}$
+        address_to_phone:
+          type: string
+          minLength: 0
+          pattern: ^(\+)?[1-9]\d{1,14}$
+        address_to_fax:
+          type: string
+          description: The fax number of the address
+          minLength: 0
+          maxLength: 255
+          pattern: ^[1-9]\d{1,14}$
+      required:
+      - id
+      - pharmacy
+      - npi
+      - address_to_street1
+      - address_to_city
+      - address_to_state
+      - address_to_zip
+      - address_to_country
+    Model172:
+      type: array
+      items:
+        type: string
+        minLength: 0
+    Model173:
+      type: object
+      properties:
+        patient_token:
+          type: string
+          minLength: 0
+        prescription_tokens:
+          $ref: '#/components/schemas/prescription_tokens'
+        shipping_address:
+          $ref: '#/components/schemas/Shipping%20Address'
+          x-alternatives:
+          - $ref: '#/x-alt-definitions/Shipping%20Address'
+          - $ref: '#/x-alt-definitions/shipping_address'
+        external_location:
+          $ref: '#/components/schemas/Model171'
+          x-alternatives:
+          - $ref: '#/x-alt-definitions/external_location'
+          - $ref: '#/x-alt-definitions/Model8'
+        insurance_tokens:
+          $ref: '#/components/schemas/Model172'
+        delivery_instruction:
+          type: string
+          minLength: 0
+          maxLength: 280
+      required:
+      - patient_token
+      - prescription_tokens
+      - shipping_address
+      - external_location
+    Model182:
+      type: object
+      properties:
+        request_id:
+          type: string
+          description: Request id
+          example: fill_request_aecafb34372151077db8
+        address_from_company:
+          type: string
+          description: Desired name to display in the Return section of shipping label
+          example: Avengers
+          default: ''
+        shipping_method:
+          type: string
+          description: Shipping method
+          example: usps_ground_advantage
+          default: usps_ground_advantage
+          enum:
+          - standard
+          - priority
+          - overnight
+          - usps_ground_advantage
+          - usps_priority
+          - usps_priority_express
+          - fedex_ground
+          - fedex_2_day
+          - fedex_smart_post
+          - fedex_standard_overnight
+          - fedex_priority_overnight
+          - ups_mail_innovations_domestic
+          - ups_next_day_air
+          - ups_next_day_air_saver
+          - ups_second_day_air
+          - ups_ground
+          - dhl_ecommerce_parcels_ground
+          - dhl_ecommerce_parcels_expedited
+          - dhl_ecommerce_parcels_expedited_max
+          - dhl_ecommerce_parcel_plus_ground
+          - dhl_ecommerce_parcel_plus_expedited
+          - dhl_ecommerce_parcel_plus_expedited_max
+          x-convert:
+            case: lower
+        signature_confirmation:
+          type: boolean
+          description: Is signature required by patient upon delivery
+          example: false
+        notes:
+          type: string
+          example: Here are some special instructions on how to fill this order
+        address_to_name:
+          type: string
+          description: Patient’s name as it should appear on shipping label
+          example: Peter Parker
+        address_to_company:
+          type: string
+          description: Desired return name to display on package shipping label sent to patient
+          example: ''
+          default: ''
+        address_to_street1:
+          type: string
+          description: Street 1 of patient’s shipping address
+          example: 1700 S Amphlett Blvd
+          maxLength: 100
+        address_to_street2:
+          type: string
+          description: Street 2 of patient’s shipping address (if applicable)
+          example: '#221'
+          default: ''
+        address_to_city:
+          type: string
+          description: City of patient’s shipping address
+          example: San Mateo
+        address_to_state:
+          type: string
+          description: State of patient’s shipping address
+          example: CA
+        address_to_zip:
+          type: string
+          description: Zip code of patient’s shipping address
+          example: '94402'
+        address_to_country:
+          type: string
+          description: Use US for all requests
+          example: US
+          default: US
+        address_to_phone:
+          type: string
+          description: Patient’s phone number
+          example: (347) 610-8896
+        address_to_email:
+          type: string
+          description: Patient’s email address
+          example: peter.parker@avengers.com
+      required:
+      - address_to_name
+      - address_to_street1
+      - address_to_city
+      - address_to_state
+      - address_to_zip
+      - address_to_phone
+    Model183:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'Accepted: Order fill_request_aecafb34372151077db8 has been updated with the new request
+            parameters.'
+    Model184:
+      type: object
+      properties:
+        request_id:
+          type: string
+          example: update_request_994aee2d04ae2f1995b5a86449a9c813
+        timestamp:
+          type: integer
+          example: 1631571795
+        status:
+          type: string
+          example: success
+        details:
+          $ref: '#/components/schemas/Model183'
+    Model185:
+      type: object
+      properties:
+        key:
+          type: string
+          example: patient_token
+        message:
+          type: string
+          example: is not allowed
+    Model186:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model185'
+    Model187:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 400
+        error:
+          type: string
+          example: Bad Request
+        validation_errors:
+          $ref: '#/components/schemas/Model186'
+    Model2:
+      type: object
+      properties:
+        statusCode:
+          type: string
+          example: 0001 or 0002
+        message:
+          type: string
+          example: An example error message
+      required:
+      - statusCode
+      - message
+    Model20:
+      type: object
+      properties:
+        category:
+          type: string
+          example: prescription_copay
+          enum:
+          - prescription_copay
+          - tax
+          - shipping
+          - prescription_cash
+          - tax_copay
+          - processing_fee
+        prescription_token:
+          type: string
+          example: 0154cc7b065
+        amount:
+          type: number
+          example: 11.43
+        description:
+          type: string
+          example: Copay for medication A
+      required:
+      - category
+      - prescription_token
+      - amount
+    Model21:
+      type: object
+      properties:
+        patient_first_name:
+          type: string
+          example: Stephen
+        patient_last_name:
+          type: string
+          example: Strange
+        metadata:
+          type: string
+          example: some metadata
+        patient_payment_type:
+          type: string
+          example: cash
+        is_cancellable:
+          type: boolean
+          description: Indicates whether the entire fill request can be cancelled based on its current
+            status. Generally true when order is in Triage or PV1 status, false when in Fill, PV2, Packing,
+            Complete, or Cancelled status.
+          example: true
+        address_to_name:
+          type: string
+          example: Stephen Strange
+        address_to_street1:
+          type: string
+          example: 1700 S Amphlett Blvd
+        address_to_street2:
+          type: string
+          example: '#221'
+        address_to_city:
+          type: string
+          example: San Mateo
+        address_to_state:
+          type: string
+          example: CA
+        address_to_phone:
+          type: string
+          example: '1112223333'
+        address_to_email:
+          type: string
+          example: truepill@truepill.com
+        address_to_zip:
+          type: string
+          example: '94402'
+        patient_survey:
+          $ref: '#/components/schemas/patient_survey'
+        medications:
+          $ref: '#/components/schemas/medications'
+        otc_products:
+          $ref: '#/components/schemas/otc_products'
+        shipping_method:
+          type: string
+          example: standard
+        address_to_company:
+          type: string
+        address_to_country:
+          type: string
+          example: US
+        status:
+          type: string
+          example: triage
+        url_token:
+          type: string
+          example: abc123
+        created_at:
+          type: string
+          example: '2021-09-14T14:22:37.000Z'
+        tracking_url:
+          type: string
+          example: https://www.fedex.com/apps/fedextrack/?action=track&cntry_code=us&trackingnumber=12345
+        receipt_items:
+          $ref: '#/components/schemas/receipt_items'
+        current_stripe_payment:
+          $ref: '#/components/schemas/current_stripe_payment'
+      required:
+      - patient_survey
+    Model22:
+      type: object
+      properties:
+        results:
+          $ref: '#/components/schemas/results'
+        next_page_token:
+          type: string
+          example: JpdiI6IjdkNWViNWU5MTViNjAzNzAwYjQ4NTI3YjEyZjIzNDFkIiwiY29udGVudCI6IjE2YTcyNmQ4OGI3NTNlYzRjMTE5ZDc5NWIyMmE4MDRkN2UzYzA3YTA1M
+    Model235:
+      type: object
+      properties:
+        stripe_id:
+          type: string
+          example: pi_10f410zj3018s2
+      required:
+      - stripe_id
+    Model236:
+      type: object
+      properties:
+        stripe_id:
+          type: string
+          example: pi_10f410zj3018s2
+        fill_request_token:
+          type: string
+          example: a2fcd842de60b010
+      required:
+      - stripe_id
+      - fill_request_token
+    Model237:
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          example: 1631571795.423
+        status:
+          type: string
+          example: success
+        details:
+          $ref: '#/components/schemas/Model236'
+    Model238:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Invalid Stripe ID
+    Model239:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Unauthorized from viewing this fill request
+    Model240:
+      type: object
+      properties:
+        id:
+          type: string
+          example: f716ba1c-bd4b-43c7-9395-84255cd943cd
+          x-format:
+            guid: true
+        status:
+          type: string
+          example: CANCELLED
+      required:
+      - id
+      - status
+    Model3:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 401
+        error:
+          type: string
+          example: Unauthorized
+        message:
+          type: string
+          example: Invalid credentials
+    Model4:
+      type: object
+      properties:
+        id:
+          type: string
+          example: f716ba1c-bd4b-43c7-9395-84255cd943cd
+          x-format:
+            guid: true
+        status:
+          type: string
+          example: PENDING
+        submit_on:
+          type: string
+          format: date
+          example: '2022-01-01T00:00:00.000Z'
+        original_fill_request_token:
+          type: string
+          example: fill_request_token_abc123
+      required:
+      - id
+      - status
+      - submit_on
+      - original_fill_request_token
+    Model50:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 403
+        error:
+          type: string
+          example: Forbidden
+        message:
+          type: string
+          example: Unauthorized from viewing this fill request
+    Model51:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 404
+        error:
+          type: string
+          example: Not Found
+        message:
+          type: string
+          example: Unable to find Fill Request.
+    Model59:
+      type: object
+      description: Prescriber's address details
+      properties:
+        name:
+          type: string
+          description: Clinic name that the prescriber works at
+          example: Test clinic
+        street1:
+          type: string
+          description: Street 1 of prescriber’s working address
+          example: 123 Some Lane
+        street2:
+          type: string
+          description: Street 2 of prescriber’s working address
+          example: Apt. 123
+        city:
+          type: string
+          description: City of prescriber’s working address
+          example: Los Angeles
+        state:
+          type: string
+          description: State of prescriber’s working address. Two-letter state abbreviation
+          example: CA
+        zip:
+          type: string
+          description: Zip code of prescriber’s working address
+          example: '01000'
+        country:
+          type: string
+          description: US (default)
+          example: US
+        phone:
+          type: string
+          description: Prescriber’s phone number
+          example: '4303043949'
+        email:
+          type: string
+          description: Prescriber’s email
+          example: hulkout@hulk.com
+        fax:
+          type: string
+          description: Prescriber’s fax number
+          example: '430304394'
+    Model60:
+      type: object
+      properties:
+        prescriber_type:
+          type: string
+          example: OD
+        first_name:
+          type: string
+          description: Prescriber’s first name
+          example: Bruce
+        last_name:
+          type: string
+          description: Prescriber’s last name
+          example: Banner
+        dea:
+          type: string
+          description: Prescriber’s DEA license ID
+          example: BI7884668
+        npi:
+          type: string
+          description: Prescriber’s National Provider Identifier
+          example: '1497742761'
+        address:
+          $ref: '#/components/schemas/Model59'
+        prescriber_token:
+          type: string
+          example: b6aba8097c2059820fb3
+      required:
+      - first_name
+      - last_name
+    Model61:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 404
+        error:
+          type: string
+          example: Not Found
+        message:
+          type: string
+          example: Unable to find Prescriber.
+    Model8:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 401
+        error:
+          type: string
+          example: Unauthorized
+        message:
+          type: string
+          example: Please Send a Valid Api-Key
+    Model9:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 500
+        error:
+          type: string
+          example: An internal server error occurred
+        message:
+          type: string
+          example: An internal server error occurred
+    availabilities:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model10'
+    cancelled_medications:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model119'
+    cancelled_otc_products:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model121'
+    copay_payment:
+      type: object
+      properties:
+        cardholder_name:
+          type: string
+          description: Cardholder name
+          example: John Doe
+        payment_type:
+          type: string
+        last_four_digits:
+          type: string
+          example: '4132'
+        transaction_amount:
+          type: number
+        card_type:
+          type: string
+        transaction_date:
+          type: string
+        transaction_id:
+          type: string
+      required:
+      - payment_type
+    current_stripe_payment:
+      type: object
+      properties:
+        cardholder_name:
+          type: string
+          example: Bruce Banner
+        last_four_digits:
+          type: string
+          example: '6789'
+        stripe_id:
+          type: string
+          example: pi_10f410zj3018s2
+        amount:
+          type: number
+          example: 12.75
+        description:
+          type: string
+          example: Paid by patient
+        intent_status:
+          type: string
+      required:
+      - stripe_id
+      - amount
+    failed_medications:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model120'
+    failed_otc_products:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model122'
+    getScheduledActions.data:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date
+          description: The timestamp of response
+          example: '2022-03-13T15:08:14.748Z'
+        status:
+          type: string
+          description: The status of response
+          example: successful
+          enum:
+          - successful
+          - unsuccessful
+        scheduled_actions:
+          $ref: '#/components/schemas/getScheduledActions.data.details.scheduled_actions'
+        pagination:
+          $ref: '#/components/schemas/getScheduledActions.data.details'
+      required:
+      - timestamp
+      - status
+    getScheduledActions.data.details:
+      type: object
+      description: The details of the response
+      properties:
+        next_page_token:
+          type: string
+          description: Base64 encoded datetime cursor to start the following paginated list from
+          example: MjAyMi0wMy0wOCAxNjoyMDowMg==
+        total:
+          type: number
+          description: The total number of scheduled actions of any type for the current customer
+          example: 50
+        per_page:
+          type: number
+          description: The limit of actions per paginated list
+          example: 10
+        pages:
+          type: number
+          description: The total number of scheduled actions
+          example: 5
+      required:
+      - total
+      - per_page
+      - pages
+    getScheduledActions.data.details.scheduled_actions:
+      type: array
+      description: The list of all scheduled actions of all types by customer
+      example:
+      - id: b5220786-0636-48c9-a9a0-087d17d15d9f
+        submit_on: '2022-02-19 16:04:53'
+        created_at: '2022-03-08T14:20:08.000Z'
+        updated_at: '2022-03-08T14:20:08.000Z'
+        action_type: FILL_REQUEST
+        status: PENDING
+        metadata:
+          request_id: 1
+        customer_id: 21
+      items:
+        $ref: '#/components/schemas/Model1'
+    icd_codes:
+      type: object
+    medication_response:
+      type: object
+      properties:
+        prescription_token:
+          type: string
+          example: e61e324f9018
+        quantity:
+          type: number
+          example: 30
+        is_cancellable:
+          type: boolean
+          description: Indicates whether this medication/fill can be cancelled.
+          example: true
+    medications:
+      type: array
+      items:
+        $ref: '#/components/schemas/medication_response'
+    metadata:
+      type: object
+      description: The additional data json for current scheduled action
+      example:
+        request_id: 8
+    otc_product:
+      type: object
+      properties:
+        sku:
+          type: string
+          example: SKU-123-456
+        quantity:
+          type: number
+          example: 1
+        patient_consent:
+          $ref: '#/components/schemas/patient_consent'
+        is_cancellable:
+          type: boolean
+          description: Indicates whether this OTC product can be cancelled. False if packing slip has
+            been printed.
+          example: true
+    otc_products:
+      type: array
+      items:
+        $ref: '#/components/schemas/otc_product'
+    packing_materials:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model144'
+    patient_consent:
+      type: object
+      properties:
+        consent_statement:
+          type: string
+        consent_method:
+          type: string
+        consent_date:
+          type: string
+        consent_type:
+          type: string
+        patient_name:
+          type: string
+        consent_provided_by:
+          type: string
+        item:
+          type: string
+    patient_survey:
+      type: object
+      example:
+        medications: Tafluprost
+        allergies: Penicillian
+        conditions: Glaucoma
+      properties:
+        allergies:
+          type: string
+          x-alternatives:
+          - type: string
+          - $ref: '#/x-alt-definitions/allergies'
+        medications:
+          type: string
+          x-alternatives:
+          - type: string
+          - $ref: '#/x-alt-definitions/medications'
+        conditions:
+          type: string
+        events:
+          type: string
+          x-alternatives:
+          - type: string
+          - $ref: '#/x-alt-definitions/events'
+        smoking_frequency:
+          type: string
+        drinking_frequency:
+          type: string
+        asthma_breathing:
+          type: boolean
+        heart_disease:
+          type: boolean
+        arthritis:
+          type: boolean
+        lung_disorder:
+          type: boolean
+        bleeding_clotting_disorder:
+          type: boolean
+        neurological_chronic_headaches:
+          type: boolean
+        blood_transfusion:
+          type: boolean
+        psychiatric_disorder:
+          type: boolean
+        bowel_stomach:
+          type: boolean
+        pulmonary_embolism:
+          type: boolean
+        cancer:
+          type: boolean
+        stroke:
+          type: boolean
+        cholesterol_disorder:
+          type: boolean
+        seizure_epilepsy:
+          type: boolean
+        diabetes:
+          type: boolean
+        thyroid_disorder:
+          type: boolean
+        eye_disorder:
+          type: boolean
+        urinary_kidney_disorder:
+          type: boolean
+        pregnancy:
+          type: boolean
+      required:
+      - allergies
+      - medications
+      - conditions
+    prescription_tokens:
+      type: array
+      items:
+        type: string
+        minLength: 0
+        pattern: '[a-f0-9]{8,16}'
+    pricing:
+      type: object
+      properties:
+        cost:
+          type: number
+        tax:
+          type: number
+        total:
+          type: number
+    receipt_items:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model20'
+    results:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model21'
+    stripe_payment:
+      type: object
+      properties:
+        category:
+          type: string
+          example: stripe
+        cardholder_name:
+          type: string
+          example: Bruce Banner
+        last_four_digits:
+          type: string
+          example: '6789'
+        stripe_id:
+          type: string
+          example: pi_10f410zj3018s2
+        amount:
+          type: number
+          example: 12.75
+        description:
+          type: string
+          example: Paid by patient
+      required:
+      - category
+      - stripe_id
+      - amount
+    validation_errors:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model12'

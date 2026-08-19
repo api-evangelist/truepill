@@ -1,142 +1,1312 @@
-openapi: 3.0.1
+openapi: 3.0.3
 info:
-  title: Truepill (FuzeRx) Insurance API
-  description: REST API for Truepill's pharmacy and healthcare-infrastructure platform, now shipping as FuzeRx after LetsGetChecked's 2024 acquisition of Truepill and the May 2025 rebrand to Fuze Health. The API exposes JSON over HTTPS for patient management, prescriptions, pharmacy-to-pharmacy transfers, insurance and copay adjudication, and webhook event retrieval. Endpoints and field names below reflect Truepill/FuzeRx public developer documentation; request and response bodies are summarized and should be reconciled against the live reference at https://rxdocs.fuzehealth.com before production use.
-  termsOfService: https://www.truepill.com/terms-of-service
+  title: Truepill Insurance API
+  description: 'Insurance objects, eligibility checks, copay requests and cancellation, coverage requests,
+    prior authorization, and pharmacy coverage.
+
+
+    Harvested verbatim from the live Truepill (FuzeRx) Swagger 2.0 contract published at https://rxapi.fuzehealth.com/swagger.json
+    and split by resource domain. Operation summaries, descriptions, parameters, schemas and response
+    codes are the provider''s own; only the Swagger 2.0 -> OpenAPI 3.0.3 conversion and the domain split
+    are ours.'
+  version: 0.0.1
   contact:
     name: FuzeRx Support
-    email: rx.support@fuzehealth.com
-  version: v1
+    url: https://rxdocs.fuzehealth.com
 servers:
-- url: https://rxapi.fuzehealth.com/v1
+- url: https://rxapi.fuzehealth.com
   description: Production
-- url: https://rxapi.sandbox.fuzehealth.com/v1
-  description: Sandbox
 security:
-- ApiKeyAuth: []
+- apiKey: []
 tags:
-- name: Insurance
-  description: Insurance objects, copay requests, and claim adjudication.
+- name: insurance
+  description: Insurance objects, eligibility checks, copay requests and cancellation, coverage requests,
+    prior authorization, and pharmacy coverage.
 paths:
-  /insurance:
+  /api/v1/copay_request:
     post:
-      operationId: createInsurance
+      summary: Create Copay Request
+      description: Generate a Copay Request to retrieve copay information on a patient's prescription(s).
+        We can support multiple insurances on a copay request
+      operationId: postApiV1Copay_request
       tags:
-      - Insurance
-      summary: Create an insurance object for a patient.
-      description: Establishes a patient's pharmacy benefit details (BIN, PCN, group number, member ID) for use in copay determination and claim adjudication.
+      - insurance
       requestBody:
-        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Insurance'
+              $ref: '#/components/schemas/Model130'
       responses:
-        '200':
-          description: Insurance object created.
+        '202':
+          description: Accepted
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Insurance'
-  /copay_request:
+                $ref: '#/components/schemas/Model133'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model134'
+  /api/v1/copay_request/cancel:
     post:
-      operationId: createCopayRequest
+      summary: Cancel Copay Request
+      description: Cancel an existing Copay Request if the status is 'Pending' or 'Triage'.
+      operationId: postApiV1Copay_requestCancel
       tags:
-      - Insurance
-      summary: Create a copay request.
-      description: Submits patient insurance and prescription details to determine a patient's real-time out-of-pocket expense for a medication. Results may also be delivered asynchronously via webhook events.
+      - insurance
       requestBody:
-        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CopayRequest'
+              $ref: '#/components/schemas/Model210'
       responses:
-        '200':
-          description: Copay request accepted.
+        '202':
+          description: Accepted
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CopayResponse'
-  /insurance_claim:
+                $ref: '#/components/schemas/Model212'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model213'
+  /api/v1/copay_request/{request_id}:
     get:
-      operationId: getInsuranceClaim
+      summary: Get Copay Request by request_id
+      description: Get information around an existing Copay Request
+      operationId: getApiV1Copay_requestRequest_id
       tags:
-      - Insurance
-      summary: Get insurance claim details.
-      description: Queries claim details from successfully adjudicated insurance claims. Access to this endpoint is restricted.
+      - insurance
+      parameters:
+      - name: request_id
+        in: path
+        required: true
+        description: Request id
+        schema:
+          type: string
       responses:
-        '200':
-          description: Insurance claim details.
+        '202':
+          description: Accepted
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InsuranceClaim'
+                $ref: '#/components/schemas/Model45'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model46'
+  /api/v1/coverage_request:
+    post:
+      summary: Create Coverage Request
+      description: Generate a Coverage Request for Truepill to investigate whether a patient has any valid
+        plans or benefit details.
+      operationId: postApiV1Coverage_request
+      tags:
+      - insurance
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Model135'
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model137'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model134'
+  /api/v1/insurance:
+    post:
+      summary: Create Insurance
+      description: Associate an Insurance with the Patient<br/><br/>With a Patient created in the Truepill
+        ecosystem, you can associate an Insurance to that patient with the Create Insurance API endpoint
+        using the `patient_token`.<br/><br/>Upon a successful response, an `insurance_token` is provided
+        that can be used along with the existing `patient_token` for Copay and Fill Requests.<br/><br/>Truepill
+        supports multiple insurances should a patient provide more than one insurance.
+      operationId: postApiV1Insurance
+      tags:
+      - insurance
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Model154'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model156'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model159'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model134'
+  /api/v1/insurance/eligibility-check:
+    post:
+      summary: Check Insurance Eligibility
+      description: Check patient insurance eligibility<br/><br/>This endpoint accepts either a patient_token
+        or patient details to check insurance eligibility.<br/><br/>The request will be forwarded to the
+        Insurance Service for processing.<br/><br/>Returns an array of insurances.
+      operationId: postApiV1InsuranceEligibilitycheck
+      tags:
+      - insurance
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Model214'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model215'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model216'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model134'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model217'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model218'
+  /api/v1/insurance/{insurance_token}:
+    get:
+      summary: Get Insurance details
+      operationId: getApiV1InsuranceInsurance_token
+      tags:
+      - insurance
+      parameters:
+      - name: insurance_token
+        in: path
+        required: true
+        description: Insurance token
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model52'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model53'
+  /api/v1/pharmacy-coverage:
+    get:
+      summary: Get best suitable Pharmacy Location
+      operationId: getApiV1Pharmacycoverage
+      tags:
+      - insurance
+      parameters:
+      - name: ship_to_state
+        in: query
+        schema:
+          type: string
+      - name: bin
+        in: query
+        schema:
+          type: string
+          pattern: ^[0-9]{6}$
+      - name: pcn
+        in: query
+        schema:
+          type: string
+      - name: group_number
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model25'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model26'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model27'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model28'
+  /api/v1/prior_authorization:
+    post:
+      summary: Create a Prior Authorization request
+      description: A prior authorization can be created by making a Prior Authorization Request.<br/><br/>Truepill
+        will provide a receipt confirmation of the request, and multiple subsequent webhook events throughout
+        the lifecycle of your PA.
+      operationId: postApiV1Prior_authorization
+      tags:
+      - insurance
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Prior%20Authorization%20Request%20Fields'
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model169'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model170'
+  /v1/copay_request:
+    post:
+      summary: Create Copay Request
+      description: Generate a Copay Request to retrieve copay information on a patient's prescription(s).
+        We can support multiple insurances on a copay request
+      operationId: postV1Copay_request
+      tags:
+      - insurance
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Model130'
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model133'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model134'
+  /v1/copay_request/cancel:
+    post:
+      summary: Cancel Copay Request
+      description: Cancel an existing Copay Request if the status is 'Pending' or 'Triage'.
+      operationId: postV1Copay_requestCancel
+      tags:
+      - insurance
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Model210'
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model212'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model213'
+  /v1/copay_request/{request_id}:
+    get:
+      summary: Get Copay Request by request_id
+      description: Get information around an existing Copay Request
+      operationId: getV1Copay_requestRequest_id
+      tags:
+      - insurance
+      parameters:
+      - name: request_id
+        in: path
+        required: true
+        description: Request id
+        schema:
+          type: string
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model45'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model46'
+  /v1/coverage_request:
+    post:
+      summary: Create Coverage Request
+      description: Generate a Coverage Request for Truepill to investigate whether a patient has any valid
+        plans or benefit details.
+      operationId: postV1Coverage_request
+      tags:
+      - insurance
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Model135'
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model137'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model134'
+  /v1/insurance:
+    post:
+      summary: Create Insurance
+      description: Associate an Insurance with the Patient<br/><br/>With a Patient created in the Truepill
+        ecosystem, you can associate an Insurance to that patient with the Create Insurance API endpoint
+        using the `patient_token`.<br/><br/>Upon a successful response, an `insurance_token` is provided
+        that can be used along with the existing `patient_token` for Copay and Fill Requests.<br/><br/>Truepill
+        supports multiple insurances should a patient provide more than one insurance.
+      operationId: postV1Insurance
+      tags:
+      - insurance
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Model154'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model156'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model159'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model134'
+  /v1/insurance/eligibility-check:
+    post:
+      summary: Check Insurance Eligibility
+      description: Check patient insurance eligibility<br/><br/>This endpoint accepts either a patient_token
+        or patient details to check insurance eligibility.<br/><br/>The request will be forwarded to the
+        Insurance Service for processing.<br/><br/>Returns an array of insurances.
+      operationId: postV1InsuranceEligibilitycheck
+      tags:
+      - insurance
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Model214'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model215'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model216'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model134'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model217'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model218'
+  /v1/insurance/{insurance_token}:
+    get:
+      summary: Get Insurance details
+      operationId: getV1InsuranceInsurance_token
+      tags:
+      - insurance
+      parameters:
+      - name: insurance_token
+        in: path
+        required: true
+        description: Insurance token
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model52'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model53'
+  /v1/pharmacy-coverage:
+    get:
+      summary: Get best suitable Pharmacy Location
+      operationId: getV1Pharmacycoverage
+      tags:
+      - insurance
+      parameters:
+      - name: ship_to_state
+        in: query
+        schema:
+          type: string
+      - name: bin
+        in: query
+        schema:
+          type: string
+          pattern: ^[0-9]{6}$
+      - name: pcn
+        in: query
+        schema:
+          type: string
+      - name: group_number
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model25'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model26'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model27'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model28'
+  /v1/prior_authorization:
+    post:
+      summary: Create a Prior Authorization request
+      description: A prior authorization can be created by making a Prior Authorization Request.<br/><br/>Truepill
+        will provide a receipt confirmation of the request, and multiple subsequent webhook events throughout
+        the lifecycle of your PA.
+      operationId: postV1Prior_authorization
+      tags:
+      - insurance
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Prior%20Authorization%20Request%20Fields'
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model169'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model170'
 components:
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: API key passed in the Authorization header. Separate keys are issued for sandbox and
+        production.
   schemas:
-    Insurance:
+    Model128:
+      type: array
+      description: Patient's prescriptions.
+      example:
+      - prescription_token: z3q2jr
+        quantity: 8.7
+        days_supply: 30
+        patient_consent:
+          consent_statement: Patient Bruce Banner consented that Truepill pharmacy will bill their insurance
+            in order to provide a fill of Medication Sildenafil 10mg for a quantity of 10.
+          patient_name: Bruce Banner
+          consent_provided_by: Hulk
+          item: sildenafil 10mg
+          consent_method: VERBAL
+          consent_date: ' 2021-01-25 15:17:51.000Z'
+          consent_type: INSURANCE
+        claim_overrides:
+        - insurance_token: adcbc795028c009d
+          prior_authorization_number: ABC123
+          submission_clarification_code: '4'
+        - insurance_token: 75539ed9ffb86f38
+          other_coverage_code: '8'
+      - b5q3t2
+      - h3r55c
+      items:
+        type: string
+        description: Prescription token
+        example: 4526d90a
+        minLength: 1
+        x-alternatives:
+        - type: string
+          description: Prescription token
+          example: 4526d90a
+          minLength: 1
+        - $ref: '#/x-alt-definitions/Model4'
+    Model129:
+      type: array
+      example:
+      - skhsyq83rkd3uht9
+      - ubqfc1a0a17hjb1c
+      - oi4aafwcsv5zzvvj
+      minItems: 1
+      items:
+        type: string
+    Model130:
       type: object
       properties:
+        prescriptions:
+          $ref: '#/components/schemas/Model128'
+        insurance_token:
+          $ref: '#/components/schemas/Model129'
+          x-alternatives:
+          - $ref: '#/x-alt-definitions/insurance_token'
+          - type: string
+        metadata:
+          type: string
+          description: Customer-side identifier to reference the Copay Request in Customer system
+          example: cfe146
         patient_token:
           type: string
-        bin:
+          description: Patient token
+          example: 4526d90a
+        notes:
           type: string
-        pcn:
+          description: Additional information customer wishes to convey relating to this Copay Request
+          example: This is a note
+        ship_to_state:
           type: string
-        group_number:
+          description: State prescription is being shipped to as 2 letter abbreviation
+          example: CA
+          x-constraint:
+            length: 2
+          x-convert:
+            case: upper
+        patient_payment_type:
           type: string
-        member_id:
+          description: Whether to run with insurance (must be provided) or as cash
+          enum:
+          - cash
+          - insurance
+      required:
+      - patient_token
+    Model131:
+      type: object
+      properties:
+        prescription_token:
           type: string
-        relationship_code:
+          example: 9df7a51822e2
+        copay_request_prescription_token:
           type: string
-        priority:
+          example: e13eab97b91c6b27
+        status:
           type: string
-          description: primary, secondary, or tertiary.
-    CopayResponse:
+          example: pending
+    Model132:
       type: object
       properties:
         copay_request_token:
           type: string
-        status:
-          type: string
-        copay_amount:
-          type: number
-        currency:
-          type: string
-        timestamp:
-          type: string
-          format: date-time
-    InsuranceClaim:
+          example: a2fcd842de60b010
+        copay_request_prescriptions_tokens:
+          $ref: '#/components/schemas/copay_request_prescriptions_tokens'
+    Model133:
       type: object
       properties:
-        claim_id:
+        request_id:
           type: string
-        prescription_token:
-          type: string
-        bin:
-          type: string
-        adjudicated_amount:
-          type: number
-        patient_pay_amount:
-          type: number
+          example: 40277544de5c6ba685dc4161e189d3e2
+        timestamp:
+          type: integer
+          example: 1631571795.423
         status:
           type: string
-    CopayRequest:
+          example: success
+        details:
+          $ref: '#/components/schemas/Model132'
+    Model134:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Patient not found
+    Model135:
       type: object
       properties:
         patient_token:
           type: string
+          example: 838a906bcc6e7671
+        metadata:
+          type: string
+          example: metadata
+      required:
+      - patient_token
+    Model136:
+      type: object
+      properties:
+        coverage_request_token:
+          type: string
+          example: 097b844c799b9c00
+        message:
+          type: string
+          example: Your coverage request has been processed successfully.
+    Model137:
+      type: object
+      properties:
+        request_id:
+          type: string
+          example: 40277544de5c6ba685dc4161e189d3e2
+        timestamp:
+          type: integer
+          example: 1631571795.423
+        status:
+          type: string
+          example: success
+        details:
+          $ref: '#/components/schemas/Model136'
+    Model153:
+      type: object
+      properties:
+        cardholder_id:
+          type: string
+          description: Cardholder ID
+          example: A9321328
+        rx_group:
+          type: string
+          example: '006726'
+        rx_bin:
+          type: string
+          example: '997928'
+          pattern: ^[0-9]{6}$
+        pcn:
+          type: string
+          description: A processor control number (PCN) is identifier used to route pharmacy reimbursements
+          example: AXA
+        phone_number:
+          type: string
+          description: Insurance company phone number
+          example: (955) 372-4143
+        insurance_card_image_url:
+          type: string
+          description: Image URL for insurance card
+        relationship_code:
+          type: integer
+          description: Relationship of the patient to the cardholder
+          example: 1
+          minimum: 0
+          maximum: 8
+        card_type:
+          type: string
+          description: Insurance card type
+          example: insurance
+          enum:
+          - insurance
+          - savings_card
+          - commercial
+          - government
+          - medicare
+          - medicaid
+        person_code:
+          type: string
+          description: Code assigned to a specific individual covered under the policy.
+          example: '01'
+          maxLength: 3
+          x-format:
+            alphanum: true
+          x-convert:
+            case: upper
+            trim: true
+        coverage_type:
+          type: string
+          description: Insurance coverage type
+          example: insurance
+          enum:
+          - medicare_bridge
+          - medicare_part_d
+    Model154:
+      type: object
+      properties:
+        insurance:
+          $ref: '#/components/schemas/Model153'
+        patient_token:
+          type: string
+          example: 4526d90a
+      required:
+      - insurance
+      - patient_token
+    Model155:
+      type: object
+      properties:
+        insurance_token:
+          type: string
+          example: 498147cb8c59541b
+    Model156:
+      type: object
+      properties:
+        request_id:
+          type: string
+          example: 6996e3bde41c7fabbbd3df39619f78bf
+        timestamp:
+          type: integer
+          example: 1631571795.423
+        status:
+          type: string
+          example: success
+        details:
+          $ref: '#/components/schemas/Model155'
+    Model157:
+      type: object
+      properties:
+        key:
+          type: string
+          example: insurance.cardholder_id
+        message:
+          type: string
+          example: cardholder_id must be a string
+    Model158:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model157'
+    Model159:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 400
+        error:
+          type: string
+          example: Bad Request
+        validation_errors:
+          $ref: '#/components/schemas/Model158'
+    Model168:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Your prior authorization request has been processed successfully.
+        patient_token:
+          type: string
+          description: Associated patient's record token
+          example: 4526d90a
+        insurance_token:
+          type: string
+          description: Associated patient's insurance record token
+          example: 19sienglo92831n5
         prescription_token:
           type: string
-        ndc:
+          description: Token to reference the prescription
+          example: z3q2jr
+        metadata:
           type: string
+          description: Customer-side identifier to reference the PA request in customer system
+          example: cfe146
+        prescriber_phone:
+          type: string
+          description: Phone number associated with the prescribe
+          example: 1-800-123-4567
+        prescriber_fax:
+          type: string
+          description: Fax number associated with the prescriber
+          example: 1-800-123-4567
+      required:
+      - patient_token
+      - insurance_token
+      - prescription_token
+    Model169:
+      type: object
+      properties:
+        request_id:
+          type: string
+          example: e8ab3dc37eb5be523508cbb5d707adf0
+        timestamp:
+          type: integer
+          example: 1631571795
+        status:
+          type: string
+          example: success
+        details:
+          $ref: '#/components/schemas/Model168'
+    Model170:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 400
+        error:
+          type: string
+          example: Bad Request
+        message:
+          type: string
+          example: Invalid request payload JSON format
+    Model210:
+      type: object
+      properties:
+        copay_request_token:
+          type: string
+          description: Copay token
+          example: 4526d90a
+        request_id:
+          type: string
+          description: Request id
+          example: bf11da52584eb54188bf8ebed33ef15f
+    Model211:
+      type: object
+      properties:
+        code:
+          type: string
+          example: CUSTOMER_CANCELLATION_REQUEST
+        description:
+          type: string
+          example: Copay Request Cancelled by Customer Request
+        message:
+          type: string
+          example: 'Accepted: Copay Request 34f68f71f980f78bb0bc has been cancelled.'
+    Model212:
+      type: object
+      properties:
+        request_id:
+          type: string
+          example: 40277544de5c6ba685dc4161e189d3e2
+        timestamp:
+          type: integer
+          example: 1631571795.423
+        status:
+          type: string
+          example: success
+        details:
+          $ref: '#/components/schemas/Model211'
+    Model213:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Copay not found
+    Model214:
+      type: object
+      description: Either patient_token or patient_details must be provided, but not both
+      properties:
+        patient_token:
+          type: string
+          description: Patient token
+          example: 4526d90a
+        patient_details:
+          $ref: '#/components/schemas/patient_details'
+    Model215:
+      type: object
+      properties:
+        cardholder_id:
+          type: string
+          description: Cardholder ID
+          example: XBC1009876543
+        bin:
+          type: string
+          description: Bank identification number
+          example: '880099'
+        group_number:
+          type: string
+          description: Group number
+          example: D96009620
+        pcn:
+          type: string
+          description: Processor control number
+          example: SP9E6
+        plan_type:
+          type: string
+          description: Insurance plan type
+          example: commercial
+          enum:
+          - commercial
+          - medicare
+          - medicaid
+          - other
+        effective_date:
+          type: string
+          description: Insurance effective date
+          example: '2019-03-01T00:00:00.000Z'
+          x-format:
+            isoDate: true
+        termination_date:
+          type: string
+          description: Insurance termination date
+          example: '2020-02-29T00:00:00.000Z'
+          x-format:
+            isoDate: true
+        payer_name:
+          type: string
+          description: Insurance payer name
+          example: Anthem BC
+        person_code:
+          type: string
+          description: Person code
+          example: '03'
+        patient_relationship:
+          type: string
+          description: Patient relationship to subscriber
+          example: Child
+    Model216:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 400
+        error:
+          type: string
+          example: Bad Request
+        message:
+          type: string
+          example: Invalid or missing patient_token
+    Model217:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 503
+        error:
+          type: string
+          example: Service Unavailable
+        message:
+          type: string
+          example: Surescripts service is currently unavailable
+    Model218:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 504
+        error:
+          type: string
+          example: Gateway Timeout
+        message:
+          type: string
+          example: Surescripts service request timed out
+    Model25:
+      type: object
+      properties:
+        pharmacy_name:
+          type: string
+          example: Test Pharmacy
+        npi:
+          type: string
+          example: 1231231234
+          pattern: ^\d{10}$
+        address:
+          $ref: '#/components/schemas/address'
+    Model26:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 400
+        message:
+          $ref: '#/components/schemas/message'
+        error:
+          type: string
+          example: Bad Request
+    Model27:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 401
+        message:
+          type: string
+          example: Unauthorized
+    Model28:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 403
+        message:
+          type: string
+          example: Forbidden
+    Model44:
+      type: object
+      properties:
+        prescription_token:
+          type: string
+          example: abc123
+        prescribed_written_name:
+          type: string
+          example: Ibuprofen
         quantity:
           type: number
-        days_supply:
-          type: integer
-  securitySchemes:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
-      description: 'API key passed as `Authorization: ApiKey <YOUR_API_KEY>`. Separate keys are issued for the sandbox and production environments.'
+          example: 30
+        copay_amount:
+          type: number
+          example: 10
+        fill_number:
+          type: number
+          example: 1
+        error_code:
+          type: string
+          example: R009
+        rejection_reason:
+          type: string
+          example: Not covered by insurance
+        additional_rejection_details:
+          type: string
+          example: Med not covered by insurance
+    Model45:
+      type: object
+      properties:
+        created_at:
+          type: string
+          example: '2021-09-14T14:22:37.000Z'
+        status:
+          type: string
+          example: success
+        error_code:
+          type: string
+          example: CR019
+        rejection_reason:
+          type: string
+          example: Bad Insurance Details
+        additional_rejection_details:
+          type: string
+          example: Missing/Invalid Group Number
+        triage_reason:
+          type: string
+          example: Other Reason
+        additional_triage_details:
+          type: string
+          example: Maint dose
+        patient_token:
+          type: string
+          example: abc123
+        insurance_tokens:
+          $ref: '#/components/schemas/insurance_tokens'
+        prescriptions:
+          $ref: '#/components/schemas/prescriptions'
+        metadata:
+          type: string
+          example: RX12343565
+        notes:
+          type: string
+          example: Med notes
+        ship_to_state:
+          type: string
+          example: CA
+          x-constraint:
+            length: 2
+    Model46:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 404
+        error:
+          type: string
+          example: Not Found
+        message:
+          type: string
+          example: Unable to find Copay Request.
+    Model52:
+      type: object
+      properties:
+        cardholder_id:
+          type: string
+          example: A9321328
+        rx_group:
+          type: string
+          example: '006726'
+        rx_bin:
+          type: string
+          example: '997928'
+        pcn:
+          type: string
+          example: AXA
+    Model53:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 404
+        error:
+          type: string
+          example: Not Found
+        message:
+          type: string
+          example: Unable to find Insurance.
+    address:
+      type: object
+      properties:
+        street_1:
+          type: string
+          example: 1234 123th Avenue NE
+        street_2:
+          type: string
+          example: Suite J/A
+        city:
+          type: string
+          example: Redmond
+        state:
+          type: string
+          example: WA
+        zip:
+          type: string
+          example: '98502'
+          pattern: ^\d{5}(-\d{4})?$
+        phone:
+          type: string
+          example: (111) 123-4321
+    copay_request_prescriptions_tokens:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model131'
+    insurance_tokens:
+      type: array
+      items:
+        type: string
+    message:
+      type: array
+      items:
+        type: string
+        example: Invalid bin field length. bin must be in numeric string format and length must be equal
+          to 6 characters
+    patient_details:
+      type: object
+      description: Patient details
+      properties:
+        first_name:
+          type: string
+          description: Patient first name
+          example: John
+        last_name:
+          type: string
+          description: Patient last name
+          example: Doe
+        dob:
+          type: string
+          description: Patient date of birth in YYYYMMDD format
+          example: '19950503'
+          pattern: ^\d{8}$
+        gender:
+          type: string
+          description: Patient gender
+          example: male
+          enum:
+          - male
+          - female
+        zip:
+          type: string
+          description: Patient zip code
+          example: '94105'
+          pattern: ^\d{5}(-\d{4})?$
+        city:
+          type: string
+          description: Patient city
+          example: San Francisco
+        state:
+          type: string
+          description: Patient state code
+          example: CA
+          x-constraint:
+            length: 2
+      required:
+      - first_name
+      - last_name
+      - dob
+      - gender
+      - zip
+      - city
+    prescriptions:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model44'

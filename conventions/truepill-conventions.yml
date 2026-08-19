@@ -1,0 +1,188 @@
+generated: '2026-08-14'
+method: searched
+source: https://rxdocs.fuzehealth.com (Overview, Making Requests, Errors, Environments, Get Webhook Events)
+derived_from: openapi/_original/truepill-fuzerx-swagger.json
+provider: Truepill
+providerId: truepill
+summary: >-
+  FuzeRx is a JSON-over-HTTPS REST API with a single opaque API key, a path-based
+  version prefix, an unusual PUT-to-create pattern on the patient resource, and a
+  cursor-paginated webhook-event feed that is the only paginated collection in the
+  contract. It does NOT document an idempotency mechanism: there is no
+  Idempotency-Key header anywhere in the published Swagger or the reference docs.
+  Duplicate suppression is instead expressed after the fact, as rejection codes
+  (TRANSFER_DUPLICATE, order code R1 "Duplicate Order", copay code
+  DUPLICATE_REQUEST), which means a retried POST is detected and rejected rather
+  than safely replayed.
+authentication:
+  style: api-key
+  header: Authorization
+  format: 'ApiKey <YOUR API KEY>'
+  see: authentication/truepill-authentication.yml
+idempotency:
+  supported: false
+  header: null
+  scope: null
+  retention: null
+  evidence: >-
+    No Idempotency-Key (or equivalent) parameter appears in any of the 158
+    operations in the live Swagger contract at
+    https://rxapi.fuzehealth.com/swagger.json, and the reference documentation at
+    rxdocs.fuzehealth.com never uses the word idempotent.
+  duplicate_handling:
+    mechanism: server-side duplicate detection, surfaced as rejection webhook events
+    codes:
+    - code: TRANSFER_DUPLICATE
+      surface: transfer / direct transfer rejection
+    - code: R1
+      surface: order rejection ("Duplicate Order", message carries the original order number)
+    - code: DUPLICATE_REQUEST
+      surface: copay request rejection
+  agent_guidance: >-
+    A client MUST NOT blindly retry a POST to /v1/fill_request,
+    /v1/copay_request, /v1/transfer_request, /v1/direct_transfer or
+    /v1/order. Retrying a request whose response was lost can dispense a second
+    prescription. Recover by polling the matching GET (by request token) or by
+    waiting for the webhook event, and treat R1 / TRANSFER_DUPLICATE /
+    DUPLICATE_REQUEST as confirmation that the FIRST attempt landed.
+pagination:
+  style: cursor
+  applies_to:
+  - GET /v1/webhook_events/{webhook_type}
+  page_size: 100
+  page_size_configurable: false
+  request_param: next
+  response_field: next_page_token
+  response_collection_field: results
+  note: >-
+    The results array carries at most 100 entries per page; when more exist the
+    response includes next_page_token, which is passed back as the `next` query
+    parameter. No other collection endpoint in the contract documents pagination.
+filtering:
+  style: operator-prefixed query parameters
+  operators:
+  - op: $lt
+    meaning: less than
+    value_type: integer
+  - op: $gt
+    meaning: greater than
+    value_type: integer
+  - op: $lte
+    meaning: less than or equal to
+    value_type: integer
+  - op: $gte
+    meaning: greater than or equal to
+    value_type: integer
+    note: >-
+      Published as "$lte / Greater than or equal to" in the docs table — the
+      second $lte row is a documentation typo for $gte. Recorded verbatim
+      because we do not correct a provider's published contract.
+  - op: $eq
+    meaning: equals
+    value_type: integer or string
+  example: 'GET /v1/webhook_events/notify_rx?timestamp=$gt:1625177120&timestamp=$lt:1625177295'
+  note: Operators are documented only for the webhook-event feed (fields id, timestamp, next, status).
+field_expansion:
+  supported: false
+sparse_fieldsets:
+  supported: false
+metadata:
+  supported: true
+  field: metadata
+  location: webhook event details object, echoed from the originating request
+  note: >-
+    A customer-supplied `metadata` string is carried through the whole lifecycle
+    and echoed on ORDER, SHIPMENT, TRANSFER, TRANSFER_CONTACT and COPAY webhook
+    events, making it the practical correlation key between a request and its
+    asynchronous outcomes.
+request_id_tracing:
+  supported: true
+  field: request_id
+  location: response body and webhook event body
+  format: '<object>_<hex token>, e.g. fill_request_991e90fa6b367cf72032'
+  note: >-
+    request_id is not a per-HTTP-call trace id — it is the durable token of the
+    business object created by the request, and it is the join key between the
+    synchronous response and every later webhook event. There is no documented
+    X-Request-Id response header.
+tokens:
+  style: opaque per-entity tokens
+  examples:
+  - patient_token
+  - prescription_token
+  - transfer_token
+  - direct_transfer_token
+  - copay_token
+  - order_token
+  - insurance_token
+  - url_token
+  rationale: >-
+    Published rationale — tokens "ensure we limit the amount of sensitive and
+    patient-identifiable data sent using webhook events". Treat every token as
+    PHI-adjacent even though it carries no demographics itself.
+versioning:
+  style: path-prefix
+  current: v1
+  prefix: /v1/
+  additional:
+  - /v2/ exists for direct_transfer and media only
+  - /v0/ exists for the consults and diagnostics products
+  aliases: >-
+    Every /v1 and /v2 path in the published Swagger is ALSO mounted under an
+    /api prefix (e.g. /api/v1/patient). The two families are byte-identical in
+    the contract; the documentation only ever uses the un-prefixed form, so
+    prefer /v1/... and treat /api/v1/... as an undocumented alias.
+  see: lifecycle/truepill-lifecycle.yml
+content_negotiation:
+  request: application/json (arguments may also be passed as form params)
+  response: application/json
+  note: >-
+    Docs state arguments "may be passed as params or JSON with the correct
+    Content-Type header" and that argument format can vary by HTTP method. The
+    published curl examples use -d form fields; the fetch() examples use JSON.
+http_methods:
+  used:
+  - GET
+  - POST
+  - PUT
+  - DELETE
+  - PATCH
+  anomaly: >-
+    PUT /v1/patient CREATES a patient (the documented "Create a Patient" call),
+    and POST /v1/patient/{patient_token} UPDATES one. This inverts the usual
+    REST convention and is the single most common integration mistake on this
+    API.
+error_envelope:
+  format: proprietary JSON (NOT RFC 9457 application/problem+json)
+  content_type: application/json
+  fields:
+  - name: statusCode
+    type: integer
+  - name: error
+    type: string
+    note: HTTP reason phrase, e.g. "Bad Request"
+  - name: message
+    type: string
+    note: present on 401/404-style failures
+  - name: validation_errors
+    type: array
+    note: 'present on 400; entries are {key, message} pairs naming the offending field'
+  see: errors/truepill-problem-types.yml
+async_model:
+  style: webhooks
+  note: >-
+    Most business outcomes are asynchronous. A 200/202 on a POST means accepted,
+    not completed — the real result arrives as a webhook event, or can be pulled
+    from GET /v1/webhook_events/{webhook_type}.
+  see: asyncapi/truepill-webhooks.yml
+rate_limit_signaling:
+  documented: false
+  headers: []
+  exhaustion_status: null
+  note: >-
+    No rate limits, quotas, or throttling headers are published anywhere in the
+    documentation, and no limit-related response header appears in the Swagger
+    contract. See rate-limits/truepill-rate-limits.yml.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

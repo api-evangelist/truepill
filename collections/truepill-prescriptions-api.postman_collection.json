@@ -1,0 +1,237 @@
+{
+  "item": [
+    {
+      "id": "e6460e44-f282-4b9c-9ca7-cbc085660125",
+      "name": "Prescriptions",
+      "description": {
+        "content": "Prescription details and routing.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "7e82fdee-d53d-4bb8-b23b-a45e0af0b310",
+          "name": "List a patient's prescriptions.",
+          "request": {
+            "name": "List a patient's prescriptions.",
+            "description": {},
+            "url": {
+              "path": [
+                "patient",
+                ":patient_token",
+                "prescriptions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "patient_token",
+                  "description": "(Required) Opaque token identifying the patient."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c1cabd3a-f4b7-46ab-a0d0-72dd9c8856e4",
+              "name": "Prescriptions for the patient.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "patient",
+                    ":patient_token",
+                    "prescriptions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "patient_token",
+                      "description": "(Required) Opaque token identifying the patient."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"prescription_token\": \"string\",\n    \"patient_token\": \"string\",\n    \"medication_name\": \"string\",\n    \"ndc\": \"string\",\n    \"quantity\": 6359.143503746841,\n    \"days_supply\": 8199,\n    \"directions\": \"string\",\n    \"status\": \"string\",\n    \"refills_remaining\": 3366\n  },\n  {\n    \"prescription_token\": \"string\",\n    \"patient_token\": \"string\",\n    \"medication_name\": \"string\",\n    \"ndc\": \"string\",\n    \"quantity\": 6172.568364396754,\n    \"days_supply\": 7664,\n    \"directions\": \"string\",\n    \"status\": \"string\",\n    \"refills_remaining\": 782\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ece5613c-5333-4a62-9f2b-9b9c0662b224",
+          "name": "Get prescription details.",
+          "request": {
+            "name": "Get prescription details.",
+            "description": {},
+            "url": {
+              "path": [
+                "prescription",
+                ":prescription_token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "prescription_token",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "832d2e34-8a96-4ee7-a321-d71cd8dc5a57",
+              "name": "Prescription details.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "prescription",
+                    ":prescription_token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "prescription_token",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"prescription_token\": \"string\",\n  \"patient_token\": \"string\",\n  \"medication_name\": \"string\",\n  \"ndc\": \"string\",\n  \"quantity\": 1876.267281278522,\n  \"days_supply\": 4237,\n  \"directions\": \"string\",\n  \"status\": \"string\",\n  \"refills_remaining\": 5150\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://rxapi.fuzehealth.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Authorization"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "8b5019b6-f1fa-4690-a0d0-4ce4754e16dc",
+    "name": "Truepill (FuzeRx) Insurance Prescriptions API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "REST API for Truepill's pharmacy and healthcare-infrastructure platform, now shipping as FuzeRx after LetsGetChecked's 2024 acquisition of Truepill and the May 2025 rebrand to Fuze Health. The API exposes JSON over HTTPS for patient management, prescriptions, pharmacy-to-pharmacy transfers, insurance and copay adjudication, and webhook event retrieval. Endpoints and field names below reflect Truepill/FuzeRx public developer documentation; request and response bodies are summarized and should be reconciled against the live reference at https://rxdocs.fuzehealth.com before production use.\n\nContact Support:\n Name: FuzeRx Support\n Email: rx.support@fuzehealth.com",
+      "type": "text/plain"
+    }
+  }
+}

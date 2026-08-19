@@ -1,0 +1,163 @@
+generated: '2026-08-14'
+method: searched
+source: https://rxdocs.fuzehealth.com (HIPAA & Security, Making Requests, Errors, Electronic Prescription), https://rx.fuzehealth.com/api-docs, openapi/_original/truepill-fuzerx-swagger.json
+provider: Truepill
+providerId: truepill
+summary: >-
+  Truepill / FuzeRx publishes a HIPAA compliance program and operates under US
+  pharmacy and controlled-substance regulation, and it exchanges electronic
+  prescriptions over Surescripts using the NCPDP SCRIPT standard. It conforms to
+  none of the API-layer interoperability standards a healthcare buyer might expect:
+  there is no FHIR surface, no OAuth 2.0 or SMART-on-FHIR authorization, no RFC
+  9457 problem details, and no idempotency contract. The regulatory posture is
+  real; the standards posture is proprietary.
+conformance:
+- id: hipaa
+  name: HIPAA (Privacy Rule, Security Rule, Transactions and Code Sets Rule)
+  conforms: true
+  evidence: >-
+    Published statement — "FuzeRx uses a set of policies and procedures to
+    safeguard our physical and technical infrastructure to maintain compliance
+    with the HIPAA Privacy Rule, Security Rule, Transactions and Code Sets Rule,
+    and their implementing regulations" and "FuzeRx uses trusted HIPAA-compliant
+    cloud infrastructure."
+  source: https://rxdocs.fuzehealth.com
+  attested_by: provider self-statement (no third-party audit report published)
+- id: tls
+  name: TLS 1.2+ in transit, encryption at rest
+  conforms: true
+  evidence: >-
+    "All API requests are transmitted over TLS 1.2 protocol and all data is
+    encrypted in transit and at rest." Live probe of rxapi.fuzehealth.com on
+    2026-08-14 negotiated TLS 1.3.
+  source: https://rxdocs.fuzehealth.com
+- id: ncpdp-script
+  name: NCPDP SCRIPT (electronic prescribing)
+  conforms: true
+  evidence: >-
+    "In the US, the accepted standard for eRx is the SCRIPT standard, governed by
+    the National Council for Prescription Drug Programs (NCPDP). A licensed US
+    provider can write a new prescription to FuzeRx pharmacy over the Surescripts
+    network." FuzeRx is the receiving pharmacy on that network; the SCRIPT
+    exchange happens upstream of the REST API, which surfaces it as a NOTIFY_RX
+    webhook event.
+  source: https://rxdocs.fuzehealth.com
+- id: surescripts
+  name: Surescripts network participation
+  conforms: true
+  evidence: Documented as the transport by which prescriptions reach the FuzeRx pharmacy.
+  source: https://rxdocs.fuzehealth.com
+- id: dea-controlled-substances
+  name: DEA online pharmacy notification (21 U.S.C. 831, 21 CFR 1304.40)
+  conforms: true
+  evidence: >-
+    "FuzeRx has made the notifications to the DEA Administrator required by 21
+    U.S.C. 831 and 21 CFR 1304.40."
+  source: https://rx.fuzehealth.com/api-docs
+- id: internet-pharmacy-disclosure
+  name: Internet Pharmacy Site Disclosure
+  conforms: true
+  evidence: A published Internet Pharmacy Site Disclosure (Hayward) is linked from the FuzeRx API docs landing page.
+  source: https://rx.fuzehealth.com/api-docs
+- id: fhir
+  name: HL7 FHIR
+  conforms: false
+  evidence: >-
+    No FHIR resources, no /fhir base path, no CapabilityStatement, and no FHIR
+    media types anywhere in the 158-operation published contract. The data model
+    is proprietary (patient_token / prescription_token), not FHIR Patient /
+    MedicationRequest.
+- id: smart-on-fhir
+  name: SMART on FHIR
+  conforms: false
+  evidence: No OAuth 2.0 authorization server and no .well-known/smart-configuration on any host.
+- id: oauth2
+  name: OAuth 2.0
+  conforms: false
+  evidence: >-
+    The only securityDefinition in the published Swagger is a single apiKey in the
+    Authorization header. /.well-known/oauth-authorization-server on
+    rxapi.fuzehealth.com returns the global 401 API-key challenge, not a metadata
+    document.
+- id: oidc
+  name: OpenID Connect
+  conforms: false
+  evidence: No /.well-known/openid-configuration on any probed host.
+- id: rfc9457
+  name: RFC 9457 Problem Details for HTTP APIs
+  conforms: false
+  evidence: >-
+    Errors use a proprietary {statusCode, error, message, validation_errors}
+    envelope with content-type application/json. No application/problem+json and
+    no type/title/detail members. See errors/truepill-problem-types.yml.
+- id: idempotency
+  name: Idempotency keys (draft-ietf-httpapi-idempotency-key-header)
+  conforms: false
+  evidence: >-
+    No Idempotency-Key header in any operation. Duplicate submissions are detected
+    server-side and rejected after the fact (TRANSFER_DUPLICATE, R1,
+    DUPLICATE_REQUEST) rather than replayed safely.
+- id: pagination
+  name: Documented pagination
+  conforms: true
+  style: cursor
+  evidence: >-
+    GET /v1/webhook_events/{webhook_type} returns results[] capped at 100 entries
+    with next_page_token, replayed as the `next` query parameter. This is the only
+    paginated collection in the contract.
+- id: rfc8594
+  name: RFC 8594 Sunset header / deprecation signalling
+  conforms: false
+  evidence: No Sunset or Deprecation headers declared; no operation marked deprecated.
+- id: openapi
+  name: OpenAPI / Swagger machine-readable contract
+  conforms: true
+  version: Swagger 2.0
+  evidence: >-
+    A complete 158-operation Swagger 2.0 document is served anonymously at
+    https://rxapi.fuzehealth.com/swagger.json (HTTP 200, probed 2026-08-14), and
+    an equivalent document at https://rxapi.sandbox.fuzehealth.com/swagger.json.
+    It is not linked from the documentation — discovery requires guessing the
+    path. The contract is a generation behind the current OpenAPI 3.x.
+- id: asyncapi
+  name: AsyncAPI
+  conforms: false
+  evidence: >-
+    A substantial webhook surface exists (10 event types) but no AsyncAPI document
+    is published. See asyncapi/truepill-webhooks.yml.
+- id: scim
+  name: SCIM
+  conforms: false
+- id: odata
+  name: OData
+  conforms: false
+- id: json-api
+  name: JSON:API
+  conforms: false
+apis_yml_pointers:
+  compliance:
+    emitted: true
+    url: https://rxdocs.fuzehealth.com/#hipaa-amp-security
+    justification: >-
+      A `type: Compliance` pointer IS emitted because the provider publishes a named compliance
+      program on its own documentation host — the "HIPAA & Security" section, verified live on
+      2026-08-15 (HTTP 200), states compliance with the HIPAA Privacy Rule, Security Rule and
+      Transactions and Code Sets Rule, and the FuzeRx API docs landing page publishes the DEA
+      notification under 21 U.S.C. 831 / 21 CFR 1304.40 and an Internet Pharmacy Site Disclosure.
+      This is a self-attestation, not a third-party audit — see certifications_published below.
+  trust_center:
+    emitted: false
+    reason: trust.fuzehealth.com does not resolve; no trust or compliance page exists on any host.
+certifications_published:
+  soc2: not published
+  iso27001: not published
+  hitrust: not published
+  fedramp: not applicable
+  note: >-
+    No trust center, no certification badges, and no audit-report request flow
+    were found on truepill.com, fuzehealth.com, rx.fuzehealth.com or
+    rxdocs.fuzehealth.com. trust.fuzehealth.com does not resolve. HIPAA compliance
+    is asserted by the provider; nothing independent is published.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

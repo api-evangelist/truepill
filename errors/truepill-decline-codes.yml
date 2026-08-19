@@ -1,0 +1,111 @@
+generated: '2026-08-14'
+method: searched
+source: https://rxdocs.fuzehealth.com (Copay Reject Codes, Triaged Copay Requests, Copay Prescription Rejection Codes)
+provider: Truepill
+providerId: truepill
+applicability: >-
+  FuzeRx is not a card acquirer, but it IS an authorization/adjudication provider:
+  POST /v1/copay_request submits a patient's insurance and prescription details to
+  a pharmacy benefit manager and returns a real-time out-of-pocket determination.
+  The rejection codes below are the pharmacy-benefit equivalent of card decline
+  codes, and they are what an integration must branch on to tell "the patient owes
+  $X" from "this claim will never adjudicate".
+summary: >-
+  Copay adjudication is asynchronous. POST /v1/copay_request returns 202 Accepted;
+  the determination — or the decline — arrives as a COPAY webhook event. A decline
+  carries status = error and a string code in details.error_code. A recoverable
+  hold carries status = triage and a CT-prefixed code in details.code.
+envelope:
+  field: details.error_code
+  callback_type: COPAY
+  status_values:
+  - success
+  - error
+  - triage
+  triage_field: details.code
+  additional_detail_field: details.additional_information
+decline_codes:
+- code: DUPLICATE_REQUEST
+  meaning: Duplicate Request
+  action: >-
+    A copay request for this patient/prescription is already in flight. Do not
+    resubmit — poll GET /v1/copay_request/{request_id} or wait for the original
+    event. This is also the closest thing FuzeRx has to an idempotency signal.
+  terminal: true
+- code: CLOSED_NETWORK
+  meaning: Closed Network
+  action: The plan does not permit this pharmacy. Route the fill elsewhere or collect cash-pay consent.
+  terminal: true
+- code: PHARMACY_OUT_OF_NETWORK
+  meaning: Out of Network
+  action: The dispensing pharmacy is out of network for this plan. Offer cash pay or an in-network alternative.
+  terminal: true
+- code: PHARMACY_OUT_OF_NETWORK_STATE_MEDICAID
+  meaning: Out of Network
+  action: Out of network specifically for a state Medicaid plan. Medicaid rules usually bar cash-pay substitution — escalate to a human.
+  terminal: true
+- code: INSURANCE_TERMINATED
+  meaning: Coverage Terminated
+  action: Collect current coverage from the patient and create a new insurance object before retrying.
+  terminal: true
+- code: BAD_INSURANCE_DETAILS
+  meaning: Bad Insurance Details
+  message: List of the selected insurance issues
+  action: >-
+    Read the accompanying message to learn which of BIN / PCN / group number /
+    cardholder ID / DOB is wrong, correct it, and submit a new copay request.
+  terminal: false
+- code: CUSTOMER_CANCELLATION_REQUEST
+  meaning: Copay Cancelled by Customer Request
+  action: The request was cancelled via POST /v1/copay_request/cancel. No further action.
+  terminal: true
+- code: PA_REQUIRED
+  meaning: Prior Authorization Required
+  action: >-
+    Submit POST /v1/prior_authorization, or set initiate_prior_auth = true on the
+    copay request so FuzeRx initiates and handles the PA itself (the request then
+    moves to triage code CT003 instead of declining).
+  terminal: false
+triage_codes:
+- code: CT001
+  meaning: Clinic Outreach
+  additional_information: Description/reason of clinical outreach
+- code: CT002
+  meaning: Customer Clarification needed
+  additional_information: May include a description of the desired clarification
+- code: CT003
+  meaning: Prior Authorization needed
+  additional_information: May include a description of the prior authorization
+- code: CT004
+  meaning: Refill too soon
+  additional_information: Date when the medication can be filled
+- code: CT005
+  meaning: Pending internal transfer
+- code: CT006
+  meaning: Other Reason
+  additional_information: Specifics of reason
+- code: CT007
+  meaning: Coverage Terminated
+- code: CT008
+  meaning: Coverage Not Effective
+- code: CT009
+  meaning: Date of Birth Mismatch
+- code: CT010
+  meaning: Bad Insurance Details
+  additional_information: "May include: Missing/Invalid Group Number, Non-Matched Cardholder ID, Missing/Invalid PCN, Missing/Invalid DOB, Invalid BIN"
+masked_to_patients:
+  documented: false
+  note: >-
+    The documentation does not state which codes may or may not be shown to a
+    patient. Because these codes carry benefit and coverage facts about a named
+    individual, treat the raw code and message as PHI and surface only the
+    remediation, not the code, in patient-facing UI. This is our guidance, not a
+    published provider rule.
+decline_code_count: 8
+triage_code_count: 10
+related:
+- errors/truepill-problem-types.yml
+- errors/truepill-error-codes.yml
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

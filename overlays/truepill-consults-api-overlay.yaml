@@ -1,0 +1,74 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Truepill Consults API
+  version: 1.0.0
+extends: openapi/truepill-consults-api-openapi.yml
+x-generated: '2026-08-15'
+x-method: generated
+x-source: derived from openapi/truepill-consults-api-openapi.yml plus conventions/truepill-conventions.yml,
+  errors/truepill-problem-types.yml, authentication/truepill-authentication.yml and lifecycle/truepill-lifecycle.yml
+x-note: Non-mutating. The harvested contract in openapi/ is never edited; this overlay records what API
+  Evangelist observed ON TOP of it. Apply with any OpenAPI Overlay 1.0.0 processor.
+actions:
+- target: $.info
+  description: Record the provider identity, the real upstream contract, and the agent-facing runtime
+    semantics that the Swagger 2.0 source does not express.
+  update:
+    x-apievangelist-provider: truepill
+    x-apievangelist-provider-name: Truepill (FuzeRx / Fuze Health)
+    x-apievangelist-upstream-contract: https://rxapi.fuzehealth.com/swagger.json
+    x-apievangelist-upstream-format: Swagger 2.0
+    x-apievangelist-docs: https://rxdocs.fuzehealth.com
+    x-apievangelist-status-page: https://status.rx.fuzehealth.com
+    x-idempotency:
+      supported: false
+      note: No Idempotency-Key header exists on any operation. Duplicate submissions are detected server-side
+        and REJECTED after the fact (R1, TRANSFER_DUPLICATE, DUPLICATE_REQUEST) rather than replayed.
+        Never blind-retry a write operation.
+    x-error-envelope:
+      rfc9457: false
+      media_type: application/json
+      fields:
+      - statusCode
+      - error
+      - message
+      - validation_errors
+    x-async-model:
+      style: webhooks
+      note: A 200/202 on a write means accepted, not completed. Outcomes arrive as webhook events; GET
+        /v1/webhook_events/{webhook_type} replays them with cursor pagination.
+    x-rate-limits:
+      documented: false
+      headers: []
+    x-phi: true
+    x-regulatory:
+    - HIPAA
+    - NCPDP SCRIPT
+    - DEA 21 CFR 1304.40
+- target: $.servers
+  description: Add the sandbox host. The provider serves an equivalent anonymous Swagger contract there,
+    but the source document declares only one host.
+  update:
+  - url: https://rxapi.fuzehealth.com
+    description: Production — keys prefixed tp_live_key_
+  - url: https://rxapi.sandbox.fuzehealth.com
+    description: Sandbox — keys prefixed tp_test_key_, supports the simulation object
+- target: $.components.securitySchemes.apiKey
+  description: State the literal wire format. The provider's docs call this HTTP Basic Auth, which it
+    is not.
+  update:
+    x-format: 'Authorization: ApiKey <YOUR API KEY>'
+    x-key-prefixes:
+      production: tp_live_key_
+      sandbox: tp_test_key_
+    x-self-serve: false
+    x-scopes: null
+- target: $.paths[*][?(@.operationId)]
+  description: Flag every operation in this document as belonging to a PHI-carrying pharmacy surface with
+    no idempotency contract. 4 of 6 operations are writes and are not safely retryable.
+  update:
+    x-apievangelist-phi: true
+    x-apievangelist-retry-safe: false
+x-coverage:
+  operations: 6
+  write_operations: 4

@@ -1,0 +1,325 @@
+{
+  "item": [
+    {
+      "id": "c469b89f-2ac3-43d7-a4fa-fde4c6bf3ebd",
+      "name": "Insurance",
+      "description": {
+        "content": "Insurance objects, copay requests, and claim adjudication.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "3b4fe4e8-308a-4e6e-917e-0c5e264373cc",
+          "name": "Create an insurance object for a patient.",
+          "request": {
+            "name": "Create an insurance object for a patient.",
+            "description": {
+              "content": "Establishes a patient's pharmacy benefit details (BIN, PCN, group number, member ID) for use in copay determination and claim adjudication.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "insurance"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patient_token\": \"<string>\",\n  \"bin\": \"<string>\",\n  \"pcn\": \"<string>\",\n  \"group_number\": \"<string>\",\n  \"member_id\": \"<string>\",\n  \"relationship_code\": \"<string>\",\n  \"priority\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d063d88f-08c8-41b7-ad47-ac7615a6a7f7",
+              "name": "Insurance object created.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "insurance"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"patient_token\": \"<string>\",\n  \"bin\": \"<string>\",\n  \"pcn\": \"<string>\",\n  \"group_number\": \"<string>\",\n  \"member_id\": \"<string>\",\n  \"relationship_code\": \"<string>\",\n  \"priority\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"patient_token\": \"<string>\",\n  \"bin\": \"<string>\",\n  \"pcn\": \"<string>\",\n  \"group_number\": \"<string>\",\n  \"member_id\": \"<string>\",\n  \"relationship_code\": \"<string>\",\n  \"priority\": \"<string>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5da852c6-1c56-476e-b1aa-763f0f67e0bc",
+          "name": "Create a copay request.",
+          "request": {
+            "name": "Create a copay request.",
+            "description": {
+              "content": "Submits patient insurance and prescription details to determine a patient's real-time out-of-pocket expense for a medication. Results may also be delivered asynchronously via webhook events.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "copay_request"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patient_token\": \"<string>\",\n  \"prescription_token\": \"<string>\",\n  \"ndc\": \"<string>\",\n  \"quantity\": \"<number>\",\n  \"days_supply\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "de14e9a9-c98b-4be8-9176-7ac3320a6f29",
+              "name": "Copay request accepted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "copay_request"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"patient_token\": \"<string>\",\n  \"prescription_token\": \"<string>\",\n  \"ndc\": \"<string>\",\n  \"quantity\": \"<number>\",\n  \"days_supply\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"copay_request_token\": \"string\",\n  \"status\": \"string\",\n  \"copay_amount\": 9834.915475819142,\n  \"currency\": \"string\",\n  \"timestamp\": \"2003-09-07T01:04:15.362Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "940c9eca-b815-4e24-8695-9b6c60d4350a",
+          "name": "Get insurance claim details.",
+          "request": {
+            "name": "Get insurance claim details.",
+            "description": {
+              "content": "Queries claim details from successfully adjudicated insurance claims. Access to this endpoint is restricted.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "insurance_claim"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9f45a862-1094-4afe-8840-71220e19e0fd",
+              "name": "Insurance claim details.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "insurance_claim"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"claim_id\": \"string\",\n  \"prescription_token\": \"string\",\n  \"bin\": \"string\",\n  \"adjudicated_amount\": 7921.944355773067,\n  \"patient_pay_amount\": 9815.087283211366,\n  \"status\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://rxapi.fuzehealth.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Authorization"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "66c9c960-d24b-467d-a4a3-054dcb24ad40",
+    "name": "Truepill (FuzeRx) Insurance API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "REST API for Truepill's pharmacy and healthcare-infrastructure platform, now shipping as FuzeRx after LetsGetChecked's 2024 acquisition of Truepill and the May 2025 rebrand to Fuze Health. The API exposes JSON over HTTPS for patient management, prescriptions, pharmacy-to-pharmacy transfers, insurance and copay adjudication, and webhook event retrieval. Endpoints and field names below reflect Truepill/FuzeRx public developer documentation; request and response bodies are summarized and should be reconciled against the live reference at https://rxdocs.fuzehealth.com before production use.\n\nContact Support:\n Name: FuzeRx Support\n Email: rx.support@fuzehealth.com",
+      "type": "text/plain"
+    }
+  }
+}

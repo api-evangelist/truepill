@@ -4,7 +4,19 @@ schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main
 provider: Truepill
 providerId: truepill
 created: '2026-06-21'
-modified: '2026-06-21'
+modified: '2026-08-15'
+method: searched
+source: >-
+  https://fuzehealth.com, https://rx.fuzehealth.com/api-docs, https://rxdocs.fuzehealth.com,
+  https://www.truepill.com — re-checked 2026-08-15. No pricing page, rate card, tier table or
+  self-serve checkout exists anywhere on the Truepill / Fuze Health estate. The only commercial
+  surface is https://rx.fuzehealth.com/contact-form/sales-contact.
+plan_count: 0
+plan_count_note: >-
+  plan_count is 0 because the provider publishes NO plans. The single entry below is a structural
+  placeholder describing the sales-led shape of the relationship, not a published tier, and none of
+  its prices are quoted figures. No Pricing pointer is emitted in apis.yml — there is no pricing
+  page to point at.
 reconciled: false
 tags:
 - Pharmacy

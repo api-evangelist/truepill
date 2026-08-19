@@ -1,0 +1,67 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Truepill (FuzeRx) Insurance API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Insurance",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create an insurance object for a patient.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://rxapi.fuzehealth.com/v1/insurance",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Establishes a patient's pharmacy benefit details (BIN, PCN, group number, member ID) for use in copay determination and claim adjudication."
+        },
+        {
+          "info": {
+            "name": "Create a copay request.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://rxapi.fuzehealth.com/v1/copay_request",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submits patient insurance and prescription details to determine a patient's real-time out-of-pocket expense for a medication. Results may also be delivered asynchronously via webhook events."
+        },
+        {
+          "info": {
+            "name": "Get insurance claim details.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://rxapi.fuzehealth.com/v1/insurance_claim"
+          },
+          "docs": "Queries claim details from successfully adjudicated insurance claims. Access to this endpoint is restricted."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

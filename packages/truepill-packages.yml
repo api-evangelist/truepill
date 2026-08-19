@@ -1,0 +1,64 @@
+generated: '2026-08-14'
+method: searched
+source: https://rxdocs.fuzehealth.com, https://github.com/truepill, npm/PyPI/RubyGems/Packagist/crates.io/pkg.go.dev registry queries
+provider: Truepill
+providerId: truepill
+summary: >-
+  Truepill (FuzeRx) publishes NO first-party client libraries. The developer
+  documentation at rxdocs.fuzehealth.com shows only raw curl and browser fetch()
+  examples and never references an SDK, and the company GitHub org
+  (github.com/truepill) contains six repositories, none of which is an API
+  client — they are generic OSS tools and forks (node-libxml, openapi-to-joi,
+  rum-react-integration, phantomized, netlify-plugin-cypress, sinon-mongoose).
+  The FuzeHealth org (github.com/FuzeHealth) holds a single .github profile repo.
+  One THIRD-PARTY Ruby client exists on RubyGems, published by Cerebral Inc.,
+  and it has not been released since February 2022.
+official_package_count: 0
+package_count: 1
+registries_searched:
+- registry: npm
+  query: truepill, fuzerx, fuzehealth, @truepill/*
+  result: no packages (registry search total 0; direct name lookups 404)
+- registry: pypi
+  query: truepill, fuzerx
+  result: 404 — no packages
+- registry: rubygems
+  query: truepill
+  result: 1 third-party gem
+- registry: packagist
+  query: truepill
+  result: no package (the probed URL is a soft-200 HTML redirect, not a package record)
+- registry: crates.io
+  query: truepill, fuzerx
+  result: no packages
+- registry: pkg.go.dev
+  query: truepill, fuzehealth
+  result: no modules
+- registry: maven-central
+  query: truepill, fuzehealth
+  result: no artifacts
+- registry: nuget
+  query: truepill, fuzerx
+  result: no packages
+packages:
+- language: ruby
+  registry: rubygems
+  name: truepill
+  url: https://rubygems.org/gems/truepill
+  install: gem install truepill
+  official: false
+  version: 0.0.8
+  published: '2022-02-15'
+  license: MIT
+  authors: Cerebral Inc., Shanti Braford, Konstantin Raf
+  description: A ruby library to interface with the Truepill API.
+  note: >-
+    Community client published by Cerebral Inc., a Truepill customer — NOT
+    first-party. Last release 2022-02-15, more than four years before this
+    check and predating the Fuze Health rebrand and the rxapi.fuzehealth.com
+    host entirely, so it is a strong abandonment signal for anyone considering
+    it. Version and publish date read from
+    https://rubygems.org/api/v1/gems/truepill.json.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

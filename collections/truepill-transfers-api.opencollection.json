@@ -1,0 +1,100 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Truepill (FuzeRx) Insurance Transfers API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Transfers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List all transfer requests.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://rxapi.fuzehealth.com/v1/transfer_request"
+          },
+          "docs": "List all transfer requests."
+        },
+        {
+          "info": {
+            "name": "Initiate a pharmacy transfer request.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://rxapi.fuzehealth.com/v1/transfer_request",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Initiate a pharmacy transfer request."
+        },
+        {
+          "info": {
+            "name": "Get a specific transfer request.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://rxapi.fuzehealth.com/v1/transfer_request/:transfer_token",
+            "params": [
+              {
+                "name": "transfer_token",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get a specific transfer request."
+        },
+        {
+          "info": {
+            "name": "Create a direct transfer (v1).",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://rxapi.fuzehealth.com/v1/direct_transfer",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a direct transfer (v1)."
+        },
+        {
+          "info": {
+            "name": "Create a direct transfer (v2).",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://rxapi.fuzehealth.com/v1/v2/direct_transfer",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a direct transfer (v2)."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

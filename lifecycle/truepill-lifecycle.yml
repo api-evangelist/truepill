@@ -1,0 +1,111 @@
+generated: '2026-08-14'
+method: searched
+source: https://rxdocs.fuzehealth.com (Versioning), https://status.rx.fuzehealth.com, https://rxapi.fuzehealth.com/swagger.json
+provider: Truepill
+providerId: truepill
+summary: >-
+  FuzeRx versions by URL path and publishes a real Atlassian Statuspage, but it
+  publishes NO deprecation policy, NO sunset schedule, NO changelog or release
+  notes, and NO SLA. Multiple API generations (v0, v1, v2) run side by side in the
+  live contract with no published statement of which is current or when any of
+  them retires — the single largest operational gap on this provider.
+versioning:
+  style: path-prefix
+  current: v1
+  statement: >-
+    "FuzeRx APIs are currently on version 1. The version is specified in all API
+    requests with /v1/ in the API endpoint."
+  source: https://rxdocs.fuzehealth.com
+  versions_live:
+  - version: v0
+    surfaces:
+    - /consults/v0/*
+    - /diagnostics/v0/*
+    - /v0/schedule
+    note: Consults and diagnostics ship as v0 — pre-1.0 by the provider's own numbering, with no stability statement.
+  - version: v1
+    surfaces:
+    - /v1/*
+    - /api/v1/*
+    note: The documented, current generation.
+  - version: v2
+    surfaces:
+    - /v2/direct_transfer
+    - /v2/media
+    - /diagnostics/v2/orders/{order_id}/results
+    note: >-
+      v2 exists only for direct transfer, media and diagnostics results. The docs
+      document both "Create a Direct Transfer" (v1) and "Create a Direct Transfer
+      V2" without saying that v1 is deprecated, so both remain supported.
+  path_aliasing:
+    observed: true
+    note: >-
+      Every /v1 and /v2 path is also mounted under /api (e.g. /api/v1/patient).
+      The alias family is present in the published Swagger but never appears in
+      the documentation. Prefer the un-prefixed form.
+deprecation_policy:
+  published: false
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  deprecated_operations_in_spec: 0
+  evidence: >-
+    No operation in the 158-operation live Swagger carries `deprecated: true`, and
+    no Sunset or Deprecation response header is declared anywhere. The docs
+    contain no deprecation, sunset, or end-of-life section.
+  note: >-
+    NO Deprecation pointer is emitted in apis.yml for this provider — there is no
+    policy to point at.
+status_page:
+  published: true
+  url: https://status.rx.fuzehealth.com
+  legacy_url: https://status.truepill.com
+  redirect: https://status.truepill.com 302s to https://status.rx.fuzehealth.com
+  platform: Atlassian Statuspage
+  components:
+  - Pharmacy Systems
+  - Core APIs
+  - Truepill Dashboard
+  - Virtual Pharmacy
+  - Webhooks
+  feeds:
+  - type: rss
+    url: https://status.rx.fuzehealth.com/history.rss
+  - type: atom
+    url: https://status.rx.fuzehealth.com/history.atom
+  subscriptions:
+  - email
+  - sms
+  - slack
+  - rss
+  - atom
+  observed:
+    date: '2026-08-14'
+    status: All Systems Operational
+    uptime_90d: 99.99%–100.0% across components
+  http_status: 200
+changelog:
+  published: false
+  note: >-
+    No changelog, release-notes, or "what's new" surface exists on
+    rxdocs.fuzehealth.com, rx.fuzehealth.com or fuzehealth.com. The published
+    Swagger reports info.version "0.0.1" and carries no dates, so a consumer has
+    no way to detect that the contract changed. No changelog/ artifact is emitted.
+sla:
+  published: false
+  note: Availability targets are contract-negotiated; no public SLA document exists.
+support:
+  email: rx.support@fuzehealth.com
+  onboarding_email: support@fuzehealth.com
+  phone: 1-833-860-1057
+  source: https://rx.fuzehealth.com/api-docs
+company_lifecycle:
+  note: >-
+    Truepill was acquired by LetsGetChecked in 2024 and the combined company
+    rebranded as Fuze Health in May 2025; the developer platform now ships as
+    FuzeRx. The truepill.com brand host and status.truepill.com both still
+    resolve and redirect into the fuzehealth.com estate, and the live API host
+    still returns keys prefixed tp_live_key_ / tp_test_key_.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

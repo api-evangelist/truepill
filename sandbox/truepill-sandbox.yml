@@ -1,0 +1,109 @@
+generated: '2026-08-14'
+method: searched
+source: https://rxdocs.fuzehealth.com (Environments, Simulating Webhook Events while Testing, Sandbox Testing with Simulations)
+provider: Truepill
+providerId: truepill
+summary: >-
+  FuzeRx ships a genuinely separate sandbox environment on its own host, selected
+  by which of two provisioned API keys you present. Its distinguishing feature is a
+  SIMULATION framework: because the sandbox has no live e-prescribing, pharmacy or
+  PBM systems behind it, the sandbox accepts a `simulation` object on requests that
+  manufactures prescriptions and drives the asynchronous webhook lifecycle
+  end-to-end. Access still requires onboarding — there is no self-serve sandbox
+  signup.
+environments:
+- name: production
+  base_url: https://rxapi.fuzehealth.com/v1
+  key_prefix: tp_live_key_
+  live_systems: true
+- name: sandbox
+  base_url: https://rxapi.sandbox.fuzehealth.com/v1
+  key_prefix: tp_test_key_
+  live_systems: false
+  description: >-
+    "The only functional difference between the two environments is that the
+    sandbox environment has fake data and simulation error events which you can
+    use to test the end-to-end experience."
+  spec_available: true
+  spec_url: https://rxapi.sandbox.fuzehealth.com/swagger.json
+  spec_http_status: 200
+  note: >-
+    The sandbox host serves its own anonymous Swagger 2.0 contract, with
+    host = rxapi.sandbox.fuzehealth.com. Probed 2026-08-14.
+selection:
+  mechanism: api-key + host
+  description: >-
+    The environment is chosen by the key you send and the host you call. There is
+    no environment header and no mode flag in the request body.
+self_serve: false
+signup: >-
+  Both keys are provisioned by Fuze Health during commercial onboarding. Contact
+  rx.support@fuzehealth.com. There is no public sandbox registration form.
+simulations:
+  available_in:
+  - sandbox
+  mechanism: >-
+    A `simulation` object is included in the request body of a supported call.
+    In the sandbox this both fabricates the underlying pharmacy artifacts and
+    triggers the webhook events that a live system would emit.
+  covered_flows:
+  - Patient & Prescription
+  - Copay request
+  - Fill request
+  - Direct Transfer
+  - Consult
+  example_trigger:
+    operation: PUT /v1/patient
+    field: simulation.newRx
+    shape: '[true, { ...prescription attributes... }]'
+    effect: >-
+      Creates the patient AND a simulated electronic prescription attached to
+      them, so a NOTIFY_RX webhook event and a downstream fill can be exercised
+      without a real prescriber or Surescripts transmission.
+    documented_attributes:
+    - medication_sig
+    - prescriber
+    - days_supply
+    - num_refills_filled
+    - refills_remaining
+    - quantity_remaining
+    - number_of_refills_allowed
+    - prescribed_drug_strength
+    - prescribed_ndc
+    - prescribed_quantity
+    - prescribed_unit_text
+    - prescribed_label_type
+    - prescribed_brand_name
+    - prescribed_written_name
+    - prescribed_generic_name
+    - dispensed_drug_strength
+    - dispensed_ndc
+    - dispensed_quantity
+    - dispensed_days_supply
+  error_simulation: >-
+    The sandbox carries "simulation error events", so the rejection and triage
+    codes catalogued in errors/truepill-error-codes.yml and
+    errors/truepill-decline-codes.yml can be exercised deliberately rather than
+    waited for.
+webhook_testing:
+  endpoint_configuration: >-
+    Production and test webhook endpoints are configured in the FuzeRx Dashboard
+    under the gear icon → Profile → Account Details, which also offers a
+    "test the integration" action.
+  separate_test_endpoint: true
+test_data:
+  cards: not applicable
+  test_clocks: not documented
+  fixtures: >-
+    No published fixture catalogue of magic identifiers. Test prescriptions are
+    created on demand through the simulation object rather than drawn from a
+    fixed list of reserved tokens.
+  note: >-
+    No hard-coded test values (test NDCs, reserved patient tokens, magic
+    identifiers) are published. Everything is generated per simulation run.
+caveats:
+- Sandbox tokens are environment-scoped; a sandbox patient_token returns 404 against production.
+- The sandbox has no live e-prescribing, so nothing arrives over Surescripts — every eRx must be simulated.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

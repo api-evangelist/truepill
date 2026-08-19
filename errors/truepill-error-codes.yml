@@ -1,0 +1,180 @@
+generated: '2026-08-14'
+method: searched
+source: https://rxdocs.fuzehealth.com (Transfer Error Codes, Order Error Codes, Triage Codes)
+provider: Truepill
+providerId: truepill
+summary: >-
+  FuzeRx's operational failures are not HTTP errors — they arrive later, as
+  rejection and triage webhook events. Each carries a code in `error_code` (or
+  `code` for triage), a human description in `description`, and optional detail in
+  `message` / `additional_information`. These are the codes an integration must
+  branch on; the HTTP envelope in errors/truepill-problem-types.yml only reports
+  whether the request was accepted.
+envelope:
+  rejection:
+    callback_type: TRANSFER | TRANSFER_CONTACT | DIRECT_TRANSFER | ORDER
+    status: error
+    fields:
+    - details.error_code
+    - details.description
+    - details.message
+  triage:
+    callback_type: ORDER
+    status: triage
+    fields:
+    - details.code
+    - details.description
+    - details.additional_information
+    note: An order may be triaged multiple times; each occurrence emits its own webhook event.
+catalogs:
+- name: Transfer Error Codes
+  applies_to:
+  - POST /v1/transfer_request
+  - POST /v1/direct_transfer
+  - POST /v2/direct_transfer
+  surface: TRANSFER and TRANSFER_CONTACT rejection webhook events
+  codes:
+  - code: RX_DOSAGE_MISMATCH
+    description: Dosage doesn't match prescription
+  - code: RX_FORMULA_MISMATCH
+    description: Formulation doesn't match prescription
+  - code: RX_NO_REFILLS
+    description: No refills remaining
+  - code: RX_NONEXISTANT
+    description: Prescription doesn't exist at specified pharmacy
+  - code: RX_EXPIRED
+    description: Prescription has expired
+  - code: RX_IS_DAW
+    description: Prescription is dispense as written for brand
+  - code: PATIENT_RECORD_NONEXISTANT
+    description: No patient record at pharmacy
+  - code: PATIENT_CANCELLED_RX
+    description: Patient cancellation request
+  - code: PATIENT_INFO_MISMATCH
+    description: Patient information doesn't match prescription
+  - code: PATIENT_CONTACT_REQUESTED
+    description: Pharmacy/prescriber requesting patient contact
+  - code: PHARMACY_NO_RESPONSE
+    description: Pharmacy did not respond after 6 days
+  - code: PHARMACY_DECLINED
+    description: Pharmacy refuses transfer
+  - code: PRESCRIBER_DECLINED
+    description: Prescriber declined to provide prescription
+  - code: PRESCRIBER_NO_RESPONSE
+    description: Prescriber did not respond after 6 days
+  - code: TRANSFER_DUPLICATE
+    description: Duplicate transfer
+    note: Also the de-facto duplicate-suppression signal — see conventions/truepill-conventions.yml.
+  - code: TRANSFER_CONTACT_INFO_INCORRECT
+    description: Incorrect pharmacy/prescriber contact information
+  - code: TRANSFER_OTHER_REASON
+    description: Other reason
+    message: Rejection specifics
+- name: Order Error Codes
+  applies_to:
+  - POST /v1/fill_request
+  - POST /v1/order
+  surface: ORDER rejection webhook events (status = error)
+  codes:
+  - code: R2
+    description: Bad Address Details
+  - code: '12'
+    description: Bad Insurance Details
+    message: "At least one of: Missing/Invalid Group Number, Missing/Invalid PCN, Non-Matched Cardholder ID, Missing/Invalid DOB"
+  - code: R004
+    description: Coverage Not Effective
+  - code: R003
+    description: Closed Network
+  - code: '09'
+    description: Date of Birth Mismatch
+  - code: DI
+    description: Drug Interactions
+    message: Description of impeding drug interactions
+  - code: R1
+    description: Duplicate Order
+    message: The order number of the duplicate order
+  - code: DT
+    description: Duplicate Therapy
+    message: Description of other duplicate therapy
+  - code: R009
+    description: High Copay
+    message: The high copay amount in question
+  - code: R010
+    description: Mail Order Fills Exceeded
+  - code: PC
+    description: Missing eRx
+  - code: NR
+    description: No Refills Remaining
+  - code: R0
+    description: Order Cancelled by Customer
+  - code: R005
+    description: Order Rejected by FuzeRx for Customer
+  - code: R019
+    description: Other Reason
+    message: Specifics of reason
+  - code: R3
+    description: Out of Stock/Unavailable to Order
+  - code: '62'
+    description: Patient Name Mismatch
+  - code: '75'
+    description: Prior Authorization Required
+  - code: R015
+    description: Quantity Limited by Insurance
+    message: Limited quantity information
+  - code: '79'
+    description: Refill Too Early
+    message: Date of refill availability
+  - code: R4
+    description: Returned to sender
+  - code: R022
+    description: Sig Clarification Needed
+    message: Description of required or missing instructions
+  - code: R017
+    description: Test
+  - code: R5
+    description: Transferred Out of Pharmacy
+  - code: R024
+    description: Prescription Expired
+  - code: R025
+    description: Coverage Terminated
+  - code: R026
+    description: Quantity Mismatch
+- name: Order Triage Codes
+  applies_to:
+  - POST /v1/fill_request
+  - POST /v1/order
+  surface: ORDER webhook events with status = triage
+  semantics: >-
+    Not a terminal failure. The order is blocked on an external dependency and is
+    expected to be resolved by pharmacy staff; do not cancel and resubmit.
+  codes:
+  - code: T001
+    description: Invalid Address
+  - code: T003
+    description: Prior Authorization Required
+    additional_information: May include a description of the prior authorization
+  - code: T004
+    description: Customer Clarification Needed
+    additional_information: May include a description of the desired clarification
+  - code: T005
+    description: Out of Stock
+    additional_information: Date of stock availability
+  - code: T006
+    description: Clinical Outreach to MD
+    additional_information: Description/reason of clinical outreach
+  - code: T007
+    description: Other Reason
+    additional_information: Specifics of reason
+  - code: T009
+    description: Refill Too Soon
+    additional_information: Date of refill availability
+  - code: T013
+    description: Rx Clarification Required
+    additional_information: May include a description of the desired Rx clarification
+  - code: T045
+    description: Patient name/dob mismatch
+    additional_information: Description of the mismatch requiring clarification
+code_count: 52
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

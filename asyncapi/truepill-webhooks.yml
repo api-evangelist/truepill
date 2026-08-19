@@ -1,0 +1,171 @@
+generated: '2026-08-14'
+method: searched
+source: https://rxdocs.fuzehealth.com (Webhook Events and every per-product webhook section)
+provider: Truepill
+providerId: truepill
+asyncapi_published: false
+asyncapi_note: >-
+  Truepill / FuzeRx publishes NO AsyncAPI document. Probes of /asyncapi.yaml,
+  /asyncapi.json and the docs host returned nothing, and the GitHub orgs contain no
+  event schemas. This file is the webhook catalogue harvested from the published
+  reference — it is a faithful record of the provider's event surface, NOT an
+  AsyncAPI specification, and it is deliberately not written as one.
+summary: >-
+  FuzeRx is asynchronous by design: a POST to the pharmacy surface returns 200/202
+  meaning accepted, and the real outcome arrives later as a webhook event POSTed to
+  a customer-hosted endpoint. Twelve callback_type values are documented. The same
+  events are also PULLABLE — GET /v1/webhook_events/{webhook_type} replays them
+  with cursor pagination, which is the recovery path when a delivery is missed.
+delivery:
+  transport: HTTPS POST to a customer-hosted webhook server
+  configuration: >-
+    Production and test webhook endpoints are set in the FuzeRx Dashboard under
+    the gear icon → Profile → Account Details, which also exposes a test action.
+  separate_test_endpoint: true
+  signing:
+    documented: false
+    note: >-
+      No signature header, shared secret, or verification procedure is documented.
+      A consumer cannot cryptographically verify that a webhook came from FuzeRx —
+      a material gap for a surface that carries PHI-adjacent tokens.
+  retries:
+    documented: false
+  replay:
+    supported: true
+    operation: GET /v1/webhook_events/{webhook_type}
+    pagination: cursor (results[] capped at 100, next_page_token → `next` param)
+    filters: 'id, timestamp, next, status with $lt/$gt/$lte/$gte/$eq operators'
+shared_event_shape:
+  fields:
+  - name: request_id
+    type: string
+    description: Token identifier of the originating request (fill request, direct transfer, etc.).
+  - name: callback_type
+    type: string
+    description: The event type.
+  - name: status
+    type: string
+    description: 'Most commonly success or error; also triage on ORDER and COPAY.'
+  - name: details
+    type: object
+    description: Type-specific payload.
+  - name: timestamp
+    type: integer
+    description: Unix epoch seconds.
+  exception: >-
+    NOTIFY_RX carries only callback_type, timestamp and details — it has no
+    request_id and no status, because it is not the outcome of a customer request.
+  correlation: >-
+    details.metadata echoes a customer-supplied string through the whole
+    lifecycle and is the practical join key.
+event_count: 12
+events:
+- callback_type: NOTIFY_RX
+  trigger: A prescription for your patient arrives at the FuzeRx pharmacy over Surescripts.
+  status_values: []
+  details_fields:
+  - medication_name
+  - prescriber
+  - prescription_token
+  - patient_token
+  - transfer_prescription_token
+  - location
+  pull_type: notify_rx
+- callback_type: ORDER
+  trigger: A fill request / order is processed, rejected, or moved to triage.
+  status_values:
+  - success
+  - error
+  - triage
+  error_codes: errors/truepill-error-codes.yml (Order Error Codes)
+  triage_codes: errors/truepill-error-codes.yml (Order Triage Codes)
+  details_fields:
+  - metadata
+  - message
+  - date_filled
+  - medications[]
+  - order_token
+- callback_type: SHIPMENT
+  trigger: Carrier scan events for a dispensed order.
+  status_values:
+  - success
+  details_fields:
+  - metadata
+  - status
+  - message
+  - eta
+  - tracking_number
+  - tracking_url
+  - carrier
+  shipment_statuses:
+  - TRANSIT
+  - DELIVERED
+- callback_type: TRANSFER
+  trigger: Outcome of a pharmacy-to-pharmacy transfer request.
+  status_values:
+  - success
+  - error
+  error_codes: errors/truepill-error-codes.yml (Transfer Error Codes)
+- callback_type: TRANSFER_CONTACT
+  trigger: FuzeRx contacted the losing pharmacy or the prescriber on a transfer.
+  status_values:
+  - success
+  - error
+  details_fields:
+  - metadata
+  - message
+  - patient_token
+  - transfer_token
+  - contact_name
+  - contact_method
+  - contact_number
+- callback_type: DIRECT_TRANSFER
+  trigger: Outcome of POST /v1/direct_transfer.
+  status_values:
+  - success
+  - error
+- callback_type: DIRECT_TRANSFER_V2
+  trigger: Outcome of POST /v2/direct_transfer (RxForward / RxTransfer).
+  status_values:
+  - success
+  - error
+- callback_type: COPAY
+  trigger: Real-time copay / out-of-pocket determination for a prescription.
+  status_values:
+  - success
+  - error
+  - triage
+  error_codes: errors/truepill-decline-codes.yml
+  triage_codes: errors/truepill-decline-codes.yml (CT001–CT010)
+- callback_type: COVERAGE
+  trigger: Outcome of POST /v1/coverage_request — pharmacy benefit coverage determination.
+  status_values:
+  - success
+  - error
+- callback_type: PRIOR_AUTH
+  trigger: Outcome of POST /v1/prior_authorization.
+  status_values:
+  - success
+  - error
+- callback_type: CONSULT
+  trigger: Telehealth consult state changes.
+  status_values:
+  - success
+  - error
+- callback_type: FILE
+  trigger: A patient's identification photo or selfie is uploaded against a consult.
+  details_fields:
+  - metadata
+  - documents[] with status, document_id, tags
+  document_tags:
+  - SELFIE
+  - PHOTO_ID
+  note: Carries consult_id at the top level rather than request_id.
+gaps:
+- No AsyncAPI or JSON Schema for any event payload.
+- No webhook signature or verification mechanism documented.
+- No retry/backoff policy documented; the pull endpoint is the only stated recovery path.
+- The overview list in the docs names 9 event types; three more (TRANSFER_CONTACT, DIRECT_TRANSFER_V2, FILE) appear only inside product sections.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

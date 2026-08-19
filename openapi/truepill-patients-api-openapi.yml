@@ -1,211 +1,1789 @@
-openapi: 3.0.1
+openapi: 3.0.3
 info:
-  title: Truepill (FuzeRx) Insurance Patients API
-  description: REST API for Truepill's pharmacy and healthcare-infrastructure platform, now shipping as FuzeRx after LetsGetChecked's 2024 acquisition of Truepill and the May 2025 rebrand to Fuze Health. The API exposes JSON over HTTPS for patient management, prescriptions, pharmacy-to-pharmacy transfers, insurance and copay adjudication, and webhook event retrieval. Endpoints and field names below reflect Truepill/FuzeRx public developer documentation; request and response bodies are summarized and should be reconciled against the live reference at https://rxdocs.fuzehealth.com before production use.
-  termsOfService: https://www.truepill.com/terms-of-service
+  title: Truepill Patients API
+  description: 'Patient records, demographics, surveys and a patient''s prescription list, referenced
+    by an opaque patient_token.
+
+
+    Harvested verbatim from the live Truepill (FuzeRx) Swagger 2.0 contract published at https://rxapi.fuzehealth.com/swagger.json
+    and split by resource domain. Operation summaries, descriptions, parameters, schemas and response
+    codes are the provider''s own; only the Swagger 2.0 -> OpenAPI 3.0.3 conversion and the domain split
+    are ours.'
+  version: 0.0.1
   contact:
     name: FuzeRx Support
-    email: rx.support@fuzehealth.com
-  version: v1
+    url: https://rxdocs.fuzehealth.com
 servers:
-- url: https://rxapi.fuzehealth.com/v1
+- url: https://rxapi.fuzehealth.com
   description: Production
-- url: https://rxapi.sandbox.fuzehealth.com/v1
-  description: Sandbox
 security:
-- ApiKeyAuth: []
+- apiKey: []
 tags:
-- name: Patients
-  description: Patient records and demographics.
+- name: patients
+  description: Patient records, demographics, surveys and a patient's prescription list, referenced by
+    an opaque patient_token.
 paths:
-  /patient:
-    put:
-      operationId: createPatient
-      tags:
-      - Patients
-      summary: Create a patient record.
-      description: Creates a patient and returns an opaque patient_token used to reference the patient on subsequent requests.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatientRequest'
-      responses:
-        '200':
-          description: Patient created.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PatientResponse'
+  /api/v1/patient:
     get:
-      operationId: findPatient
+      summary: Patient search
+      description: 'While the Get Patient endpoint requires a `patient_token` to retrieve information,
+        you can also retrieve patient information without a `patient_token`, using the Find Patient endpoint.<br/><br/>Search
+        for patient information by appending the following param fields onto the API endpoint, separated
+        with an `&`:'
+      operationId: getApiV1Patient
       tags:
-      - Patients
-      summary: Find a patient by demographics.
+      - patients
       parameters:
+      - name: guardian
+        in: query
+        schema:
+          type: string
+      - name: prefix
+        in: query
+        description: Patient title
+        schema:
+          type: string
+          enum:
+          - Mr.
+          - Ms.
+          - Mrs.
+          - Miss
+          - Ms
+          - Prof
+          - Sir
+      - name: suffix
+        in: query
+        description: Suffix which qualifies a person
+        schema:
+          type: string
+          enum:
+          - Jr.
+          - Sr.
+          - I
+          - II
+          - III
+          - IV
+          - V
       - name: first_name
         in: query
+        required: true
+        description: Patient first name
         schema:
           type: string
       - name: last_name
         in: query
+        required: true
+        description: Patient last name
         schema:
           type: string
+      - name: gender
+        in: query
+        required: true
+        description: Patient gender
+        schema:
+          type: string
+          enum:
+          - male
+          - female
+          - unknown
       - name: dob
+        in: query
+        required: true
+        description: Patient's date of birth
+        schema:
+          type: string
+          format: date
+      - name: zip
+        in: query
+        description: Postal code where the company is located
+        schema:
+          type: string
+          pattern: ^\d{5}(-\d{4})?$
+      - name: species
         in: query
         schema:
           type: string
-          format: date
+          default: Human
+          enum:
+          - Human
+          - Crocodile
+          - Frog
+          - Iguana
+          - Lizard
+          - Snake
+          - Tortoise
+          - Turtle
+          - Spider
+          - Other Arthopoda
+          - Chicken
+          - African Goshawk
+          - Budgerigar
+          - Cockatiel
+          - Cockatoo
+          - Common Canary
+          - Crow
+          - Duck
+          - Eagle
+          - Goose
+          - Guinea Fowl
+          - Kestrel
+          - Kite
+          - Macaw
+          - Ostrich
+          - Other Aves
+          - Owl
+          - Parakeet
+          - Parrot
+          - Partridge
+          - Peregrin Falcon
+          - Pheasant
+          - Pigeon
+          - Quail
+          - Snipe
+          - Sparrow
+          - Starling
+          - Swan
+          - Turtle Dove
+          - Bison
+          - Cattle/Bovine
+          - Buffalo
+          - Other Bovinae
+          - Alpaca
+          - Camel
+          - Llama
+          - Other Camelidae
+          - Dog/Canine
+          - Fox
+          - Jackal
+          - Raccoon Dog
+          - Wolf
+          - Other Caprinae
+          - Goat/Carpine
+          - Sheep/Ovine
+          - Elk
+          - Moose
+          - Fallow
+          - Other Cervidae
+          - Red Deer
+          - Reindeer
+          - Roe Deer
+          - Donkey/Asinine
+          - Horse/Equine
+          - Hybrid
+          - Other Equidae
+          - Zebra
+          - Bobcat
+          - Cougar
+          - Puma
+          - European Lynx
+          - Cat/Feline
+          - Jaguar
+          - Leopard
+          - Lion
+          - Other Felidae
+          - Tiger
+          - Wild Cat
+          - European Rabbit
+          - Hare
+          - Other Leporidae
+          - Bivalvia
+          - Cephalopoda
+          - Other Mollusca
+          - Badger
+          - Ferret
+          - Mink
+          - Other Mustelidae
+          - Bat
+          - Bear
+          - Hedgehog
+          - Monkey
+          - Other Mammalia
+          - Arctic Char
+          - Atlantic Salmon
+          - Brill
+          - Carp
+          - Catfish
+          - Cod
+          - Crucian Carp
+          - European Eel
+          - Gilthead
+          - Goldfish
+          - Gudgeon
+          - Halibut
+          - Largemouth Bass
+          - Mullet
+          - Other Pisces
+          - Perch
+          - Pike
+          - Roach
+          - Sea Bream
+          - Seabass
+          - Sharpsnout Seabream
+          - Sole
+          - Sturgeon
+          - Tench
+          - Trout
+          - Turbot
+          - Rockfish/Wolffish
+          - Beaver
+          - Chinchilla
+          - Dormouse
+          - Dwarf Hamster
+          - European Hamster
+          - Gerbil
+          - Guinea Pig
+          - House Mouse
+          - Other Rodentia
+          - Rat
+          - Russian Hamster
+          - Syrian Hamster
+          - Golden Hamster
+          - Vole
+          - Other Suidae
+          - Pig/Porcine
+          - Wild Boar
+          - Addax
       responses:
         '200':
-          description: Matching patient(s).
+          description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PatientResponse'
-  /patient/{patient_token}:
-    get:
-      operationId: getPatient
-      tags:
-      - Patients
-      summary: Retrieve patient details.
-      parameters:
-      - $ref: '#/components/parameters/PatientToken'
-      responses:
-        '200':
-          description: Patient details.
+                $ref: '#/components/schemas/Model23'
+        '404':
+          description: Not Found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PatientResponse'
-    post:
-      operationId: updatePatient
+                $ref: '#/components/schemas/Model24'
+    put:
+      summary: Create Patient
+      description: This endpoint generates a patient record in the Truepill ecosystem.<br/><br/>Upon a
+        successful request, the endpoint returns a `patient_token` for you to reference in subsequent
+        API requests that require this field.<br/><br/>The `patient_token` that is returned upon successfully
+        creating a patient record can be used with many of the other endpoints to continue referencing
+        the same record.<br/><br/>If the patient information in the request body matches the information
+        in an existing patient record, the existing `patient_token` will be returned in the API response.<br/><br/>The
+        address and phone number provided should be the same as the information provided to the prescriber
+        on the e-Script. These attributes are only used for matching purposes.
+      operationId: putApiV1Patient
       tags:
-      - Patients
-      summary: Update patient information.
-      parameters:
-      - $ref: '#/components/parameters/PatientToken'
+      - patients
       requestBody:
-        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PatientRequest'
+              $ref: '#/components/schemas/Model230'
       responses:
-        '200':
-          description: Patient updated.
+        '201':
+          description: Created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PatientResponse'
-  /patient/{patient_token}/prescriptions:
+                $ref: '#/components/schemas/Model231'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model234'
+  /api/v1/patient/{patient_token}:
     get:
-      operationId: listPatientPrescriptions
+      summary: Get Patient
+      description: Once a patient has been created in the Truepill ecosystem, you can access the patient
+        information at any time using the `patient_token` that was provided on the Create Patient response.<br/><br/>If
+        the `patient_token` does not map to a patient record, a `404 Not Found` will be returned.<br/><br/>Querying
+        for patient information that does not belong to you will return an error response.<br/><br/>Patient
+        SSN and `id_image` information is not viewable through this endpoint
+      operationId: getApiV1PatientPatient_token
       tags:
-      - Patients
-      summary: List a patient's prescriptions.
+      - patients
       parameters:
-      - $ref: '#/components/parameters/PatientToken'
+      - name: patient_token
+        in: path
+        required: true
+        schema:
+          type: string
       responses:
         '200':
-          description: Prescriptions for the patient.
+          description: OK
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Prescription'
-components:
-  parameters:
-    PatientToken:
-      name: patient_token
-      in: path
-      required: true
-      schema:
-        type: string
-      description: Opaque token identifying the patient.
-  schemas:
-    Prescription:
-      type: object
-      properties:
-        prescription_token:
+                $ref: '#/components/schemas/Model58'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model24'
+    post:
+      summary: Update Patient
+      description: This endpoint updates a patient record in the Truepill ecosystem.<br/><br/>Upon a successful
+        request, the endpoint returns the `patient_token` of the patient updated, the timestamp, the status,
+        and a message.<br/><br/>Only non-required fields can be updated. Submitting a patient's first
+        name, last name, date of birth, or gender as a field to be updated will be considered a bad request.
+      operationId: postApiV1PatientPatient_token
+      tags:
+      - patients
+      parameters:
+      - name: patient_token
+        in: path
+        required: true
+        schema:
           type: string
-        patient_token:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Model219'
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model221'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model224'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model24'
+  /api/v1/patient/{patient_token}/patient_survey:
+    get:
+      summary: Get Patient Survey
+      description: This endpoint returns the most recent `patient_survey` that was submitted to Truepill
+      operationId: getApiV1PatientPatient_tokenPatient_survey
+      tags:
+      - patients
+      parameters:
+      - name: patient_token
+        in: path
+        required: true
+        schema:
           type: string
-        medication_name:
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model105'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model24'
+  /api/v1/patient/{patient_token}/prescriptions:
+    get:
+      summary: List Patient Prescriptions
+      description: Retrieve the list of Patient's prescriptions which includes the prescription token,
+        medication name, medication sig, prescriber, date written, refills remaining, current prescription
+        status and the fillable status.<br/><br/>Patient's prescriptions must already exist in the Truepill
+        ecosystem in order to be retrieved.
+      operationId: getApiV1PatientPatient_tokenPrescriptions
+      tags:
+      - patients
+      parameters:
+      - name: patient_token
+        in: path
+        required: true
+        schema:
           type: string
-        ndc:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model104'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model24'
+  /v1/patient:
+    get:
+      summary: Patient search
+      description: 'While the Get Patient endpoint requires a `patient_token` to retrieve information,
+        you can also retrieve patient information without a `patient_token`, using the Find Patient endpoint.<br/><br/>Search
+        for patient information by appending the following param fields onto the API endpoint, separated
+        with an `&`:'
+      operationId: getV1Patient
+      tags:
+      - patients
+      parameters:
+      - name: guardian
+        in: query
+        schema:
           type: string
-          description: National Drug Code.
-        quantity:
-          type: number
-        days_supply:
-          type: integer
-        directions:
+      - name: prefix
+        in: query
+        description: Patient title
+        schema:
           type: string
-        status:
+          enum:
+          - Mr.
+          - Ms.
+          - Mrs.
+          - Miss
+          - Ms
+          - Prof
+          - Sir
+      - name: suffix
+        in: query
+        description: Suffix which qualifies a person
+        schema:
           type: string
-        refills_remaining:
-          type: integer
-    PatientRequest:
-      type: object
-      properties:
-        first_name:
+          enum:
+          - Jr.
+          - Sr.
+          - I
+          - II
+          - III
+          - IV
+          - V
+      - name: first_name
+        in: query
+        required: true
+        description: Patient first name
+        schema:
           type: string
-        last_name:
+      - name: last_name
+        in: query
+        required: true
+        description: Patient last name
+        schema:
           type: string
-        dob:
+      - name: gender
+        in: query
+        required: true
+        description: Patient gender
+        schema:
+          type: string
+          enum:
+          - male
+          - female
+          - unknown
+      - name: dob
+        in: query
+        required: true
+        description: Patient's date of birth
+        schema:
           type: string
           format: date
-        gender:
+      - name: zip
+        in: query
+        description: Postal code where the company is located
+        schema:
           type: string
-        ssn:
+          pattern: ^\d{5}(-\d{4})?$
+      - name: species
+        in: query
+        schema:
           type: string
-        address_1:
+          default: Human
+          enum:
+          - Human
+          - Crocodile
+          - Frog
+          - Iguana
+          - Lizard
+          - Snake
+          - Tortoise
+          - Turtle
+          - Spider
+          - Other Arthopoda
+          - Chicken
+          - African Goshawk
+          - Budgerigar
+          - Cockatiel
+          - Cockatoo
+          - Common Canary
+          - Crow
+          - Duck
+          - Eagle
+          - Goose
+          - Guinea Fowl
+          - Kestrel
+          - Kite
+          - Macaw
+          - Ostrich
+          - Other Aves
+          - Owl
+          - Parakeet
+          - Parrot
+          - Partridge
+          - Peregrin Falcon
+          - Pheasant
+          - Pigeon
+          - Quail
+          - Snipe
+          - Sparrow
+          - Starling
+          - Swan
+          - Turtle Dove
+          - Bison
+          - Cattle/Bovine
+          - Buffalo
+          - Other Bovinae
+          - Alpaca
+          - Camel
+          - Llama
+          - Other Camelidae
+          - Dog/Canine
+          - Fox
+          - Jackal
+          - Raccoon Dog
+          - Wolf
+          - Other Caprinae
+          - Goat/Carpine
+          - Sheep/Ovine
+          - Elk
+          - Moose
+          - Fallow
+          - Other Cervidae
+          - Red Deer
+          - Reindeer
+          - Roe Deer
+          - Donkey/Asinine
+          - Horse/Equine
+          - Hybrid
+          - Other Equidae
+          - Zebra
+          - Bobcat
+          - Cougar
+          - Puma
+          - European Lynx
+          - Cat/Feline
+          - Jaguar
+          - Leopard
+          - Lion
+          - Other Felidae
+          - Tiger
+          - Wild Cat
+          - European Rabbit
+          - Hare
+          - Other Leporidae
+          - Bivalvia
+          - Cephalopoda
+          - Other Mollusca
+          - Badger
+          - Ferret
+          - Mink
+          - Other Mustelidae
+          - Bat
+          - Bear
+          - Hedgehog
+          - Monkey
+          - Other Mammalia
+          - Arctic Char
+          - Atlantic Salmon
+          - Brill
+          - Carp
+          - Catfish
+          - Cod
+          - Crucian Carp
+          - European Eel
+          - Gilthead
+          - Goldfish
+          - Gudgeon
+          - Halibut
+          - Largemouth Bass
+          - Mullet
+          - Other Pisces
+          - Perch
+          - Pike
+          - Roach
+          - Sea Bream
+          - Seabass
+          - Sharpsnout Seabream
+          - Sole
+          - Sturgeon
+          - Tench
+          - Trout
+          - Turbot
+          - Rockfish/Wolffish
+          - Beaver
+          - Chinchilla
+          - Dormouse
+          - Dwarf Hamster
+          - European Hamster
+          - Gerbil
+          - Guinea Pig
+          - House Mouse
+          - Other Rodentia
+          - Rat
+          - Russian Hamster
+          - Syrian Hamster
+          - Golden Hamster
+          - Vole
+          - Other Suidae
+          - Pig/Porcine
+          - Wild Boar
+          - Addax
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model23'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model24'
+    put:
+      summary: Create Patient
+      description: This endpoint generates a patient record in the Truepill ecosystem.<br/><br/>Upon a
+        successful request, the endpoint returns a `patient_token` for you to reference in subsequent
+        API requests that require this field.<br/><br/>The `patient_token` that is returned upon successfully
+        creating a patient record can be used with many of the other endpoints to continue referencing
+        the same record.<br/><br/>If the patient information in the request body matches the information
+        in an existing patient record, the existing `patient_token` will be returned in the API response.<br/><br/>The
+        address and phone number provided should be the same as the information provided to the prescriber
+        on the e-Script. These attributes are only used for matching purposes.
+      operationId: putV1Patient
+      tags:
+      - patients
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Model230'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model231'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model234'
+  /v1/patient/{patient_token}:
+    get:
+      summary: Get Patient
+      description: Once a patient has been created in the Truepill ecosystem, you can access the patient
+        information at any time using the `patient_token` that was provided on the Create Patient response.<br/><br/>If
+        the `patient_token` does not map to a patient record, a `404 Not Found` will be returned.<br/><br/>Querying
+        for patient information that does not belong to you will return an error response.<br/><br/>Patient
+        SSN and `id_image` information is not viewable through this endpoint
+      operationId: getV1PatientPatient_token
+      tags:
+      - patients
+      parameters:
+      - name: patient_token
+        in: path
+        required: true
+        schema:
           type: string
-        address_2:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model58'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model24'
+    post:
+      summary: Update Patient
+      description: This endpoint updates a patient record in the Truepill ecosystem.<br/><br/>Upon a successful
+        request, the endpoint returns the `patient_token` of the patient updated, the timestamp, the status,
+        and a message.<br/><br/>Only non-required fields can be updated. Submitting a patient's first
+        name, last name, date of birth, or gender as a field to be updated will be considered a bad request.
+      operationId: postV1PatientPatient_token
+      tags:
+      - patients
+      parameters:
+      - name: patient_token
+        in: path
+        required: true
+        schema:
           type: string
-        city:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Model219'
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model221'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model224'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model24'
+  /v1/patient/{patient_token}/patient_survey:
+    get:
+      summary: Get Patient Survey
+      description: This endpoint returns the most recent `patient_survey` that was submitted to Truepill
+      operationId: getV1PatientPatient_tokenPatient_survey
+      tags:
+      - patients
+      parameters:
+      - name: patient_token
+        in: path
+        required: true
+        schema:
           type: string
-        state:
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model105'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model24'
+  /v1/patient/{patient_token}/prescriptions:
+    get:
+      summary: List Patient Prescriptions
+      description: Retrieve the list of Patient's prescriptions which includes the prescription token,
+        medication name, medication sig, prescriber, date written, refills remaining, current prescription
+        status and the fillable status.<br/><br/>Patient's prescriptions must already exist in the Truepill
+        ecosystem in order to be retrieved.
+      operationId: getV1PatientPatient_tokenPrescriptions
+      tags:
+      - patients
+      parameters:
+      - name: patient_token
+        in: path
+        required: true
+        schema:
           type: string
-        zip:
-          type: string
-        phone_number:
-          type: string
-        email:
-          type: string
-        language_preference:
-          type: string
-        species:
-          type: string
-          description: Supports veterinary dispensing.
-    PatientResponse:
-      type: object
-      properties:
-        status:
-          type: string
-        timestamp:
-          type: string
-          format: date-time
-        request_id:
-          type: string
-        details:
-          type: object
-          properties:
-            patient_token:
-              type: string
-            first_name:
-              type: string
-            last_name:
-              type: string
-            dob:
-              type: string
-              format: date
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model104'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model24'
+components:
   securitySchemes:
-    ApiKeyAuth:
+    apiKey:
       type: apiKey
       in: header
       name: Authorization
-      description: 'API key passed as `Authorization: ApiKey <YOUR_API_KEY>`. Separate keys are issued for the sandbox and production environments.'
+      description: API key passed in the Authorization header. Separate keys are issued for sandbox and
+        production.
+  schemas:
+    Model104:
+      type: object
+      properties:
+        patient_token:
+          type: string
+          example: 55d8131974c7af33
+        prescriptions:
+          $ref: '#/components/schemas/Prescriptions'
+    Model105:
+      type: object
+      properties:
+        weight_value:
+          type: number
+          example: 1.01
+        weight_unit:
+          type: string
+          example: oz
+        created_at:
+          type: string
+          format: date
+          example: '2021-09-15T02:22:21.000Z'
+        updated_at:
+          type: string
+          format: date
+          example: '2021-09-15T02:22:21.000Z'
+        asthma_breathing:
+          type: boolean
+          description: Whether the patient has asthma or breathing problems
+        heart_disease:
+          type: boolean
+          description: Whether the patient has heart disease
+        arthritis:
+          type: boolean
+          description: Whether the patient has arthritis
+        lung_disorder:
+          type: boolean
+          description: Whether the patient has a lung disorder
+        bleeding_clotting_disorder:
+          type: boolean
+          description: Whether the patient has a bleeding or clotting disorder
+        neurological_chronic_headaches:
+          type: boolean
+          description: Whether the patient has neurological disorders or chronic headaches
+        blood_transfusion:
+          type: boolean
+          description: Whether the patient has had a blood transfusion
+        psychiatric_disorder:
+          type: boolean
+          description: Whether the patient has a psychiatric disorder
+        bowel_stomach:
+          type: boolean
+          description: Whether the patient has bowel or stomach problems
+        pulmonary_embolism:
+          type: boolean
+          description: Whether the patient has had a pulmonary embolism
+        cancer:
+          type: boolean
+          description: Whether the patient has had cancer
+        stroke:
+          type: boolean
+          description: Whether the patient has had a stroke
+        cholesterol_disorder:
+          type: boolean
+          description: Whether the patient has a cholesterol disorder
+        seizure_epilepsy:
+          type: boolean
+          description: Whether the patient has seizures or epilepsy
+        diabetes:
+          type: boolean
+          description: Whether the patient has diabetes
+        thyroid_disorder:
+          type: boolean
+          description: Whether the patient has a thyroid disorder
+        eye_disorder:
+          type: boolean
+          description: Whether the patient has an eye disorder
+        urinary_kidney_disorder:
+          type: boolean
+          description: Whether the patient has a urinary or kidney disorder
+        conditions:
+          type: string
+        smoking_frequency:
+          type: string
+          description: The frequency of smoking, if any
+        drinking_frequency:
+          type: string
+          description: The frequency of drinking, if any
+        other_medications:
+          type: string
+        known_allergies:
+          type: boolean
+          description: Any allergies this patient has
+        url_token:
+          type: string
+          example: 837ab5
+        pregnancy:
+          type: boolean
+          description: Whether the patient is pregnant or not
+    Model219:
+      type: object
+      properties:
+        company:
+          type: string
+          description: Name of company associated with patient (if applicable)
+          example: True Pill
+          x-convert:
+            trim: true
+        street1:
+          type: string
+          description: Street 1 of patient’s address
+          example: 123 Some Lane
+          x-convert:
+            trim: true
+        street2:
+          type: string
+          description: Street 2 of patient’s address (if applicable)
+          example: Apt. 123
+          x-convert:
+            trim: true
+        city:
+          type: string
+          description: City of patient’s address
+          example: Los Angeles
+          x-convert:
+            trim: true
+        state:
+          type: string
+          description: State of patient’s address, two-letter abbreviation
+          example: CA
+          x-convert:
+            trim: true
+        country:
+          type: string
+          default: US
+          x-convert:
+            trim: true
+        zip:
+          type: string
+          description: Patient’s zip code
+          example: '94402'
+          pattern: ^\d{5}(-\d{4})?$
+        phone:
+          type: string
+          description: Patient’s phone number
+          example: 430-304-3949
+        email:
+          type: string
+          description: Patient’s email address
+          example: hulkout@hulk.com
+          x-format:
+            email: true
+          x-convert:
+            trim: true
+        ssn:
+          type: string
+          description: Social Security Number
+          example: '123456789'
+          pattern: ^\d{3}\d{2}\d{4}$
+        ssn_serial:
+          type: string
+          description: Social Security Number (last 4 digits)
+          example: '6789'
+          pattern: ^\d{4}$
+        communications_opt_in:
+          type: boolean
+          example: false
+        language_preference:
+          type: string
+          description: Patient’s preferred language
+          example: English
+        id_image:
+          type: string
+          description: URL for image of user ID
+        mbi:
+          type: string
+          description: Medicare Beneficiary ID
+          pattern: ^[1-9](?![SLOIBZ])[A-Z](?![SLOIBZ])[A-Z0-9][0-9](?![SLOIBZ])[A-Z](?![SLOIBZ])[A-Z0-9][0-9](?![SLOIBZ])[A-Z](?![SLOIBZ])[A-Z][0-9][0-9]$
+        viewed_notice_of_privacy_practices:
+          type: boolean
+        viewed_notice_of_privacy_practices_date:
+          type: string
+          description: Date NOPP was received
+          example: '20180401'
+          pattern: ^((1|2)\d{3}[01][0-9][0-3][0-9]$)
+    Model220:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'Accepted: Patient a35be240f1f5da6b has been updated'
+    Model221:
+      type: object
+      properties:
+        patient_token:
+          type: string
+          example: a35be240f1f5da6b
+        timestamp:
+          type: integer
+          example: 1631571795
+        status:
+          type: string
+          example: success
+        details:
+          $ref: '#/components/schemas/Model220'
+    Model222:
+      type: object
+      properties:
+        key:
+          type: string
+          example: first_name
+        message:
+          type: string
+          example: is not allowed
+    Model223:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model222'
+    Model224:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 400
+        error:
+          type: string
+          example: Bad Request
+        validation_errors:
+          $ref: '#/components/schemas/Model223'
+    Model23:
+      type: object
+      properties:
+        guardian:
+          type: string
+        prefix:
+          type: string
+          description: Patient title
+          example: Mr
+          enum:
+          - Mr.
+          - Ms.
+          - Mrs.
+          - Miss
+          - Ms
+          - Prof
+          - Sir
+        suffix:
+          type: string
+          description: Suffix which qualifies a person
+          example: Jr.
+          enum:
+          - Jr.
+          - Sr.
+          - I
+          - II
+          - III
+          - IV
+          - V
+        first_name:
+          type: string
+          description: Patient first name
+          example: Lola
+          x-convert:
+            trim: true
+        last_name:
+          type: string
+          description: Patient last name
+          example: Martin
+          x-convert:
+            trim: true
+        gender:
+          type: string
+          description: Patient gender
+          example: female
+          enum:
+          - male
+          - female
+          - unknown
+        dob:
+          type: string
+          format: date
+          description: Patient's date of birth
+          example: '20180401'
+        zip:
+          type: string
+          description: Postal code where the company is located
+          example: '94538'
+          pattern: ^\d{5}(-\d{4})?$
+        species:
+          type: string
+          example: sparrow
+          default: Human
+          enum:
+          - Human
+          - Crocodile
+          - Frog
+          - Iguana
+          - Lizard
+          - Snake
+          - Tortoise
+          - Turtle
+          - Spider
+          - Other Arthopoda
+          - Chicken
+          - African Goshawk
+          - Budgerigar
+          - Cockatiel
+          - Cockatoo
+          - Common Canary
+          - Crow
+          - Duck
+          - Eagle
+          - Goose
+          - Guinea Fowl
+          - Kestrel
+          - Kite
+          - Macaw
+          - Ostrich
+          - Other Aves
+          - Owl
+          - Parakeet
+          - Parrot
+          - Partridge
+          - Peregrin Falcon
+          - Pheasant
+          - Pigeon
+          - Quail
+          - Snipe
+          - Sparrow
+          - Starling
+          - Swan
+          - Turtle Dove
+          - Bison
+          - Cattle/Bovine
+          - Buffalo
+          - Other Bovinae
+          - Alpaca
+          - Camel
+          - Llama
+          - Other Camelidae
+          - Dog/Canine
+          - Fox
+          - Jackal
+          - Raccoon Dog
+          - Wolf
+          - Other Caprinae
+          - Goat/Carpine
+          - Sheep/Ovine
+          - Elk
+          - Moose
+          - Fallow
+          - Other Cervidae
+          - Red Deer
+          - Reindeer
+          - Roe Deer
+          - Donkey/Asinine
+          - Horse/Equine
+          - Hybrid
+          - Other Equidae
+          - Zebra
+          - Bobcat
+          - Cougar
+          - Puma
+          - European Lynx
+          - Cat/Feline
+          - Jaguar
+          - Leopard
+          - Lion
+          - Other Felidae
+          - Tiger
+          - Wild Cat
+          - European Rabbit
+          - Hare
+          - Other Leporidae
+          - Bivalvia
+          - Cephalopoda
+          - Other Mollusca
+          - Badger
+          - Ferret
+          - Mink
+          - Other Mustelidae
+          - Bat
+          - Bear
+          - Hedgehog
+          - Monkey
+          - Other Mammalia
+          - Arctic Char
+          - Atlantic Salmon
+          - Brill
+          - Carp
+          - Catfish
+          - Cod
+          - Crucian Carp
+          - European Eel
+          - Gilthead
+          - Goldfish
+          - Gudgeon
+          - Halibut
+          - Largemouth Bass
+          - Mullet
+          - Other Pisces
+          - Perch
+          - Pike
+          - Roach
+          - Sea Bream
+          - Seabass
+          - Sharpsnout Seabream
+          - Sole
+          - Sturgeon
+          - Tench
+          - Trout
+          - Turbot
+          - Rockfish/Wolffish
+          - Beaver
+          - Chinchilla
+          - Dormouse
+          - Dwarf Hamster
+          - European Hamster
+          - Gerbil
+          - Guinea Pig
+          - House Mouse
+          - Other Rodentia
+          - Rat
+          - Russian Hamster
+          - Syrian Hamster
+          - Golden Hamster
+          - Vole
+          - Other Suidae
+          - Pig/Porcine
+          - Wild Boar
+          - Addax
+      required:
+      - first_name
+      - last_name
+      - gender
+      - dob
+    Model230:
+      type: object
+      properties:
+        guardian:
+          type: string
+        prefix:
+          type: string
+          description: Patient title
+          example: Mr
+          enum:
+          - Mr.
+          - Ms.
+          - Mrs.
+          - Miss
+          - Ms
+          - Prof
+          - Sir
+        suffix:
+          type: string
+          description: Suffix which qualifies a person
+          example: Jr.
+          enum:
+          - Jr.
+          - Sr.
+          - I
+          - II
+          - III
+          - IV
+          - V
+        first_name:
+          type: string
+          description: Patient first name
+          example: Lola
+          x-convert:
+            trim: true
+        last_name:
+          type: string
+          description: Patient last name
+          example: Martin
+          x-convert:
+            trim: true
+        gender:
+          type: string
+          description: Patient gender
+          example: female
+          enum:
+          - male
+          - female
+          - unknown
+        dob:
+          type: string
+          format: date
+          description: Patient's date of birth
+          example: '20180401'
+        zip:
+          type: string
+          description: Patient’s zip code
+          example: '94402'
+          pattern: ^\d{5}(-\d{4})?$
+        species:
+          type: string
+          example: sparrow
+          default: Human
+          enum:
+          - Human
+          - Crocodile
+          - Frog
+          - Iguana
+          - Lizard
+          - Snake
+          - Tortoise
+          - Turtle
+          - Spider
+          - Other Arthopoda
+          - Chicken
+          - African Goshawk
+          - Budgerigar
+          - Cockatiel
+          - Cockatoo
+          - Common Canary
+          - Crow
+          - Duck
+          - Eagle
+          - Goose
+          - Guinea Fowl
+          - Kestrel
+          - Kite
+          - Macaw
+          - Ostrich
+          - Other Aves
+          - Owl
+          - Parakeet
+          - Parrot
+          - Partridge
+          - Peregrin Falcon
+          - Pheasant
+          - Pigeon
+          - Quail
+          - Snipe
+          - Sparrow
+          - Starling
+          - Swan
+          - Turtle Dove
+          - Bison
+          - Cattle/Bovine
+          - Buffalo
+          - Other Bovinae
+          - Alpaca
+          - Camel
+          - Llama
+          - Other Camelidae
+          - Dog/Canine
+          - Fox
+          - Jackal
+          - Raccoon Dog
+          - Wolf
+          - Other Caprinae
+          - Goat/Carpine
+          - Sheep/Ovine
+          - Elk
+          - Moose
+          - Fallow
+          - Other Cervidae
+          - Red Deer
+          - Reindeer
+          - Roe Deer
+          - Donkey/Asinine
+          - Horse/Equine
+          - Hybrid
+          - Other Equidae
+          - Zebra
+          - Bobcat
+          - Cougar
+          - Puma
+          - European Lynx
+          - Cat/Feline
+          - Jaguar
+          - Leopard
+          - Lion
+          - Other Felidae
+          - Tiger
+          - Wild Cat
+          - European Rabbit
+          - Hare
+          - Other Leporidae
+          - Bivalvia
+          - Cephalopoda
+          - Other Mollusca
+          - Badger
+          - Ferret
+          - Mink
+          - Other Mustelidae
+          - Bat
+          - Bear
+          - Hedgehog
+          - Monkey
+          - Other Mammalia
+          - Arctic Char
+          - Atlantic Salmon
+          - Brill
+          - Carp
+          - Catfish
+          - Cod
+          - Crucian Carp
+          - European Eel
+          - Gilthead
+          - Goldfish
+          - Gudgeon
+          - Halibut
+          - Largemouth Bass
+          - Mullet
+          - Other Pisces
+          - Perch
+          - Pike
+          - Roach
+          - Sea Bream
+          - Seabass
+          - Sharpsnout Seabream
+          - Sole
+          - Sturgeon
+          - Tench
+          - Trout
+          - Turbot
+          - Rockfish/Wolffish
+          - Beaver
+          - Chinchilla
+          - Dormouse
+          - Dwarf Hamster
+          - European Hamster
+          - Gerbil
+          - Guinea Pig
+          - House Mouse
+          - Other Rodentia
+          - Rat
+          - Russian Hamster
+          - Syrian Hamster
+          - Golden Hamster
+          - Vole
+          - Other Suidae
+          - Pig/Porcine
+          - Wild Boar
+          - Addax
+        company:
+          type: string
+          description: Name of company associated with patient (if applicable)
+          example: True Pill
+          x-convert:
+            trim: true
+        street1:
+          type: string
+          description: Street 1 of patient’s address
+          example: 123 Some Lane
+          x-convert:
+            trim: true
+        street2:
+          type: string
+          description: Street 2 of patient’s address (if applicable)
+          example: Apt. 123
+          x-convert:
+            trim: true
+        city:
+          type: string
+          description: City of patient’s address
+          example: Los Angeles
+          x-convert:
+            trim: true
+        state:
+          type: string
+          description: State of patient’s address, two-letter abbreviation
+          example: CA
+          x-convert:
+            trim: true
+        country:
+          type: string
+          default: US
+          x-convert:
+            trim: true
+        phone:
+          type: string
+          description: Patient’s phone number
+          example: 430-304-3949
+        email:
+          type: string
+          description: Patient’s email address
+          example: hulkout@hulk.com
+          x-format:
+            email: true
+          x-convert:
+            trim: true
+        ssn:
+          type: string
+          description: Social Security Number
+          example: '123456789'
+          pattern: ^\d{3}\d{2}\d{4}$
+        ssn_serial:
+          type: string
+          description: Social Security Number (last 4 digits)
+          example: '6789'
+          pattern: ^\d{4}$
+        communications_opt_in:
+          type: boolean
+          example: false
+        language_preference:
+          type: string
+          description: Patient’s preferred language
+          example: English
+          x-convert:
+            trim: true
+        id_image:
+          type: string
+          description: URL for image of user ID
+        mbi:
+          type: string
+          description: Medicare Beneficiary ID
+          pattern: ^[1-9](?![SLOIBZ])[A-Z](?![SLOIBZ])[A-Z0-9][0-9](?![SLOIBZ])[A-Z](?![SLOIBZ])[A-Z0-9][0-9](?![SLOIBZ])[A-Z](?![SLOIBZ])[A-Z][0-9][0-9]$
+        viewed_notice_of_privacy_practices:
+          type: boolean
+        viewed_notice_of_privacy_practices_date:
+          type: string
+          description: Date NOPP was received
+          example: '20180401'
+          pattern: ^((1|2)\d{3}[01][0-9][0-3][0-9]$)
+      required:
+      - first_name
+      - last_name
+      - gender
+      - dob
+    Model231:
+      type: object
+      properties:
+        patient_token:
+          type: string
+          example: a35be240f1f5da6b
+    Model232:
+      type: object
+      properties:
+        key:
+          type: string
+          example: gender
+        message:
+          type: string
+          example: is required
+    Model233:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model232'
+    Model234:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 400
+        error:
+          type: string
+          example: Bad Request
+        validation_errors:
+          $ref: '#/components/schemas/Model233'
+    Model24:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 404
+        error:
+          type: string
+          example: Not Found
+        message:
+          type: string
+          example: Unable to find Patient.
+    Model57:
+      type: object
+      properties:
+        name:
+          type: string
+          x-convert:
+            trim: true
+        company:
+          type: string
+          example: Walmart Pharmacy
+          x-convert:
+            trim: true
+        street1:
+          type: string
+          description: Primary street where the company is located
+          example: 123 Some Lane
+          x-convert:
+            trim: true
+        street2:
+          type: string
+          description: Secondary street where the company is located
+          example: Maggio Expressway
+          x-convert:
+            trim: true
+        city:
+          type: string
+          description: City where the company is located
+          example: San Mateo
+          x-convert:
+            trim: true
+        state:
+          type: string
+          description: State where the company is located
+          example: CA
+          x-convert:
+            trim: true
+        zip:
+          type: string
+          description: Postal code where the company is located
+          example: '94538'
+          pattern: ^\d{5}(-\d{4})?$
+        country:
+          type: string
+          description: Country where the company is located
+          example: US
+          default: US
+          x-convert:
+            trim: true
+        email:
+          type: string
+          description: 'Company email for email messaging '
+          example: some_email@gmail.com
+          x-format:
+            email: true
+          x-convert:
+            trim: true
+        phone:
+          type: string
+          x-convert:
+            trim: true
+      required:
+      - name
+      - street1
+      - city
+      - state
+      - zip
+    Model58:
+      type: object
+      properties:
+        guardian:
+          type: string
+        species:
+          type: string
+          description: Pet type
+          example: Dog
+        first_name:
+          type: string
+          description: Legal patient first name
+          example: Lola
+        last_name:
+          type: string
+          description: Legal patient last name
+          example: Martin
+        dob:
+          type: string
+          description: Legal patient date of birth, YYYYMMDD format
+          example: '20180401'
+        gender:
+          type: string
+          description: 'Assigned gender at birth: male or female'
+          example: male
+        address:
+          $ref: '#/components/schemas/Model57'
+        communications_opt_in:
+          type: boolean
+        patient_token:
+          type: string
+          example: a35be240f1f5da6b
+        mbi:
+          type: string
+          description: Medicare Beneficiary ID
+          example: 1EG4TE5MK73
+    Prescription:
+      type: object
+      properties:
+        date_written:
+          type: string
+          format: date
+          description: When the prescribed was written
+          example: '2021-09-11T13:09:27.000Z'
+        days_supply:
+          type: string
+          description: Days supply
+          example: '90'
+        is_refill:
+          type: number
+          description: Is prescription a refill or new fill?
+          example: 0
+        last_filled_date:
+          type: string
+          format: date
+          description: When prescription was last filled (null if not)
+          example: '2022-08-03T13:09:27.000Z'
+        expiration_date_utc:
+          type: string
+          format: date
+          description: When the prescription will expire
+          example: '2022-09-11T13:09:27.000Z'
+        medication_sig:
+          type: string
+          description: Instructions for taking medication
+          example: Use as directed for 90 days.
+        number_of_refills_allowed:
+          type: string
+          description: Number of refills allowed for prescription
+          example: 2
+        prescribed_brand_name:
+          type: string
+          description: Name of medication prescribed
+          example: Viagra
+        prescribed_drug_strength:
+          type: string
+          description: Drug strength prescribed
+          example: 10 mg
+        prescribed_generic_name:
+          type: string
+          description: Name of generic medication prescribed
+          example: Generic 10mg tablet
+        prescribed_ndc:
+          type: string
+          description: NDC of prescribed medication
+          example: '51580000807'
+          pattern: ^[0-9]{4,5}-[0-9]{3,4}-[0-9]{1,3}$
+        prescribed_quantity:
+          type: string
+          description: Quantity of prescribed medication
+          example: 1
+        prescribed_written_name:
+          type: string
+          description: Name of medication prescribed as written
+          example: Sildenafil
+        prescriber:
+          type: string
+          description: Name of prescriber
+          example: Molly
+        prescriber_npi:
+          type: string
+          description: NPI of prescriber
+          example: '1111111111'
+        quantity_remaining:
+          type: string
+          description: Quantity of doses remaining on prescription
+          example: 84
+        refills_remaining:
+          type: string
+          description: Number of refills on this prescription
+          example: 2
+        rx_number:
+          type: string
+          description: Rx number of prescription
+          example: '111110000'
+        origin:
+          type: string
+          description: Original source of prescription
+          example: Electronic
+        prescriber_order_number:
+          type: string
+          description: Prescriber order number of escript
+          example: '2222222'
+        original_prescribed_ndc:
+          type: string
+          description: NDC of prescribed medication as originally written on eScript (if applicable)
+          example: '51580000807'
+          pattern: ^[0-9]{4,5}-[0-9]{3,4}-[0-9]{1,3}$
+        date_filled_utc:
+          type: string
+          format: date
+          description: When prescription was last filled (null if not)
+          example: '2021-10-13T10:13:42Z'
+        prescription_token:
+          type: string
+          description: Token to reference the prescription
+          example: deb071563ead
+        medication_name:
+          type: string
+          description: Medication name
+          example: Sildenafil
+        fillable:
+          type: boolean
+          description: Is this prescription fillable (has not expired, been transferred-out, etc.)
+          example: true
+    Prescriptions:
+      type: array
+      items:
+        $ref: '#/components/schemas/Prescription'

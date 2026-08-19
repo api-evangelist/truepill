@@ -1,95 +1,282 @@
-generated: '2026-07-15'
+generated: '2026-08-15'
 method: generated
-source: openapi/truepill-openapi.yml
+source: openapi/truepill-consults-api-openapi.yml, openapi/truepill-diagnostics-api-openapi.yml,
+  openapi/truepill-fulfillment-api-openapi.yml, openapi/truepill-insurance-api-openapi.yml,
+  openapi/truepill-media-api-openapi.yml, openapi/truepill-patients-api-openapi.yml, openapi/truepill-prescriptions-api-openapi.yml,
+  openapi/truepill-transfers-api-openapi.yml, openapi/truepill-webhooks-api-openapi.yml
 description: Recommended x-agentic-access execution contracts, classified heuristically from
   the OpenAPI. A governance starting point for exposing this API to AI agents — review and bind
   audience per deployment. See research/curity/agentic-governance/.
 summary:
-  operations: 15
+  operations: 158
   by_action_class:
-    acting: 7
-    connected: 8
+    connected: 89
+    acting: 69
   by_consequence:
-    write: 4
-    read: 8
-    physical: 3
+    read: 89
+    write: 32
+    physical: 37
   human_in_the_loop_required: 0
 operations:
-- path: /patient
+- path: /consults/v0
+  method: get
+  operationId: getConsultsV0
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /consults/v0/consult
+  method: post
+  operationId: postConsultsV0Consult
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /consults/v0/consult/{consult_id}
+  method: get
+  operationId: getConsultsV0ConsultConsult_id
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /consults/v0/consult/{consult_id}
+  method: delete
+  operationId: deleteConsultsV0ConsultConsult_id
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /consults/v0/consult/{consult_id}/media
+  method: patch
+  operationId: patchConsultsV0ConsultConsult_idMedia
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /consults/v0/consult/{consult_id}/simulate
+  method: patch
+  operationId: patchConsultsV0ConsultConsult_idSimulate
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /diagnostics/v0/kits
+  method: get
+  operationId: getDiagnosticsV0Kits
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /diagnostics/v0/kits/{kit_id}/validation/kit_serial
+  method: get
+  operationId: getDiagnosticsV0KitsKit_idValidationKit_serial
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /diagnostics/v0/orders
+  method: get
+  operationId: getDiagnosticsV0Orders
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /diagnostics/v0/orders
+  method: post
+  operationId: postDiagnosticsV0Orders
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /diagnostics/v0/orders/register
+  method: post
+  operationId: postDiagnosticsV0OrdersRegister
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /diagnostics/v0/orders/{order_id}
+  method: get
+  operationId: getDiagnosticsV0OrdersOrder_id
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /diagnostics/v0/orders/{order_id}/rejection
+  method: get
+  operationId: getDiagnosticsV0OrdersOrder_idRejection
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /diagnostics/v0/orders/{order_id}/results
+  method: get
+  operationId: getDiagnosticsV0OrdersOrder_idResults
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /diagnostics/v0/tests
+  method: get
+  operationId: getDiagnosticsV0Tests
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /diagnostics/v2/orders/{order_id}/results
+  method: get
+  operationId: getDiagnosticsV2OrdersOrder_idResults
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/availability
+  method: get
+  operationId: getApiV1Availability
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/cancel_request
+  method: post
+  operationId: postApiV1Cancel_request
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/fill_request
+  method: post
+  operationId: postApiV1Fill_request
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/fill_request/{url_token}
+  method: get
+  operationId: getApiV1Fill_requestUrl_token
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/fill_request/{url_token}/stripe_payment
   method: put
-  operationId: createPatient
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /patient
-  method: get
-  operationId: findPatient
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /patient/{patient_token}
-  method: get
-  operationId: getPatient
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /patient/{patient_token}
-  method: post
-  operationId: updatePatient
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /patient/{patient_token}/prescriptions
-  method: get
-  operationId: listPatientPrescriptions
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /prescription/{prescription_token}
-  method: get
-  operationId: getPrescription
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /transfer_request
-  method: post
-  operationId: createTransferRequest
+  operationId: putApiV1Fill_requestUrl_tokenStripe_payment
   x-agentic-access:
     action-class: acting
     consequence: physical
@@ -105,9 +292,9 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /transfer_request
+- path: /api/v1/fill_requests
   method: get
-  operationId: listTransferRequests
+  operationId: getApiV1Fill_requests
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -115,19 +302,9 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /transfer_request/{transfer_token}
-  method: get
-  operationId: getTransferRequest
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /direct_transfer
+- path: /api/v1/fuzion_test
   method: post
-  operationId: createDirectTransfer
+  operationId: postApiV1Fuzion_test
   x-agentic-access:
     action-class: acting
     consequence: physical
@@ -143,9 +320,1677 @@ operations:
       - abnormal
       - high-value
     audit: required
+- path: /api/v1/nearby_same_day_pickup_locations
+  method: get
+  operationId: getApiV1Nearby_same_day_pickup_locations
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/open-api/api.yml
+  method: get
+  operationId: getApiV1OpenapiApiyml
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/order
+  method: post
+  operationId: postApiV1Order
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/order/{token}
+  method: get
+  operationId: getApiV1OrderToken
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/prescriber
+  method: post
+  operationId: postApiV1Prescriber
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/prescriber/{prescriber_token}
+  method: get
+  operationId: getApiV1PrescriberPrescriber_token
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/same_day_delivery
+  method: get
+  operationId: getApiV1Same_day_delivery
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/same_day_delivery
+  method: post
+  operationId: postApiV1Same_day_delivery
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/same_day_delivery/{id}
+  method: get
+  operationId: getApiV1Same_day_deliveryId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/specialty_pharmacies
+  method: get
+  operationId: getApiV1Specialty_pharmacies
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/update_request
+  method: post
+  operationId: postApiV1Update_request
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /scheduled-actions
+  method: get
+  operationId: getScheduledactions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /scheduled-fill-requests
+  method: get
+  operationId: getScheduledfillrequests
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /scheduled-fill-requests
+  method: post
+  operationId: postScheduledfillrequests
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /scheduled-fill-requests/{id}
+  method: put
+  operationId: putScheduledfillrequestsId
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /scheduled-fill-requests/{id}
+  method: delete
+  operationId: deleteScheduledfillrequestsId
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v0/schedule
+  method: get
+  operationId: getV0Schedule
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/availability
+  method: get
+  operationId: getV1Availability
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/cancel_request
+  method: post
+  operationId: postV1Cancel_request
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/fill_request
+  method: post
+  operationId: postV1Fill_request
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/fill_request/{url_token}
+  method: get
+  operationId: getV1Fill_requestUrl_token
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/fill_request/{url_token}/stripe_payment
+  method: put
+  operationId: putV1Fill_requestUrl_tokenStripe_payment
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/fill_requests
+  method: get
+  operationId: getV1Fill_requests
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/fuzion_test
+  method: post
+  operationId: postV1Fuzion_test
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/nearby_same_day_pickup_locations
+  method: get
+  operationId: getV1Nearby_same_day_pickup_locations
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/open-api/api.yml
+  method: get
+  operationId: getV1OpenapiApiyml
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/order
+  method: post
+  operationId: postV1Order
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/order/{token}
+  method: get
+  operationId: getV1OrderToken
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/prescriber
+  method: post
+  operationId: postV1Prescriber
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/prescriber/{prescriber_token}
+  method: get
+  operationId: getV1PrescriberPrescriber_token
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/same_day_delivery
+  method: get
+  operationId: getV1Same_day_delivery
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/same_day_delivery
+  method: post
+  operationId: postV1Same_day_delivery
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/same_day_delivery/{id}
+  method: get
+  operationId: getV1Same_day_deliveryId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/specialty_pharmacies
+  method: get
+  operationId: getV1Specialty_pharmacies
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/update_request
+  method: post
+  operationId: postV1Update_request
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/copay_request
+  method: post
+  operationId: postApiV1Copay_request
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/copay_request/cancel
+  method: post
+  operationId: postApiV1Copay_requestCancel
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/copay_request/{request_id}
+  method: get
+  operationId: getApiV1Copay_requestRequest_id
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/coverage_request
+  method: post
+  operationId: postApiV1Coverage_request
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/insurance
+  method: post
+  operationId: postApiV1Insurance
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/insurance/eligibility-check
+  method: post
+  operationId: postApiV1InsuranceEligibilitycheck
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/insurance/{insurance_token}
+  method: get
+  operationId: getApiV1InsuranceInsurance_token
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/pharmacy-coverage
+  method: get
+  operationId: getApiV1Pharmacycoverage
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/prior_authorization
+  method: post
+  operationId: postApiV1Prior_authorization
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/copay_request
+  method: post
+  operationId: postV1Copay_request
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/copay_request/cancel
+  method: post
+  operationId: postV1Copay_requestCancel
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/copay_request/{request_id}
+  method: get
+  operationId: getV1Copay_requestRequest_id
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/coverage_request
+  method: post
+  operationId: postV1Coverage_request
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/insurance
+  method: post
+  operationId: postV1Insurance
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/insurance/eligibility-check
+  method: post
+  operationId: postV1InsuranceEligibilitycheck
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/insurance/{insurance_token}
+  method: get
+  operationId: getV1InsuranceInsurance_token
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/pharmacy-coverage
+  method: get
+  operationId: getV1Pharmacycoverage
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/prior_authorization
+  method: post
+  operationId: postV1Prior_authorization
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/media
+  method: post
+  operationId: postApiV1Media
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/media/{id}
+  method: get
+  operationId: getApiV1MediaId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/media/{id}/signed-url/read
+  method: get
+  operationId: getApiV1MediaIdSignedurlRead
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/media/{id}/signed-url/write
+  method: get
+  operationId: getApiV1MediaIdSignedurlWrite
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v2/media
+  method: post
+  operationId: postApiV2Media
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v2/media/{id}
+  method: get
+  operationId: getApiV2MediaId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/media
+  method: post
+  operationId: postV1Media
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/media/{id}
+  method: get
+  operationId: getV1MediaId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/media/{id}/signed-url/read
+  method: get
+  operationId: getV1MediaIdSignedurlRead
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/media/{id}/signed-url/write
+  method: get
+  operationId: getV1MediaIdSignedurlWrite
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v2/media
+  method: post
+  operationId: postV2Media
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v2/media/{id}
+  method: get
+  operationId: getV2MediaId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/patient
+  method: get
+  operationId: getApiV1Patient
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/patient
+  method: put
+  operationId: putApiV1Patient
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/patient/{patient_token}
+  method: get
+  operationId: getApiV1PatientPatient_token
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/patient/{patient_token}
+  method: post
+  operationId: postApiV1PatientPatient_token
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/patient/{patient_token}/patient_survey
+  method: get
+  operationId: getApiV1PatientPatient_tokenPatient_survey
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/patient/{patient_token}/prescriptions
+  method: get
+  operationId: getApiV1PatientPatient_tokenPrescriptions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/patient
+  method: get
+  operationId: getV1Patient
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/patient
+  method: put
+  operationId: putV1Patient
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/patient/{patient_token}
+  method: get
+  operationId: getV1PatientPatient_token
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/patient/{patient_token}
+  method: post
+  operationId: postV1PatientPatient_token
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/patient/{patient_token}/patient_survey
+  method: get
+  operationId: getV1PatientPatient_tokenPatient_survey
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/patient/{patient_token}/prescriptions
+  method: get
+  operationId: getV1PatientPatient_tokenPrescriptions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/auto-refill
+  method: get
+  operationId: getApiV1Autorefill
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/auto-refill/patient/{patient_token}
+  method: get
+  operationId: getApiV1AutorefillPatientPatient_token
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/auto-refill/{prescription_token}
+  method: get
+  operationId: getApiV1AutorefillPrescription_token
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/auto-refill/{prescription_token}
+  method: post
+  operationId: postApiV1AutorefillPrescription_token
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/auto-refill/{prescription_token}
+  method: delete
+  operationId: deleteApiV1AutorefillPrescription_token
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/auto-refill/{prescription_token}/early-refill
+  method: post
+  operationId: postApiV1AutorefillPrescription_tokenEarlyrefill
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/auto-refill/{prescription_token}/skip-refill
+  method: delete
+  operationId: deleteApiV1AutorefillPrescription_tokenSkiprefill
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/prescription/discontinue/{prescription_token}
+  method: post
+  operationId: postApiV1PrescriptionDiscontinuePrescription_token
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/prescription/{prescription_token}/escript
+  method: get
+  operationId: getApiV1PrescriptionPrescription_tokenEscript
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/prescription/{prescription_token}/external_transfer
+  method: post
+  operationId: postApiV1PrescriptionPrescription_tokenExternal_transfer
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/prescription/{prescription_token}/fill/{fill_number}/claims
+  method: get
+  operationId: getApiV1PrescriptionPrescription_tokenFillFill_numberClaims
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/prescription/{prescription_token}/transfer_out
+  method: post
+  operationId: postApiV1PrescriptionPrescription_tokenTransfer_out
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/prescription/{token}
+  method: get
+  operationId: getApiV1PrescriptionToken
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/prescriptions/{prescription_token}/external_transfer
+  method: post
+  operationId: postApiV1PrescriptionsPrescription_tokenExternal_transfer
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/auto-refill
+  method: get
+  operationId: getV1Autorefill
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/auto-refill/patient/{patient_token}
+  method: get
+  operationId: getV1AutorefillPatientPatient_token
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/auto-refill/{prescription_token}
+  method: get
+  operationId: getV1AutorefillPrescription_token
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/auto-refill/{prescription_token}
+  method: post
+  operationId: postV1AutorefillPrescription_token
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/auto-refill/{prescription_token}
+  method: delete
+  operationId: deleteV1AutorefillPrescription_token
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/auto-refill/{prescription_token}/early-refill
+  method: post
+  operationId: postV1AutorefillPrescription_tokenEarlyrefill
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/auto-refill/{prescription_token}/skip-refill
+  method: delete
+  operationId: deleteV1AutorefillPrescription_tokenSkiprefill
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/prescription/discontinue/{prescription_token}
+  method: post
+  operationId: postV1PrescriptionDiscontinuePrescription_token
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/prescription/{prescription_token}/escript
+  method: get
+  operationId: getV1PrescriptionPrescription_tokenEscript
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/prescription/{prescription_token}/external_transfer
+  method: post
+  operationId: postV1PrescriptionPrescription_tokenExternal_transfer
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/prescription/{prescription_token}/fill/{fill_number}/claims
+  method: get
+  operationId: getV1PrescriptionPrescription_tokenFillFill_numberClaims
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/prescription/{prescription_token}/transfer_out
+  method: post
+  operationId: postV1PrescriptionPrescription_tokenTransfer_out
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/prescription/{token}
+  method: get
+  operationId: getV1PrescriptionToken
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/prescriptions/{prescription_token}/external_transfer
+  method: post
+  operationId: postV1PrescriptionsPrescription_tokenExternal_transfer
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/direct_transfer
+  method: post
+  operationId: postApiV1Direct_transfer
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/direct_transfer/{direct_transfer_token}
+  method: get
+  operationId: getApiV1Direct_transferDirect_transfer_token
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/external_location_matches
+  method: get
+  operationId: getApiV1External_location_matches
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/external_location_matches
+  method: post
+  operationId: postApiV1External_location_matches
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/external_locations
+  method: get
+  operationId: getApiV1External_locations
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/external_locations/{id}
+  method: get
+  operationId: getApiV1External_locationsId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/external_transfers/{id}
+  method: get
+  operationId: getApiV1External_transfersId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/transfer_request
+  method: get
+  operationId: getApiV1Transfer_request
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/transfer_request
+  method: post
+  operationId: postApiV1Transfer_request
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/transfer_request/{token}
+  method: get
+  operationId: getApiV1Transfer_requestToken
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v2/direct_transfer
+  method: post
+  operationId: postApiV2Direct_transfer
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/direct_transfer
+  method: post
+  operationId: postV1Direct_transfer
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/direct_transfer/{direct_transfer_token}
+  method: get
+  operationId: getV1Direct_transferDirect_transfer_token
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/external_location_matches
+  method: get
+  operationId: getV1External_location_matches
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/external_location_matches
+  method: post
+  operationId: postV1External_location_matches
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/external_locations
+  method: get
+  operationId: getV1External_locations
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/external_locations/{id}
+  method: get
+  operationId: getV1External_locationsId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/external_transfers/{id}
+  method: get
+  operationId: getV1External_transfersId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/transfer_request
+  method: get
+  operationId: getV1Transfer_request
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/transfer_request
+  method: post
+  operationId: postV1Transfer_request
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/transfer_request/{token}
+  method: get
+  operationId: getV1Transfer_requestToken
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
 - path: /v2/direct_transfer
   method: post
-  operationId: createDirectTransferV2
+  operationId: postV2Direct_transfer
   x-agentic-access:
     action-class: acting
     consequence: physical
@@ -161,41 +2006,9 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /insurance
-  method: post
-  operationId: createInsurance
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /copay_request
-  method: post
-  operationId: createCopayRequest
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /insurance_claim
+- path: /api/v1/direct_transfer/{direct_transfer_token}/webhook_events
   method: get
-  operationId: getInsuranceClaim
+  operationId: getApiV1Direct_transferDirect_transfer_tokenWebhook_events
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -203,9 +2016,69 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /webhook_events/{webhook_type}
+- path: /api/v1/fill_request/{url_token}/webhook_events
   method: get
-  operationId: getWebhookEvents
+  operationId: getApiV1Fill_requestUrl_tokenWebhook_events
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/webhook_events
+  method: get
+  operationId: getApiV1Webhook_events
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/webhook_events/{webhook_type}
+  method: get
+  operationId: getApiV1Webhook_eventsWebhook_type
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/direct_transfer/{direct_transfer_token}/webhook_events
+  method: get
+  operationId: getV1Direct_transferDirect_transfer_tokenWebhook_events
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/fill_request/{url_token}/webhook_events
+  method: get
+  operationId: getV1Fill_requestUrl_tokenWebhook_events
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/webhook_events
+  method: get
+  operationId: getV1Webhook_events
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/webhook_events/{webhook_type}
+  method: get
+  operationId: getV1Webhook_eventsWebhook_type
   x-agentic-access:
     action-class: connected
     consequence: read
