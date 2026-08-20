@@ -34,6 +34,19 @@ tags:
 - Prior Authorization
 - Electronic Prescribing
 - Pharmacy Transfers
+- Webhook
+- HIPAA
+tags_raw:
+- Pharmacy
+- Healthcare
+- Prescription Fulfillment
+- Telehealth
+- Diagnostics
+- Insurance
+- Copay Adjudication
+- Prior Authorization
+- Electronic Prescribing
+- Pharmacy Transfers
 - Webhooks
 - HIPAA
 created: '2026-06-21'
@@ -126,6 +139,8 @@ apis:
   humanURL: https://rxdocs.fuzehealth.com
   baseURL: https://rxapi.fuzehealth.com/v1
   tags:
+  - Webhook
+  tags_raw:
   - Webhooks
   properties:
   - type: OpenAPI
@@ -149,6 +164,11 @@ apis:
   humanURL: https://rxdocs.fuzehealth.com
   baseURL: https://rxapi.fuzehealth.com/v1
   tags:
+  - Fulfillment
+  - Dispensing
+  - Order
+  - Shipping
+  tags_raw:
   - Fulfillment
   - Dispensing
   - Orders
