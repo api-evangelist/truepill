@@ -11,7 +11,7 @@ capability_model:
   attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
     CC BY 4.0
   notice: NOTICE
-edge_count: 7
+edge_count: 6
 edges:
 - tag: fulfillment
   spec_file: truepill-fulfillment-api-openapi.yml
@@ -19,10 +19,21 @@ edges:
   capability_id_l1: BC-2850
   capability_name: Outpatient & Specialty Pharmacy Operations
   confidence: 0.8
-  evidence: 'Order placement and fulfillment operations: orders, fill requests and scheduled fill requests
+  evidence: 'Order placement and fulfillment operations: orders, fill requests and scheduled fill requests,
     ... same-day delivery and pickup locations, specialty pharmacies'
-  reason: Prescription fill requests, dispensing, delivery/pickup and specialty pharmacy routing are retail/specialty/mail-order
-    pharmacy operations.
+  reason: Prescription fill requests, dispensing orders, mail/same-day delivery and specialty pharmacy
+    routing are outpatient/specialty/mail-order pharmacy operations.
+- tag: prescriptions
+  spec_file: truepill-prescriptions-api-openapi.yml
+  capability_id: BC-2850.30
+  capability_id_l1: BC-2850
+  capability_name: Outpatient & Specialty Pharmacy Operations
+  confidence: 0.78
+  evidence: '"Prescription retrieval, e-script documents, claims per fill, discontinuation, and auto-refill
+    enrollment/skip/early-refill"; "Create auto refill subscription for prescription"'
+  reason: Operations manage prescriptions, fills, refills and dispensing claims for a mail-order/retail
+    pharmacy fulfilment service — provider-side outpatient pharmacy operations rather than generic order
+    management.
 - tag: consults
   spec_file: truepill-consults-api-openapi.yml
   capability_id: BC-2810.20
@@ -30,19 +41,19 @@ edges:
   capability_name: Outpatient Care Delivery
   confidence: 0.75
   evidence: 'Asynchronous telehealth consults: create, retrieve, cancel, attach media, and simulate'
-  reason: Operations create and manage telehealth consult encounters with patient, provider answers and
-    current medications — this is ambulatory/telehealth care delivery, which BC-2810.20 explicitly covers.
+  reason: Creates and manages asynchronous telehealth consults with patient and provider_answers schemas
+    — delivery of ambulatory/telehealth care.
 - tag: insurance
   spec_file: truepill-insurance-api-openapi.yml
   capability_id: BC-2800.30
   capability_id_l1: BC-2800
   capability_name: Eligibility & Benefits Verification
   confidence: 0.75
-  evidence: Insurance objects, eligibility checks, copay requests and cancellation, coverage requests,
-    prior authorization, and pharmacy coverage
-  reason: Operations verify insurance coverage/benefits and request prior authorization before service
-    — the definition of Eligibility & Benefits Verification. Some overlap with revenue cycle, but the
-    pre-service verification framing dominates.
+  evidence: POST /api/v1/insurance/eligibility-check Check Insurance Eligibility ... POST /api/v1/prior_authorization
+    Create a Prior Authorization request
+  reason: Eligibility checks, coverage requests and prior authorisation before dispensing map to verification
+    of insurance coverage, benefits and authorisation requirements; copay adjudication also touches revenue
+    cycle, hence not full confidence.
 - tag: diagnostics
   spec_file: truepill-diagnostics-api-openapi.yml
   capability_id: BC-2860.10
@@ -51,37 +62,17 @@ edges:
   confidence: 0.7
   evidence: 'At-home diagnostics: test and kit catalogs, order creation and registration, kit serial validation,
     results and rejections'
-  reason: Test catalogues, specimen/kit registration and result retrieval (schemas 'specimen', 'Test',
-    'OrderResultResponse') are laboratory diagnostic services operations; some ambiguity between laboratory
-    services and diagnostic results management.
-- tag: patients
-  spec_file: truepill-patients-api-openapi.yml
-  capability_id: BC-2800.20
-  capability_id_l1: BC-2800
-  capability_name: Patient Registration Management
-  confidence: 0.7
-  evidence: Patient records, demographics, surveys and a patient's prescription list, referenced by an
-    opaque patient_token
-  reason: Create/update/search patient with demographics is capture and stewardship of patient registration
-    data (BC-2800.20); could alternatively be read as master patient index stewardship, hence moderate
-    confidence.
-- tag: prescriptions
-  spec_file: truepill-prescriptions-api-openapi.yml
-  capability_id: BC-2850.30
-  capability_id_l1: BC-2850
-  capability_name: Outpatient & Specialty Pharmacy Operations
-  confidence: 0.7
-  evidence: Prescription retrieval, e-script documents, claims per fill, discontinuation, and auto-refill
-    enrollment/skip/early-refill
-  reason: Prescription lifecycle and auto-refill subscription management are outpatient/retail pharmacy
-    operations on the dispensing side, not provider order entry.
+  reason: Test/kit catalogue, specimen schema, order registration and result retrieval constitute laboratory
+    diagnostic service operations; sub-capability choice between laboratory services and results management
+    is somewhat ambiguous.
 - tag: transfers
   spec_file: truepill-transfers-api-openapi.yml
   capability_id: BC-2850.30
   capability_id_l1: BC-2850
   capability_name: Outpatient & Specialty Pharmacy Operations
   confidence: 0.7
-  evidence: 'Pharmacy-to-pharmacy prescription movement: transfer requests, direct transfers (v1/v2),
-    external transfers, and external pharmacy location matching'
-  reason: Prescription transfer in/out between retail pharmacies is a core outpatient pharmacy operations
-    function; the operations are pharmacy-side, not clinical care coordination.
+  evidence: '"Pharmacy-to-pharmacy prescription movement: transfer requests, direct transfers (v1/v2),
+    external transfers, and external pharmacy location matching"'
+  reason: Prescription transfer in/out between pharmacies and matching external pharmacy locations is
+    an outpatient/retail pharmacy operational process. Some ambiguity on sub-capability but it is clearly
+    pharmacy operations.
