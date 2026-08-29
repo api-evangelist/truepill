@@ -1,0 +1,87 @@
+slug: truepill
+provider: Truepill
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Healthcare Providers
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 7
+edges:
+- tag: fulfillment
+  spec_file: truepill-fulfillment-api-openapi.yml
+  capability_id: BC-2850.30
+  capability_id_l1: BC-2850
+  capability_name: Outpatient & Specialty Pharmacy Operations
+  confidence: 0.8
+  evidence: 'Order placement and fulfillment operations: orders, fill requests and scheduled fill requests
+    ... same-day delivery and pickup locations, specialty pharmacies'
+  reason: Prescription fill requests, dispensing, delivery/pickup and specialty pharmacy routing are retail/specialty/mail-order
+    pharmacy operations.
+- tag: consults
+  spec_file: truepill-consults-api-openapi.yml
+  capability_id: BC-2810.20
+  capability_id_l1: BC-2810
+  capability_name: Outpatient Care Delivery
+  confidence: 0.75
+  evidence: 'Asynchronous telehealth consults: create, retrieve, cancel, attach media, and simulate'
+  reason: Operations create and manage telehealth consult encounters with patient, provider answers and
+    current medications — this is ambulatory/telehealth care delivery, which BC-2810.20 explicitly covers.
+- tag: insurance
+  spec_file: truepill-insurance-api-openapi.yml
+  capability_id: BC-2800.30
+  capability_id_l1: BC-2800
+  capability_name: Eligibility & Benefits Verification
+  confidence: 0.75
+  evidence: Insurance objects, eligibility checks, copay requests and cancellation, coverage requests,
+    prior authorization, and pharmacy coverage
+  reason: Operations verify insurance coverage/benefits and request prior authorization before service
+    — the definition of Eligibility & Benefits Verification. Some overlap with revenue cycle, but the
+    pre-service verification framing dominates.
+- tag: diagnostics
+  spec_file: truepill-diagnostics-api-openapi.yml
+  capability_id: BC-2860.10
+  capability_id_l1: BC-2860
+  capability_name: Laboratory Services Management
+  confidence: 0.7
+  evidence: 'At-home diagnostics: test and kit catalogs, order creation and registration, kit serial validation,
+    results and rejections'
+  reason: Test catalogues, specimen/kit registration and result retrieval (schemas 'specimen', 'Test',
+    'OrderResultResponse') are laboratory diagnostic services operations; some ambiguity between laboratory
+    services and diagnostic results management.
+- tag: patients
+  spec_file: truepill-patients-api-openapi.yml
+  capability_id: BC-2800.20
+  capability_id_l1: BC-2800
+  capability_name: Patient Registration Management
+  confidence: 0.7
+  evidence: Patient records, demographics, surveys and a patient's prescription list, referenced by an
+    opaque patient_token
+  reason: Create/update/search patient with demographics is capture and stewardship of patient registration
+    data (BC-2800.20); could alternatively be read as master patient index stewardship, hence moderate
+    confidence.
+- tag: prescriptions
+  spec_file: truepill-prescriptions-api-openapi.yml
+  capability_id: BC-2850.30
+  capability_id_l1: BC-2850
+  capability_name: Outpatient & Specialty Pharmacy Operations
+  confidence: 0.7
+  evidence: Prescription retrieval, e-script documents, claims per fill, discontinuation, and auto-refill
+    enrollment/skip/early-refill
+  reason: Prescription lifecycle and auto-refill subscription management are outpatient/retail pharmacy
+    operations on the dispensing side, not provider order entry.
+- tag: transfers
+  spec_file: truepill-transfers-api-openapi.yml
+  capability_id: BC-2850.30
+  capability_id_l1: BC-2850
+  capability_name: Outpatient & Specialty Pharmacy Operations
+  confidence: 0.7
+  evidence: 'Pharmacy-to-pharmacy prescription movement: transfer requests, direct transfers (v1/v2),
+    external transfers, and external pharmacy location matching'
+  reason: Prescription transfer in/out between retail pharmacies is a core outpatient pharmacy operations
+    function; the operations are pharmacy-side, not clinical care coordination.

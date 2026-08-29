@@ -245,6 +245,9 @@ apis:
   - type: Documentation
     url: https://rxdocs.fuzehealth.com
 common:
+- type: CapabilityMap
+  url: capabilities/truepill-capability-edges.yml
+  name: Truepill Business Capability Map
 - type: AgenticAccess
   url: agentic-access/truepill-agentic-access.yml
 - type: DomainSecurity
