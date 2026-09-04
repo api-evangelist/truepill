@@ -23,16 +23,20 @@ deliveryModel:
   method: derived
 accessModel:
   pricing: enterprise
-  onboarding: self-serve
+  onboarding: unknown
   trial: false
   try_now: false
   public: false
-  label: Enterprise · Self-serve signup
+  label: Enterprise
   confidence: high
   source:
   - plans
   - authentication
-  generated: '2026-07-22'
+  - rate-limits
+  - security
+  - sandbox
+  - {url: 'https://www.truepill.com', status: 301, note: 'declared website redirects to https://rx.fuzehealth.com/ — a different registrable domain (truepill.com -> fuzehealth.com), possible rename or acquisition (probed 2026-09-03, roadmap#169)'}
+  generated: '2026-09-03'
   method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/truepill.png
 tags:
