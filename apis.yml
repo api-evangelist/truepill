@@ -108,7 +108,8 @@ apis:
   description: The api API from Truepill — 61 operation(s) for api.
   humanURL: https://rxdocs.fuzehealth.com
   baseURL: https://rxapi.fuzehealth.com/v1
-  tags:
+  tags: []
+  tags_raw:
   - api
   properties:
   - type: OpenAPI
@@ -127,6 +128,8 @@ apis:
   humanURL: https://rxdocs.fuzehealth.com
   baseURL: https://rxapi.fuzehealth.com/v1
   tags:
+  - Scheduled Actions
+  tags_raw:
   - scheduled-actions
   properties:
   - type: OpenAPI
