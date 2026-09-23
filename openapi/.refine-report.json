@@ -1,22 +1,58 @@
 {
   "provider": "truepill",
   "sources": [
-    "truepill-insurance-api-openapi.yml",
-    "truepill-patients-api-openapi.yml",
-    "truepill-prescriptions-api-openapi.yml",
-    "truepill-transfers-api-openapi.yml",
-    "truepill-webhooks-api-openapi.yml"
+    "_original/truepill-fuzerx-swagger.json"
   ],
   "outputs": [
-    "truepill-insurance-api-openapi.yml",
-    "truepill-patients-api-openapi.yml",
-    "truepill-prescriptions-api-openapi.yml",
-    "truepill-transfers-api-openapi.yml",
-    "truepill-webhooks-api-openapi.yml"
+    "truepill-api-api-openapi.yml",
+    "truepill-consults-api-openapi.yml",
+    "truepill-diagnostics-api-openapi.yml",
+    "truepill-scheduled-actions-api-openapi.yml",
+    "truepill-scheduled-fill-requests-api-openapi.yml",
+    "truepill-v0-api-openapi.yml",
+    "truepill-v1-api-openapi.yml",
+    "truepill-v2-api-openapi.yml"
   ],
   "archived": [],
-  "errors": [],
+  "errors": [
+    "truepill-fuzerx-swagger.json: dangling $ref: #/definitions/Current%20medication",
+    "truepill-fuzerx-swagger.json: dangling $ref: #/definitions/Lab%20tests",
+    "truepill-fuzerx-swagger.json: dangling $ref: #/definitions/Media%20IDs",
+    "truepill-fuzerx-swagger.json: dangling $ref: #/definitions/POST%20ScheduledFill%20Request%20Payload",
+    "truepill-fuzerx-swagger.json: dangling $ref: #/definitions/PUT%20ScheduledFill%20Request%20Payload",
+    "truepill-fuzerx-swagger.json: dangling $ref: #/definitions/Patient%20survey",
+    "truepill-fuzerx-swagger.json: dangling $ref: #/definitions/Prescriber%20Address%20details",
+    "truepill-fuzerx-swagger.json: dangling $ref: #/definitions/Prescription%20template",
+    "truepill-fuzerx-swagger.json: dangling $ref: #/definitions/Primary%20care%20provider",
+    "truepill-fuzerx-swagger.json: dangling $ref: #/definitions/Prior%20Authorization%20Request%20Fields",
+    "truepill-fuzerx-swagger.json: dangling $ref: #/definitions/Shipping%20Address",
+    "truepill-fuzerx-swagger.json: dangling $ref: #/definitions/Shipping%20address",
+    "truepill-fuzerx-swagger.json: dangling $ref: #/definitions/Standard%20questions",
+    "truepill-fuzerx-swagger.json: dangling $ref: #/definitions/Transfer%20request",
+    "truepill-fuzerx-swagger.json: dangling $ref: #/x-alt-definitions/Shipping%20Address"
+  ],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "truepill-fuzerx-swagger.json: upgraded swagger 2.0 -> OpenAPI 3.2.0; renamed 15 component key(s) illegal in 3.x (e.g. Current medication)",
+    "truepill-fuzerx-swagger.json: declared missing tag: api",
+    "truepill-fuzerx-swagger.json: declared missing tag: consults",
+    "truepill-fuzerx-swagger.json: declared missing tag: diagnostics",
+    "truepill-fuzerx-swagger.json: declared missing tag: scheduled-actions",
+    "truepill-fuzerx-swagger.json: declared missing tag: scheduled-fill-requests",
+    "truepill-fuzerx-swagger.json: declared missing tag: v0",
+    "truepill-fuzerx-swagger.json: declared missing tag: v1",
+    "truepill-fuzerx-swagger.json: declared missing tag: v2",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "truepill-api-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "truepill-consults-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "truepill-diagnostics-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "truepill-scheduled-actions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "truepill-scheduled-fill-requests-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "truepill-v0-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "truepill-v1-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "truepill-v2-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
