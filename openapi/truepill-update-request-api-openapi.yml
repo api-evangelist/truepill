@@ -1,6 +1,6 @@
 openapi: 3.2.0
 info:
-  title: Truepill API documentation Scheduled Fill Requests API
+  title: Truepill API documentation Update Request API
   version: 0.0.1
   description: DOCS
 servers:
@@ -9,250 +9,210 @@ servers:
 security:
 - apiKey: []
 tags:
-- name: scheduled-fill-requests
+- name: Update Request
 paths:
-  /scheduled-fill-requests:
-    get:
-      summary: Retrieve details for a scheduled fill request by id
-      operationId: getScheduledfillrequests
-      description: Include either original_fill_request_token or id in the query parameters.
-      parameters:
-      - x-format:
-          guid: true
-        name: id
-        in: query
-        schema:
-          type: string
-      - name: original_fill_request_token
-        in: query
-        schema:
-          type: string
-      tags:
-      - scheduled-fill-requests
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model4'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model2'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model3'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model2'
+  /v1/update_request:
     post:
-      summary: Reschedule a fill request that was submitted too soon
-      operationId: postScheduledfillrequests
+      summary: Update Fill Request
+      operationId: postV1Update_request
+      description: 'Amend the fields of an existing Fill Request, such as for correcting an address or changing the shipping method to expedite your order.
+
+
+        When using this endpoint, all the Fill Request fields must be provided with their appropriate values even if they are not to be updated.'
       tags:
-      - scheduled-fill-requests
+      - Update Request
       responses:
-        '200':
-          description: OK
+        '202':
+          description: Accepted
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model113'
+                $ref: '#/components/schemas/Model184'
         '400':
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model2'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model3'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model2'
+                $ref: '#/components/schemas/Model187'
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/POST%20ScheduledFill%20Request%20Payload'
-  /scheduled-fill-requests/{id}:
-    put:
-      summary: Update details for on scheduled fill request
-      operationId: putScheduledfillrequestsId
-      parameters:
-      - x-format:
-          guid: true
-        name: id
-        in: path
-        required: true
-        schema:
-          type: string
+              $ref: '#/components/schemas/Model182'
+  /api/v1/update_request:
+    post:
+      summary: Update Fill Request
+      operationId: postApiV1Update_request
+      description: 'Amend the fields of an existing Fill Request, such as for correcting an address or changing the shipping method to expedite your order.
+
+
+        When using this endpoint, all the Fill Request fields must be provided with their appropriate values even if they are not to be updated.'
       tags:
-      - scheduled-fill-requests
+      - Update Request
       responses:
-        '200':
-          description: OK
+        '202':
+          description: Accepted
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model113'
+                $ref: '#/components/schemas/Model184'
         '400':
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model2'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model3'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model2'
+                $ref: '#/components/schemas/Model187'
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PUT%20ScheduledFill%20Request%20Payload'
-    delete:
-      summary: Delete a scheduled fill request
-      operationId: deleteScheduledfillrequestsId
-      parameters:
-      - x-format:
-          guid: true
-        name: id
-        in: path
-        required: true
-        schema:
-          type: string
-      tags:
-      - scheduled-fill-requests
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model240'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model2'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model3'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model2'
+              $ref: '#/components/schemas/Model182'
 components:
   schemas:
-    Model240:
+    Model183:
       type: object
       properties:
-        id:
+        message:
           type: string
-          example: f716ba1c-bd4b-43c7-9395-84255cd943cd
-          x-format:
-            guid: true
+          example: 'Accepted: Order fill_request_aecafb34372151077db8 has been updated with the new request parameters.'
+    Model186:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model185'
+    Model185:
+      type: object
+      properties:
+        key:
+          type: string
+          example: patient_token
+        message:
+          type: string
+          example: is not allowed
+    Model184:
+      type: object
+      properties:
+        request_id:
+          type: string
+          example: update_request_994aee2d04ae2f1995b5a86449a9c813
+        timestamp:
+          type: integer
+          example: 1631571795
         status:
           type: string
-          example: CANCELLED
-      required:
-      - id
-      - status
-    Model113:
-      type: object
-      properties:
-        id:
-          type: string
-          example: f716ba1c-bd4b-43c7-9395-84255cd943cd
-          x-format:
-            guid: true
-        submit_on:
-          type: string
-          format: date
-          example: '2022-01-01T00:00:00.000Z'
-        original_fill_request_token:
-          type: string
-          example: fill_request_token_abc123
-      required:
-      - id
-      - submit_on
-      - original_fill_request_token
-    Model3:
+          example: success
+        details:
+          $ref: '#/components/schemas/Model183'
+    Model187:
       type: object
       properties:
         statusCode:
           type: number
-          example: 401
+          example: 400
         error:
           type: string
-          example: Unauthorized
-        message:
-          type: string
-          example: Invalid credentials
-    Model2:
+          example: Bad Request
+        validation_errors:
+          $ref: '#/components/schemas/Model186'
+    Model182:
       type: object
       properties:
-        statusCode:
+        request_id:
           type: string
-          example: 0001 or 0002
-        message:
+          description: Request id
+          example: fill_request_aecafb34372151077db8
+        address_from_company:
           type: string
-          example: An example error message
+          description: Desired name to display in the Return section of shipping label
+          example: Avengers
+          default: ''
+        shipping_method:
+          type: string
+          description: Shipping method
+          example: usps_ground_advantage
+          default: usps_ground_advantage
+          enum:
+          - standard
+          - priority
+          - overnight
+          - usps_ground_advantage
+          - usps_priority
+          - usps_priority_express
+          - fedex_ground
+          - fedex_2_day
+          - fedex_smart_post
+          - fedex_standard_overnight
+          - fedex_priority_overnight
+          - ups_mail_innovations_domestic
+          - ups_next_day_air
+          - ups_next_day_air_saver
+          - ups_second_day_air
+          - ups_ground
+          - dhl_ecommerce_parcels_ground
+          - dhl_ecommerce_parcels_expedited
+          - dhl_ecommerce_parcels_expedited_max
+          - dhl_ecommerce_parcel_plus_ground
+          - dhl_ecommerce_parcel_plus_expedited
+          - dhl_ecommerce_parcel_plus_expedited_max
+          x-convert:
+            case: lower
+        signature_confirmation:
+          type: boolean
+          description: Is signature required by patient upon delivery
+          example: false
+        notes:
+          type: string
+          example: Here are some special instructions on how to fill this order
+        address_to_name:
+          type: string
+          description: Patient’s name as it should appear on shipping label
+          example: Peter Parker
+        address_to_company:
+          type: string
+          description: Desired return name to display on package shipping label sent to patient
+          example: ''
+          default: ''
+        address_to_street1:
+          type: string
+          description: Street 1 of patient’s shipping address
+          example: 1700 S Amphlett Blvd
+          maxLength: 100
+        address_to_street2:
+          type: string
+          description: Street 2 of patient’s shipping address (if applicable)
+          example: '#221'
+          default: ''
+        address_to_city:
+          type: string
+          description: City of patient’s shipping address
+          example: San Mateo
+        address_to_state:
+          type: string
+          description: State of patient’s shipping address
+          example: CA
+        address_to_zip:
+          type: string
+          description: Zip code of patient’s shipping address
+          example: '94402'
+        address_to_country:
+          type: string
+          description: Use US for all requests
+          example: US
+          default: US
+        address_to_phone:
+          type: string
+          description: Patient’s phone number
+          example: (347) 610-8896
+        address_to_email:
+          type: string
+          description: Patient’s email address
+          example: peter.parker@avengers.com
       required:
-      - statusCode
-      - message
-    Model4:
-      type: object
-      properties:
-        id:
-          type: string
-          example: f716ba1c-bd4b-43c7-9395-84255cd943cd
-          x-format:
-            guid: true
-        status:
-          type: string
-          example: PENDING
-        submit_on:
-          type: string
-          format: date
-          example: '2022-01-01T00:00:00.000Z'
-        original_fill_request_token:
-          type: string
-          example: fill_request_token_abc123
-      required:
-      - id
-      - status
-      - submit_on
-      - original_fill_request_token
+      - address_to_name
+      - address_to_street1
+      - address_to_city
+      - address_to_state
+      - address_to_zip
+      - address_to_phone
   securitySchemes:
     apiKey:
       type: apiKey

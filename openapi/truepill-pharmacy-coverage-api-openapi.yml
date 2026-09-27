@@ -1,6 +1,6 @@
 openapi: 3.2.0
 info:
-  title: Truepill API documentation Scheduled Fill Requests API
+  title: Truepill API documentation Pharmacy Coverage API
   version: 0.0.1
   description: DOCS
 servers:
@@ -9,250 +9,180 @@ servers:
 security:
 - apiKey: []
 tags:
-- name: scheduled-fill-requests
+- name: Pharmacy Coverage
 paths:
-  /scheduled-fill-requests:
+  /v1/pharmacy-coverage:
     get:
-      summary: Retrieve details for a scheduled fill request by id
-      operationId: getScheduledfillrequests
-      description: Include either original_fill_request_token or id in the query parameters.
+      summary: Get best suitable Pharmacy Location
+      operationId: getV1Pharmacycoverage
       parameters:
-      - x-format:
-          guid: true
-        name: id
+      - x-constraint:
+          length: 2
+        name: ship_to_state
         in: query
         schema:
           type: string
-      - name: original_fill_request_token
+      - name: bin
+        in: query
+        schema:
+          type: string
+          pattern: ^[0-9]{6}$
+      - name: pcn
+        in: query
+        schema:
+          type: string
+      - name: group_number
         in: query
         schema:
           type: string
       tags:
-      - scheduled-fill-requests
+      - Pharmacy Coverage
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model4'
+                $ref: '#/components/schemas/Model25'
         '400':
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model2'
+                $ref: '#/components/schemas/Model26'
         '401':
           description: Unauthorized
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model3'
-        '500':
-          description: Internal Server Error
+                $ref: '#/components/schemas/Model27'
+        '403':
+          description: Forbidden
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model2'
-    post:
-      summary: Reschedule a fill request that was submitted too soon
-      operationId: postScheduledfillrequests
-      tags:
-      - scheduled-fill-requests
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model113'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model2'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model3'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model2'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/POST%20ScheduledFill%20Request%20Payload'
-  /scheduled-fill-requests/{id}:
-    put:
-      summary: Update details for on scheduled fill request
-      operationId: putScheduledfillrequestsId
+                $ref: '#/components/schemas/Model28'
+  /api/v1/pharmacy-coverage:
+    get:
+      summary: Get best suitable Pharmacy Location
+      operationId: getApiV1Pharmacycoverage
       parameters:
-      - x-format:
-          guid: true
-        name: id
-        in: path
-        required: true
+      - x-constraint:
+          length: 2
+        name: ship_to_state
+        in: query
+        schema:
+          type: string
+      - name: bin
+        in: query
+        schema:
+          type: string
+          pattern: ^[0-9]{6}$
+      - name: pcn
+        in: query
+        schema:
+          type: string
+      - name: group_number
+        in: query
         schema:
           type: string
       tags:
-      - scheduled-fill-requests
+      - Pharmacy Coverage
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model113'
+                $ref: '#/components/schemas/Model25'
         '400':
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model2'
+                $ref: '#/components/schemas/Model26'
         '401':
           description: Unauthorized
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model3'
-        '500':
-          description: Internal Server Error
+                $ref: '#/components/schemas/Model27'
+        '403':
+          description: Forbidden
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model2'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PUT%20ScheduledFill%20Request%20Payload'
-    delete:
-      summary: Delete a scheduled fill request
-      operationId: deleteScheduledfillrequestsId
-      parameters:
-      - x-format:
-          guid: true
-        name: id
-        in: path
-        required: true
-        schema:
-          type: string
-      tags:
-      - scheduled-fill-requests
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model240'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model2'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model3'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model2'
+                $ref: '#/components/schemas/Model28'
 components:
   schemas:
-    Model240:
-      type: object
-      properties:
-        id:
-          type: string
-          example: f716ba1c-bd4b-43c7-9395-84255cd943cd
-          x-format:
-            guid: true
-        status:
-          type: string
-          example: CANCELLED
-      required:
-      - id
-      - status
-    Model113:
-      type: object
-      properties:
-        id:
-          type: string
-          example: f716ba1c-bd4b-43c7-9395-84255cd943cd
-          x-format:
-            guid: true
-        submit_on:
-          type: string
-          format: date
-          example: '2022-01-01T00:00:00.000Z'
-        original_fill_request_token:
-          type: string
-          example: fill_request_token_abc123
-      required:
-      - id
-      - submit_on
-      - original_fill_request_token
-    Model3:
+    Model27:
       type: object
       properties:
         statusCode:
           type: number
           example: 401
-        error:
-          type: string
-          example: Unauthorized
         message:
           type: string
-          example: Invalid credentials
-    Model2:
+          example: Unauthorized
+    Model26:
       type: object
       properties:
         statusCode:
-          type: string
-          example: 0001 or 0002
+          type: number
+          example: 400
         message:
+          $ref: '#/components/schemas/message'
+        error:
           type: string
-          example: An example error message
-      required:
-      - statusCode
-      - message
-    Model4:
+          example: Bad Request
+    Model25:
       type: object
       properties:
-        id:
+        pharmacy_name:
           type: string
-          example: f716ba1c-bd4b-43c7-9395-84255cd943cd
-          x-format:
-            guid: true
-        status:
+          example: Test Pharmacy
+        npi:
           type: string
-          example: PENDING
-        submit_on:
+          example: 1231231234
+          pattern: ^\d{10}$
+        address:
+          $ref: '#/components/schemas/address'
+    address:
+      type: object
+      properties:
+        street_1:
           type: string
-          format: date
-          example: '2022-01-01T00:00:00.000Z'
-        original_fill_request_token:
+          example: 1234 123th Avenue NE
+        street_2:
           type: string
-          example: fill_request_token_abc123
-      required:
-      - id
-      - status
-      - submit_on
-      - original_fill_request_token
+          example: Suite J/A
+        city:
+          type: string
+          example: Redmond
+        state:
+          type: string
+          example: WA
+        zip:
+          type: string
+          example: '98502'
+          pattern: ^\d{5}(-\d{4})?$
+        phone:
+          type: string
+          example: (111) 123-4321
+    message:
+      type: array
+      items:
+        type: string
+        example: Invalid bin field length. bin must be in numeric string format and length must be equal to 6 characters
+    Model28:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 403
+        message:
+          type: string
+          example: Forbidden
   securitySchemes:
     apiKey:
       type: apiKey

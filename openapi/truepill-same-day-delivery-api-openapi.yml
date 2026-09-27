@@ -1,6 +1,6 @@
 openapi: 3.2.0
 info:
-  title: Truepill API documentation V0 API
+  title: Truepill API documentation Same Day Delivery API
   version: 0.0.1
   description: DOCS
 servers:
@@ -9,173 +9,246 @@ servers:
 security:
 - apiKey: []
 tags:
-- name: v0
+- name: Same Day Delivery
 paths:
-  /v0/schedule:
+  /v1/same_day_delivery:
     get:
-      summary: Return available open slots for any provider that can be used to create…
-      operationId: getV0Schedule
-      description: Returns schedule availability of providers based on given parameters
+      summary: Get same day delivery orders
+      operationId: getV1Same_day_delivery
       parameters:
-      - description: The time starting from which free slots will be returned. Should be greater than the current time.
-        name: start
+      - name: next_page_token
         in: query
-        required: true
         schema:
           type: string
-          format: date-time
-      - description: The end time up to which free slots will be returned.
-        name: end
+          minLength: 0
+      - name: status
         in: query
-        required: true
         schema:
           type: string
-          format: date-time
-      - description: Unique identifier for the questionnaire that providers have enabled scheduling for.
-        x-constraint:
-          length: 24
-        x-format:
-          hex:
-            byteAligned: false
-            prefix: false
-        name: questionnaire
+          enum:
+          - PENDING
+          - FAILED
+          - AWAITING_PICKUP
+          - IN_TRANSIT
+          - DELIVERED
+          - CANCELED
+          - INCOMPLETE
+      - name: limit
         in: query
-        required: true
         schema:
-          type: string
-      - description: Two letter abbreviation of provider’s licensed state used as a filter.
-        name: state
-        in: query
-        required: true
-        schema:
-          type: string
-          pattern: ^[A-Z]{2}$
-      - description: The duration of each returned slot in minutes.
-        x-constraint:
-          sign: positive
-        name: duration
-        in: query
-        required: false
-        schema:
-          type: integer
+          type: number
+          default: 20
+          maximum: 1000
+          minimum: 1
       tags:
-      - v0
+      - Same Day Delivery
       responses:
-        '200':
-          description: OK
+        default:
+          description: Successful
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model11'
-        '400':
-          description: Bad Request
+                type: string
+    post:
+      summary: Create a same day delivery order
+      operationId: postV1Same_day_delivery
+      tags:
+      - Same Day Delivery
+      responses:
+        default:
+          description: Successful
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model13'
-        '401':
-          description: Unauthorized
+                type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Model173'
+  /api/v1/same_day_delivery:
+    get:
+      summary: Get same day delivery orders
+      operationId: getApiV1Same_day_delivery
+      parameters:
+      - name: next_page_token
+        in: query
+        schema:
+          type: string
+          minLength: 0
+      - name: status
+        in: query
+        schema:
+          type: string
+          enum:
+          - PENDING
+          - FAILED
+          - AWAITING_PICKUP
+          - IN_TRANSIT
+          - DELIVERED
+          - CANCELED
+          - INCOMPLETE
+      - name: limit
+        in: query
+        schema:
+          type: number
+          default: 20
+          maximum: 1000
+          minimum: 1
+      tags:
+      - Same Day Delivery
+      responses:
+        default:
+          description: Successful
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model8'
-        '404':
-          description: Not Found
+                type: string
+    post:
+      summary: Create a same day delivery order
+      operationId: postApiV1Same_day_delivery
+      tags:
+      - Same Day Delivery
+      responses:
+        default:
+          description: Successful
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model14'
-        '500':
-          description: Internal Server Error
+                type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Model173'
+  /v1/same_day_delivery/{id}:
+    get:
+      summary: Get a specific same day delivery order by ID
+      operationId: getV1Same_day_deliveryId
+      tags:
+      - Same Day Delivery
+      responses:
+        default:
+          description: Successful
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model9'
+                type: string
+  /api/v1/same_day_delivery/{id}:
+    get:
+      summary: Get a specific same day delivery order by ID
+      operationId: getApiV1Same_day_deliveryId
+      tags:
+      - Same Day Delivery
+      responses:
+        default:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: string
 components:
   schemas:
-    Model11:
-      type: object
-      properties:
-        availabilities:
-          $ref: '#/components/schemas/availabilities'
-    Model13:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 400
-        error:
-          type: string
-          example: Bad Request
-        validation_errors:
-          $ref: '#/components/schemas/validation_errors'
-    validation_errors:
+    prescription_tokens:
       type: array
       items:
-        $ref: '#/components/schemas/Model12'
-    Model10:
+        type: string
+        minLength: 0
+        pattern: '[a-f0-9]{8,16}'
+    Model171:
       type: object
       properties:
-        start:
+        id:
           type: string
-          format: date-time
-          example: '2022-04-06T05:00:00.000Z'
-        end:
+          description: 'Stringified UUIDv4.
+
+            See [RFC 4112](https://tools.ietf.org/html/rfc4122)'
+          minLength: 0
+          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+        pharmacy:
           type: string
-          format: date-time
-          example: '2022-04-07T08:00:00.000Z'
+          description: References GET /v1/external_location_pharmacies
+          minLength: 0
+        npi:
+          type: string
+          description: NPI - likely type 2
+          minLength: 0
+          maxLength: 10
+          pattern: ^[0-9]{10}$
+        address_to_street1:
+          type: string
+          minLength: 0
+        address_to_street2:
+          type: string
+          minLength: 0
+        address_to_city:
+          type: string
+          minLength: 0
+        address_to_state:
+          type: string
+          minLength: 0
+          pattern: ^[A-Z]{2}$
+        address_to_zip:
+          type: string
+          minLength: 0
+          pattern: ^\d{5}(-?\d{4})?$
+        address_to_country:
+          type: string
+          minLength: 0
+          pattern: ^[A-Z]{2}$
+        address_to_phone:
+          type: string
+          minLength: 0
+          pattern: ^(\+)?[1-9]\d{1,14}$
+        address_to_fax:
+          type: string
+          description: The fax number of the address
+          minLength: 0
+          maxLength: 255
+          pattern: ^[1-9]\d{1,14}$
       required:
-      - start
-      - end
-    Model12:
-      type: object
-      properties:
-        key:
-          type: string
-          example: questionnaire
-        message:
-          type: string
-          example: length must be 24 characters long
-    Model8:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 401
-        error:
-          type: string
-          example: Unauthorized
-        message:
-          type: string
-          example: Please Send a Valid Api-Key
-    Model9:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 500
-        error:
-          type: string
-          example: An internal server error occurred
-        message:
-          type: string
-          example: An internal server error occurred
-    Model14:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 404
-        error:
-          type: string
-          example: Not Found
-        message:
-          type: string
-          example: Consult questionnaire not found. (You may not be authorized to it)
-    availabilities:
+      - id
+      - pharmacy
+      - npi
+      - address_to_street1
+      - address_to_city
+      - address_to_state
+      - address_to_zip
+      - address_to_country
+    Model172:
       type: array
       items:
-        $ref: '#/components/schemas/Model10'
+        type: string
+        minLength: 0
+    Model173:
+      type: object
+      properties:
+        patient_token:
+          type: string
+          minLength: 0
+        prescription_tokens:
+          $ref: '#/components/schemas/prescription_tokens'
+        shipping_address:
+          $ref: '#/components/schemas/Shipping%20Address'
+          x-alternatives:
+          - $ref: '#/x-alt-definitions/Shipping%20Address'
+          - $ref: '#/x-alt-definitions/shipping_address'
+        external_location:
+          $ref: '#/components/schemas/Model171'
+          x-alternatives:
+          - $ref: '#/x-alt-definitions/external_location'
+          - $ref: '#/x-alt-definitions/Model8'
+        insurance_tokens:
+          $ref: '#/components/schemas/Model172'
+        delivery_instruction:
+          type: string
+          minLength: 0
+          maxLength: 280
+      required:
+      - patient_token
+      - prescription_tokens
+      - shipping_address
+      - external_location
   securitySchemes:
     apiKey:
       type: apiKey

@@ -1,6 +1,6 @@
 openapi: 3.2.0
 info:
-  title: Truepill API documentation Scheduled Fill Requests API
+  title: Truepill API documentation Fill Requests API
   version: 0.0.1
   description: DOCS
 servers:
@@ -9,250 +9,361 @@ servers:
 security:
 - apiKey: []
 tags:
-- name: scheduled-fill-requests
+- name: Fill Requests
 paths:
-  /scheduled-fill-requests:
+  /v1/fill_requests:
     get:
-      summary: Retrieve details for a scheduled fill request by id
-      operationId: getScheduledfillrequests
-      description: Include either original_fill_request_token or id in the query parameters.
+      summary: Get a list of fill requests
+      operationId: getV1Fill_requests
+      description: Returns a list of fill requests and allows for the use of query parameters to scope the results of the request
       parameters:
-      - x-format:
-          guid: true
-        name: id
+      - name: created_at
         in: query
         schema:
           type: string
-      - name: original_fill_request_token
+      - name: limit
+        in: query
+        schema:
+          type: number
+          maximum: 100
+      - name: next
+        in: query
+        schema:
+          type: string
+      - name: metadata
         in: query
         schema:
           type: string
       tags:
-      - scheduled-fill-requests
+      - Fill Requests
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model4'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model2'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model3'
+                $ref: '#/components/schemas/Model22'
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model2'
-    post:
-      summary: Reschedule a fill request that was submitted too soon
-      operationId: postScheduledfillrequests
-      tags:
-      - scheduled-fill-requests
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model113'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model2'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model3'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model2'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/POST%20ScheduledFill%20Request%20Payload'
-  /scheduled-fill-requests/{id}:
-    put:
-      summary: Update details for on scheduled fill request
-      operationId: putScheduledfillrequestsId
+                $ref: '#/components/schemas/Model9'
+  /api/v1/fill_requests:
+    get:
+      summary: Get a list of fill requests
+      operationId: getApiV1Fill_requests
+      description: Returns a list of fill requests and allows for the use of query parameters to scope the results of the request
       parameters:
-      - x-format:
-          guid: true
-        name: id
-        in: path
-        required: true
+      - name: created_at
+        in: query
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: number
+          maximum: 100
+      - name: next
+        in: query
+        schema:
+          type: string
+      - name: metadata
+        in: query
         schema:
           type: string
       tags:
-      - scheduled-fill-requests
+      - Fill Requests
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model113'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model2'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model3'
+                $ref: '#/components/schemas/Model22'
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model2'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PUT%20ScheduledFill%20Request%20Payload'
-    delete:
-      summary: Delete a scheduled fill request
-      operationId: deleteScheduledfillrequestsId
-      parameters:
-      - x-format:
-          guid: true
-        name: id
-        in: path
-        required: true
-        schema:
-          type: string
-      tags:
-      - scheduled-fill-requests
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model240'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model2'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model3'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model2'
+                $ref: '#/components/schemas/Model9'
 components:
   schemas:
-    Model240:
+    otc_product:
       type: object
       properties:
-        id:
+        sku:
           type: string
-          example: f716ba1c-bd4b-43c7-9395-84255cd943cd
-          x-format:
-            guid: true
+          example: SKU-123-456
+        quantity:
+          type: number
+          example: 1
+        patient_consent:
+          $ref: '#/components/schemas/patient_consent'
+        is_cancellable:
+          type: boolean
+          description: Indicates whether this OTC product can be cancelled. False if packing slip has been printed.
+          example: true
+    results:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model21'
+    Model22:
+      type: object
+      properties:
+        results:
+          $ref: '#/components/schemas/results'
+        next_page_token:
+          type: string
+          example: JpdiI6IjdkNWViNWU5MTViNjAzNzAwYjQ4NTI3YjEyZjIzNDFkIiwiY29udGVudCI6IjE2YTcyNmQ4OGI3NTNlYzRjMTE5ZDc5NWIyMmE4MDRkN2UzYzA3YTA1M
+    medications:
+      type: array
+      items:
+        $ref: '#/components/schemas/medication_response'
+    patient_survey:
+      type: object
+      example:
+        medications: Tafluprost
+        allergies: Penicillian
+        conditions: Glaucoma
+      properties:
+        allergies:
+          type: string
+          x-alternatives:
+          - type: string
+          - $ref: '#/x-alt-definitions/allergies'
+        medications:
+          type: string
+          x-alternatives:
+          - type: string
+          - $ref: '#/x-alt-definitions/medications'
+        conditions:
+          type: string
+        events:
+          type: string
+          x-alternatives:
+          - type: string
+          - $ref: '#/x-alt-definitions/events'
+        smoking_frequency:
+          type: string
+        drinking_frequency:
+          type: string
+        asthma_breathing:
+          type: boolean
+        heart_disease:
+          type: boolean
+        arthritis:
+          type: boolean
+        lung_disorder:
+          type: boolean
+        bleeding_clotting_disorder:
+          type: boolean
+        neurological_chronic_headaches:
+          type: boolean
+        blood_transfusion:
+          type: boolean
+        psychiatric_disorder:
+          type: boolean
+        bowel_stomach:
+          type: boolean
+        pulmonary_embolism:
+          type: boolean
+        cancer:
+          type: boolean
+        stroke:
+          type: boolean
+        cholesterol_disorder:
+          type: boolean
+        seizure_epilepsy:
+          type: boolean
+        diabetes:
+          type: boolean
+        thyroid_disorder:
+          type: boolean
+        eye_disorder:
+          type: boolean
+        urinary_kidney_disorder:
+          type: boolean
+        pregnancy:
+          type: boolean
+      required:
+      - allergies
+      - medications
+      - conditions
+    receipt_items:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model20'
+    medication_response:
+      type: object
+      properties:
+        prescription_token:
+          type: string
+          example: e61e324f9018
+        quantity:
+          type: number
+          example: 30
+        is_cancellable:
+          type: boolean
+          description: Indicates whether this medication/fill can be cancelled.
+          example: true
+    otc_products:
+      type: array
+      items:
+        $ref: '#/components/schemas/otc_product'
+    Model20:
+      type: object
+      properties:
+        category:
+          type: string
+          example: prescription_copay
+          enum:
+          - prescription_copay
+          - tax
+          - shipping
+          - prescription_cash
+          - tax_copay
+          - processing_fee
+        prescription_token:
+          type: string
+          example: 0154cc7b065
+        amount:
+          type: number
+          example: 11.43
+        description:
+          type: string
+          example: Copay for medication A
+      required:
+      - category
+      - prescription_token
+      - amount
+    patient_consent:
+      type: object
+      properties:
+        consent_statement:
+          type: string
+        consent_method:
+          type: string
+        consent_date:
+          type: string
+        consent_type:
+          type: string
+        patient_name:
+          type: string
+        consent_provided_by:
+          type: string
+        item:
+          type: string
+    current_stripe_payment:
+      type: object
+      properties:
+        cardholder_name:
+          type: string
+          example: Bruce Banner
+        last_four_digits:
+          type: string
+          example: '6789'
+        stripe_id:
+          type: string
+          example: pi_10f410zj3018s2
+        amount:
+          type: number
+          example: 12.75
+        description:
+          type: string
+          example: Paid by patient
+        intent_status:
+          type: string
+      required:
+      - stripe_id
+      - amount
+    Model21:
+      type: object
+      properties:
+        patient_first_name:
+          type: string
+          example: Stephen
+        patient_last_name:
+          type: string
+          example: Strange
+        metadata:
+          type: string
+          example: some metadata
+        patient_payment_type:
+          type: string
+          example: cash
+        is_cancellable:
+          type: boolean
+          description: Indicates whether the entire fill request can be cancelled based on its current status. Generally true when order is in Triage or PV1 status, false when in Fill, PV2, Packing, Complete, or Cancelled status.
+          example: true
+        address_to_name:
+          type: string
+          example: Stephen Strange
+        address_to_street1:
+          type: string
+          example: 1700 S Amphlett Blvd
+        address_to_street2:
+          type: string
+          example: '#221'
+        address_to_city:
+          type: string
+          example: San Mateo
+        address_to_state:
+          type: string
+          example: CA
+        address_to_phone:
+          type: string
+          example: '1112223333'
+        address_to_email:
+          type: string
+          example: truepill@truepill.com
+        address_to_zip:
+          type: string
+          example: '94402'
+        patient_survey:
+          $ref: '#/components/schemas/patient_survey'
+        medications:
+          $ref: '#/components/schemas/medications'
+        otc_products:
+          $ref: '#/components/schemas/otc_products'
+        shipping_method:
+          type: string
+          example: standard
+        address_to_company:
+          type: string
+        address_to_country:
+          type: string
+          example: US
         status:
           type: string
-          example: CANCELLED
+          example: triage
+        url_token:
+          type: string
+          example: abc123
+        created_at:
+          type: string
+          example: '2021-09-14T14:22:37.000Z'
+        tracking_url:
+          type: string
+          example: https://www.fedex.com/apps/fedextrack/?action=track&cntry_code=us&trackingnumber=12345
+        receipt_items:
+          $ref: '#/components/schemas/receipt_items'
+        current_stripe_payment:
+          $ref: '#/components/schemas/current_stripe_payment'
       required:
-      - id
-      - status
-    Model113:
-      type: object
-      properties:
-        id:
-          type: string
-          example: f716ba1c-bd4b-43c7-9395-84255cd943cd
-          x-format:
-            guid: true
-        submit_on:
-          type: string
-          format: date
-          example: '2022-01-01T00:00:00.000Z'
-        original_fill_request_token:
-          type: string
-          example: fill_request_token_abc123
-      required:
-      - id
-      - submit_on
-      - original_fill_request_token
-    Model3:
+      - patient_survey
+    Model9:
       type: object
       properties:
         statusCode:
           type: number
-          example: 401
+          example: 500
         error:
           type: string
-          example: Unauthorized
+          example: An internal server error occurred
         message:
           type: string
-          example: Invalid credentials
-    Model2:
-      type: object
-      properties:
-        statusCode:
-          type: string
-          example: 0001 or 0002
-        message:
-          type: string
-          example: An example error message
-      required:
-      - statusCode
-      - message
-    Model4:
-      type: object
-      properties:
-        id:
-          type: string
-          example: f716ba1c-bd4b-43c7-9395-84255cd943cd
-          x-format:
-            guid: true
-        status:
-          type: string
-          example: PENDING
-        submit_on:
-          type: string
-          format: date
-          example: '2022-01-01T00:00:00.000Z'
-        original_fill_request_token:
-          type: string
-          example: fill_request_token_abc123
-      required:
-      - id
-      - status
-      - submit_on
-      - original_fill_request_token
+          example: An internal server error occurred
   securitySchemes:
     apiKey:
       type: apiKey

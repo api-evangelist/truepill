@@ -1,0 +1,1273 @@
+openapi: 3.2.0
+info:
+  title: Truepill API documentation Auto Refill API
+  version: 0.0.1
+  description: DOCS
+servers:
+- url: https://rxapi.fuzehealth.com/
+- url: http://rxapi.fuzehealth.com/
+security:
+- apiKey: []
+tags:
+- name: Auto Refill
+paths:
+  /v1/auto-refill:
+    get:
+      summary: Get a list of all prescriptions currently subscribed to auto-refill
+      operationId: getV1Autorefill
+      tags:
+      - Auto Refill
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model15'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model18'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model19'
+  /api/v1/auto-refill:
+    get:
+      summary: Get a list of all prescriptions currently subscribed to auto-refill
+      operationId: getApiV1Autorefill
+      tags:
+      - Auto Refill
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model15'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model18'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model19'
+  /v1/auto-refill/{prescription_token}:
+    get:
+      summary: GET auto refill subscription
+      operationId: getV1AutorefillPrescription_token
+      parameters:
+      - name: prescription_token
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Auto Refill
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model43'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model18'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model19'
+    post:
+      summary: Create auto refill subscription for prescription
+      operationId: postV1AutorefillPrescription_token
+      parameters:
+      - name: prescription_token
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Auto Refill
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model209'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model18'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model19'
+    delete:
+      summary: Cancel an auto-refill subscription
+      operationId: deleteV1AutorefillPrescription_token
+      parameters:
+      - name: prescription_token
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Auto Refill
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model242'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model18'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model19'
+  /api/v1/auto-refill/{prescription_token}:
+    get:
+      summary: GET auto refill subscription
+      operationId: getApiV1AutorefillPrescription_token
+      parameters:
+      - name: prescription_token
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Auto Refill
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model43'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model18'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model19'
+    post:
+      summary: Create auto refill subscription for prescription
+      operationId: postApiV1AutorefillPrescription_token
+      parameters:
+      - name: prescription_token
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Auto Refill
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model209'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model18'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model19'
+    delete:
+      summary: Cancel an auto-refill subscription
+      operationId: deleteApiV1AutorefillPrescription_token
+      parameters:
+      - name: prescription_token
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Auto Refill
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model242'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model18'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model19'
+  /v1/auto-refill/patient/{patient_token}:
+    get:
+      summary: Get a list of all prescriptions currently subscribed to auto-refill for a given…
+      operationId: getV1AutorefillPatientPatient_token
+      parameters:
+      - name: patient_token
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Auto Refill
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model95'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model18'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model19'
+  /api/v1/auto-refill/patient/{patient_token}:
+    get:
+      summary: Get a list of all prescriptions currently subscribed to auto-refill for a given…
+      operationId: getApiV1AutorefillPatientPatient_token
+      parameters:
+      - name: patient_token
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Auto Refill
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model95'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model18'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model19'
+  /v1/auto-refill/{prescription_token}/early-refill:
+    post:
+      summary: Schedule a one-time order from the auto-refill prescription
+      operationId: postV1AutorefillPrescription_tokenEarlyrefill
+      parameters:
+      - name: prescription_token
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Auto Refill
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model226'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model18'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model19'
+  /api/v1/auto-refill/{prescription_token}/early-refill:
+    post:
+      summary: Schedule a one-time order from the auto-refill prescription
+      operationId: postApiV1AutorefillPrescription_tokenEarlyrefill
+      parameters:
+      - name: prescription_token
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Auto Refill
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model226'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model18'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model19'
+  /v1/auto-refill/{prescription_token}/skip-refill:
+    delete:
+      summary: Skip a scheduled fill request
+      operationId: deleteV1AutorefillPrescription_tokenSkiprefill
+      parameters:
+      - name: prescription_token
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Auto Refill
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model248'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model18'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model19'
+  /api/v1/auto-refill/{prescription_token}/skip-refill:
+    delete:
+      summary: Skip a scheduled fill request
+      operationId: deleteApiV1AutorefillPrescription_tokenSkiprefill
+      parameters:
+      - name: prescription_token
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Auto Refill
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model248'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model18'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model19'
+components:
+  schemas:
+    Model248:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 200
+        err:
+          type: boolean
+          example: false
+        data:
+          $ref: '#/components/schemas/Model247'
+    Model41:
+      type: object
+      properties:
+        auto_refill_medications:
+          $ref: '#/components/schemas/auto_refill_medications'
+        scheduled_fill_address:
+          $ref: '#/components/schemas/scheduled_fill_address'
+        scheduled_fill_survey:
+          $ref: '#/components/schemas/scheduled_fill_survey'
+    Model92:
+      type: array
+      example:
+      - id: 1
+        prescription_token: token
+        status: active
+      items:
+        type: string
+    Model42:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date
+          example: '2026-08-07T19:45:22.707Z'
+        status:
+          type: string
+          example: successful
+        details:
+          $ref: '#/components/schemas/Model41'
+    Model225:
+      type: object
+      properties:
+        sas_id:
+          type: string
+          example: 985c7f9f-b506-424a-b016-0a47144f46b6
+    Model19:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 500
+        err:
+          type: boolean
+          example: true
+        data:
+          $ref: '#/components/schemas/Model17'
+    Model95:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 200
+        err:
+          type: boolean
+          example: false
+        data:
+          $ref: '#/components/schemas/Model94'
+    Model18:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 400
+        err:
+          type: boolean
+          example: true
+        data:
+          $ref: '#/components/schemas/Model17'
+    Model15:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 200
+        err:
+          type: boolean
+          example: false
+        data:
+          $ref: '#/components/schemas/data'
+    scheduled_fill_address:
+      type: object
+      properties:
+        name:
+          type: string
+          example: address name
+        street1:
+          type: string
+          example: street 1
+        street2:
+          type: string
+          example: street 2
+        city:
+          type: string
+          example: city
+        state:
+          type: string
+          example: state
+        zip:
+          type: number
+          example: 12345
+        phone:
+          type: string
+          example: ((123)456-7890
+        email:
+          type: string
+          example: email@email.com
+        country:
+          type: string
+    Model17:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date
+          example: '2021-05-20T00:00:00.000Z'
+        status:
+          type: string
+          example: unsuccessful
+        details:
+          $ref: '#/components/schemas/Model16'
+    details:
+      type: object
+      properties:
+        auto_refill_subscriptions:
+          $ref: '#/components/schemas/auto_refill_subscriptions'
+    Model207:
+      type: object
+      properties:
+        auto_refill_medications:
+          $ref: '#/components/schemas/Model206'
+    Model226:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 200
+        err:
+          type: boolean
+          example: false
+        data:
+          $ref: '#/components/schemas/Model225'
+    Model43:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 200
+        err:
+          type: boolean
+          example: false
+        data:
+          $ref: '#/components/schemas/Model42'
+    scheduled_fill_survey:
+      type: object
+      properties:
+        patient_token:
+          type: string
+        url_token:
+          type: string
+        created_at:
+          type: string
+          format: date
+        updated_at:
+          type: string
+          format: date
+        asthma_breathing:
+          type: number
+        heart_disease:
+          type: number
+        arthritis:
+          type: number
+        lung_disorder:
+          type: number
+        bleeding_clotting_disorder:
+          type: number
+        neurological_chronic_headaches:
+          type: number
+        blood_transfusion:
+          type: number
+        psychiatric_disorder:
+          type: number
+        bowel_stomach:
+          type: number
+        pulmonary_embolism:
+          type: number
+        cancer:
+          type: number
+        stroke:
+          type: number
+        cholesterol_disorder:
+          type: number
+        seizure_epilepsy:
+          type: number
+        diabetes:
+          type: number
+        thyroid_disorder:
+          type: number
+        eye_disorder:
+          type: number
+        urinary_kidney_disorder:
+          type: number
+        conditions:
+          type: number
+        smoking_frequency:
+          type: number
+        drinking_frequency:
+          type: number
+        other_medications:
+          type: number
+        known_allergies:
+          type: number
+        pregnancy:
+          type: boolean
+    Model206:
+      type: object
+      properties:
+        auto_refill_id:
+          type: number
+          description: ID of the newly created auto refill subscription.
+        auto_refill_date:
+          type: string
+          format: date
+          description: Date the next refill will be filled.
+          example: '2021-07-31T00:00:00.000Z'
+    auto_refill_subscriptions:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        prescription_token:
+          type: string
+          example: token
+        patient_token:
+          type: string
+          example: token
+        status:
+          type: string
+          example: active
+    Model208:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date
+          example: '2021-05-20T00:00:00.000Z'
+        status:
+          type: string
+          example: successful
+        details:
+          $ref: '#/components/schemas/Model207'
+    Model241:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date
+          example: '2026-08-07T19:45:22.698Z'
+        status:
+          type: string
+          example: successful
+    auto_refill_medications:
+      type: object
+      properties:
+        auto_refill_id:
+          type: number
+          example: 1
+        auto_refill_date:
+          type: string
+          format: date
+          example: '2026-08-07T19:45:22.708Z'
+        auto_reminder:
+          type: boolean
+          example: true
+        refills_remaining:
+          type: number
+          example: 3
+    Model242:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 200
+        err:
+          type: boolean
+          example: false
+        data:
+          $ref: '#/components/schemas/Model241'
+    Model94:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date
+          example: '2021-05-20T00:00:00.000Z'
+        status:
+          type: string
+          example: successful
+        details:
+          $ref: '#/components/schemas/Model93'
+    Model209:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 200
+        err:
+          type: boolean
+          example: false
+        data:
+          $ref: '#/components/schemas/Model208'
+    data:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date
+          example: '2021-05-20T00:00:00.000Z'
+        status:
+          type: string
+          example: successful
+        details:
+          $ref: '#/components/schemas/details'
+    Model247:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date
+          example: '2026-08-07T19:45:22.706Z'
+        status:
+          type: string
+          example: successful
+    Model93:
+      type: object
+      properties:
+        auto_refill_subscriptions:
+          $ref: '#/components/schemas/Model92'
+        nextPageToken:
+          type: string
+          example: nextPageTokenString
+        total:
+          type: number
+          example: 1
+    Model16:
+      type: object
+      properties:
+        message:
+          type: string
+          example: An example error message
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      name: Authorization
+      in: header
+x-alt-definitions:
+  selected_allergies:
+    type: array
+    items:
+      type: string
+  allergies:
+    type: object
+    properties:
+      selected_allergies:
+        $ref: '#/x-alt-definitions/selected_allergies'
+      presented_allergies:
+        $ref: '#/x-alt-definitions/selected_allergies'
+      free_form_allergy_information:
+        type: string
+    required:
+    - selected_allergies
+    - presented_allergies
+    - free_form_allergy_information
+  Model1:
+    type: object
+    properties:
+      name:
+        type: string
+      strength:
+        type: number
+      dosage:
+        type: string
+      frequency:
+        type: string
+    required:
+    - name
+  medications:
+    type: array
+    items:
+      $ref: '#/x-alt-definitions/Model1'
+  Model2:
+    type: object
+    properties:
+      type:
+        type: string
+      year:
+        type: number
+      reason:
+        type: string
+    required:
+    - type
+    - year
+    - reason
+  events:
+    type: array
+    items:
+      $ref: '#/x-alt-definitions/Model2'
+  patient_consent:
+    type: object
+    properties:
+      consent_statement:
+        type: string
+      consent_method:
+        type: string
+      consent_date:
+        type: string
+      consent_type:
+        type: string
+      patient_name:
+        type: string
+      consent_provided_by:
+        type: string
+      item:
+        type: string
+  Model3:
+    type: object
+    properties:
+      insurance_token:
+        type: string
+        description: Insurance token
+        example: adcbc795028c009d
+        minLength: 1
+      prior_authorization_number:
+        type: string
+        example: ABC123
+        pattern: ^[0-9a-zA-Z]{1,35}$
+      other_coverage_code:
+        type: string
+        example: '8'
+        pattern: ^[0-8]{1}$
+      submission_clarification_code:
+        type: string
+        example: '3'
+        pattern: ^(?:[1-9]\d?|0)$
+    required:
+    - insurance_token
+  claim_overrides:
+    type: array
+    items:
+      $ref: '#/x-alt-definitions/Model3'
+  pricing:
+    type: object
+    properties:
+      ingredient_cost_submitted:
+        type: number
+        x-constraint:
+          greater: 0
+          precision: 2
+  Model4:
+    type: object
+    properties:
+      prescription_token:
+        type: string
+        description: Prescription token
+        example: 4526d90a
+        minLength: 1
+      quantity:
+        type: number
+        example: 8.7
+      days_supply:
+        type: number
+        example: 30
+      patient_consent:
+        $ref: '#/x-alt-definitions/patient_consent'
+      claim_overrides:
+        $ref: '#/x-alt-definitions/claim_overrides'
+      ndc:
+        type: string
+        description: National drug code
+        example: '71858002504'
+        pattern: ^[0-9]{10,11}$
+      daw:
+        type: string
+        example: '2'
+        enum:
+        - '0'
+        - '2'
+      copay_limit:
+        type: number
+        minimum: 0
+        x-constraint:
+          precision: 2
+      pricing:
+        $ref: '#/x-alt-definitions/pricing'
+    required:
+    - prescription_token
+    - daw
+  insurance_token:
+    type: array
+    example:
+    - skhsyq83rkd3uht9
+    - ubqfc1a0a17hjb1c
+    - oi4aafwcsv5zzvvj
+    minItems: 1
+    items:
+      type: string
+  copay_payment:
+    type: object
+    properties:
+      cardholder_name:
+        type: string
+        description: Cardholder name
+        example: John Doe
+      payment_type:
+        type: string
+      last_four_digits:
+        type: string
+        example: '4132'
+      transaction_amount:
+        type: number
+      card_type:
+        type: string
+      transaction_date:
+        type: string
+      transaction_id:
+        type: string
+    required:
+    - payment_type
+  Medication:
+    type: object
+    description: Medication description
+    example:
+    - prescription_token: z3q2jr
+    - prescription_token: 3cs873
+    properties:
+      medication_name:
+        type: string
+        description: Medication name
+        example: Ritalin
+        maxLength: 255
+      quantity_dispensed:
+        type: number
+        description: Dispensed medication quantity
+        example: 60
+      days_supply:
+        type: number
+        description: Days supply
+        example: 30
+      is_refill:
+        type: boolean
+        description: Is prescription a refill or new fill
+        example: true
+      medication_sig:
+        type: string
+        description: Recommendations for medicines
+        example: Apply daily.
+      prescribing_doctor:
+        type: string
+        description: Prescribing doctor
+        example: Dr. Storm
+      prescription_token:
+        type: string
+        description: Prescription token
+        example: 4526d90a
+        minLength: 1
+      rx_link:
+        type: string
+        minLength: 1
+      quantity:
+        type: number
+        description: Quantity sent
+        example: 30
+        x-constraint:
+          greater: 0
+      copay_payment:
+        $ref: '#/x-alt-definitions/copay_payment'
+      ndc:
+        type: string
+        description: National drug code
+        example: '12345678901'
+        pattern: ^[0-9]{11}$
+      daw:
+        type: string
+        example: '2'
+        enum:
+        - '0'
+        - '2'
+      patient_consent:
+        $ref: '#/x-alt-definitions/patient_consent'
+    required:
+    - daw
+  MedicationArray:
+    type: array
+    x-constraint: {}
+    items:
+      $ref: '#/x-alt-definitions/Medication'
+  auto_refill:
+    type: object
+    properties:
+      date_provided:
+        type: string
+        format: date
+        description: Date of consent
+        example: '2022-05-12'
+      consent_statement:
+        type: string
+        description: Statement confirming consent
+        example: I consent
+    required:
+    - date_provided
+    - consent_statement
+  Model5:
+    type: object
+    properties:
+      consent_statement:
+        type: string
+      consent_method:
+        type: string
+      consent_date:
+        type: string
+      consent_type:
+        type: string
+      patient_name:
+        type: string
+      consent_provided_by:
+        type: string
+      item:
+        type: string
+      auto_refill:
+        $ref: '#/x-alt-definitions/auto_refill'
+  Model6:
+    type: object
+    description: Medication description
+    example:
+    - prescription_token: z3q2jr
+    - prescription_token: 3cs873
+    properties:
+      medication_name:
+        type: string
+        description: Medication name
+        example: Ritalin
+        maxLength: 255
+      quantity_dispensed:
+        type: number
+        description: Dispensed medication quantity
+        example: 60
+      days_supply:
+        type: number
+        description: Days supply
+        example: 30
+      is_refill:
+        type: boolean
+        description: Is prescription a refill or new fill
+        example: true
+      medication_sig:
+        type: string
+        description: Recommendations for medicines
+        example: Apply daily.
+      prescribing_doctor:
+        type: string
+        description: Prescribing doctor
+        example: Dr. Storm
+      prescription_token:
+        type: string
+        description: Prescription token
+        example: 4526d90a
+        minLength: 1
+      rx_link:
+        type: string
+        minLength: 1
+      quantity:
+        type: number
+        description: Quantity sent
+        example: 30
+        x-constraint:
+          greater: 0
+      copay_payment:
+        $ref: '#/x-alt-definitions/copay_payment'
+      ndc:
+        type: string
+        description: National drug code
+        example: '12345678901'
+        pattern: ^[0-9]{11}$
+      daw:
+        type: string
+        example: '2'
+        enum:
+        - '0'
+        - '2'
+      patient_consent:
+        $ref: '#/x-alt-definitions/Model5'
+    required:
+    - daw
+  Model7:
+    type: array
+    x-constraint: {}
+    items:
+      $ref: '#/x-alt-definitions/Model6'
+  Shipping Address:
+    type: object
+    properties:
+      name:
+        type: string
+        minLength: 1
+      company:
+        type: string
+        minLength: 0
+      street1:
+        type: string
+        description: Primary street of the address
+        minLength: 1
+      street2:
+        type: string
+        description: Secondary street
+        minLength: 0
+      city:
+        type: string
+        description: City
+        minLength: 1
+      state:
+        type: string
+        description: State
+        minLength: 1
+      zip:
+        type: string
+        minLength: 0
+        pattern: ^\d{5}(-\d{4})?$
+      country:
+        type: string
+        description: Country
+        default: US
+        minLength: 1
+      phone:
+        type: string
+        minLength: 0
+      email:
+        type: string
+        minLength: 1
+      fax:
+        type: string
+        minLength: 0
+    required:
+    - name
+    - street1
+    - city
+    - state
+    - zip
+    - country
+    - email
+  shipping_address:
+    type: object
+    properties:
+      phone:
+        type: string
+        minLength: 0
+    required:
+    - phone
+  external_location:
+    type: object
+    properties:
+      id:
+        type: string
+        description: 'Stringified UUIDv4.
+
+          See [RFC 4112](https://tools.ietf.org/html/rfc4122)'
+        minLength: 0
+        pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+      pharmacy:
+        type: string
+        description: References GET /v1/external_location_pharmacies
+        minLength: 0
+      npi:
+        type: string
+        description: NPI - likely type 2
+        minLength: 0
+        maxLength: 10
+        pattern: ^[0-9]{10}$
+      address_to_street1:
+        type: string
+        minLength: 0
+      address_to_street2:
+        type: string
+        minLength: 0
+      address_to_city:
+        type: string
+        minLength: 0
+      address_to_state:
+        type: string
+        minLength: 0
+        pattern: ^[A-Z]{2}$
+      address_to_zip:
+        type: string
+        minLength: 0
+        pattern: ^\d{5}(-?\d{4})?$
+      address_to_country:
+        type: string
+        minLength: 0
+        pattern: ^[A-Z]{2}$
+      address_to_phone:
+        type: string
+        minLength: 0
+        pattern: ^(\+)?[1-9]\d{1,14}$
+      address_to_fax:
+        type: string
+        description: The fax number of the address
+        minLength: 0
+        maxLength: 255
+        pattern: ^[1-9]\d{1,14}$
+    required:
+    - id
+    - pharmacy
+    - npi
+    - address_to_street1
+    - address_to_city
+    - address_to_state
+    - address_to_zip
+    - address_to_country
+  Model8:
+    type: object
+    properties:
+      ncpdpid:
+        type: string
+        description: NCPDP ID - National Council for Prescription Drug Programs
+        minLength: 0
+      distance_from_origin:
+        type: number
+        description: Approximate distance rounded to nearest 0.01 mile
+    required:
+    - ncpdpid

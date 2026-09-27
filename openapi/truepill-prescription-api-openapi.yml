@@ -1,0 +1,3147 @@
+openapi: 3.2.0
+info:
+  title: Truepill API documentation Prescription API
+  version: 0.0.1
+  description: DOCS
+servers:
+- url: https://rxapi.fuzehealth.com/
+- url: http://rxapi.fuzehealth.com/
+security:
+- apiKey: []
+tags:
+- name: Prescription
+paths:
+  /v1/prescription/{token}:
+    get:
+      summary: Get Prescription by token
+      operationId: getV1PrescriptionToken
+      description: 'Once a specific prescription is in the Truepill ecosystem -- either via eRx, Direct Transfer or Transfer -- the prescription information can be retrieved at any time through an API request.
+
+
+        This endpoint requires a prescription_token. You will receive a prescription_token through one of the following scenarios:
+
+
+        A Notify-Rx callback which is sent when a prescription is received by the pharmacy through SureScripts
+
+
+        A Direct Transfer callback which is sent when a Direct Transfer has been successfully processed
+
+
+        A Transfer callback which is sent when a Transfer has been successfully processed'
+      parameters:
+      - name: token
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Prescription
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model62'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model63'
+  /api/v1/prescription/{token}:
+    get:
+      summary: Get Prescription by token
+      operationId: getApiV1PrescriptionToken
+      description: 'Once a specific prescription is in the Truepill ecosystem -- either via eRx, Direct Transfer or Transfer -- the prescription information can be retrieved at any time through an API request.
+
+
+        This endpoint requires a prescription_token. You will receive a prescription_token through one of the following scenarios:
+
+
+        A Notify-Rx callback which is sent when a prescription is received by the pharmacy through SureScripts
+
+
+        A Direct Transfer callback which is sent when a Direct Transfer has been successfully processed
+
+
+        A Transfer callback which is sent when a Transfer has been successfully processed'
+      parameters:
+      - name: token
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Prescription
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model62'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model63'
+  /v1/prescription/{prescription_token}/escript:
+    get:
+      summary: Get Prescription escript by token
+      operationId: getV1PrescriptionPrescription_tokenEscript
+      description: Get escript data for a particular prescription
+      parameters:
+      - name: content-type
+        in: header
+        required: true
+        schema:
+          type: string
+          enum:
+          - text/xml
+      - name: prescription_token
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Prescription
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model106'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model63'
+  /api/v1/prescription/{prescription_token}/escript:
+    get:
+      summary: Get Prescription escript by token
+      operationId: getApiV1PrescriptionPrescription_tokenEscript
+      description: Get escript data for a particular prescription
+      parameters:
+      - name: content-type
+        in: header
+        required: true
+        schema:
+          type: string
+          enum:
+          - text/xml
+      - name: prescription_token
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Prescription
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model106'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model63'
+  /v1/prescription/{prescription_token}/fill/{fill_number}/claims:
+    get:
+      summary: Get Claim information
+      operationId: getV1PrescriptionPrescription_tokenFillFill_numberClaims
+      description: 'Get claim information associated with a prescription and that particular fill
+
+
+        Given a prescription token and a fill number, the claim information associated with a prescription and that particular fill can be retrieved via API
+
+
+        All claim information correlating to a specific fill is made available here, including claim rejections and reversals. Claim information is displayed in array format, with each object representing a claim record
+
+
+        If a claim is rejected, NCPDP codes are also displayed for the particular claim rejection within the `claim_reject_codes` field
+
+
+        Claim records are displayed in chronological order. If no claim information is available for a provided `prescription_token` and `fill_number`, an empty array is returned.'
+      parameters:
+      - description: Prescription token associated with prescription
+        name: prescription_token
+        in: path
+        required: true
+        schema:
+          type: string
+      - description: Fill number of particular fill
+        name: fill_number
+        in: path
+        required: true
+        schema:
+          type: number
+      tags:
+      - Prescription
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model111'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model112'
+  /api/v1/prescription/{prescription_token}/fill/{fill_number}/claims:
+    get:
+      summary: Get Claim information
+      operationId: getApiV1PrescriptionPrescription_tokenFillFill_numberClaims
+      description: 'Get claim information associated with a prescription and that particular fill
+
+
+        Given a prescription token and a fill number, the claim information associated with a prescription and that particular fill can be retrieved via API
+
+
+        All claim information correlating to a specific fill is made available here, including claim rejections and reversals. Claim information is displayed in array format, with each object representing a claim record
+
+
+        If a claim is rejected, NCPDP codes are also displayed for the particular claim rejection within the `claim_reject_codes` field
+
+
+        Claim records are displayed in chronological order. If no claim information is available for a provided `prescription_token` and `fill_number`, an empty array is returned.'
+      parameters:
+      - description: Prescription token associated with prescription
+        name: prescription_token
+        in: path
+        required: true
+        schema:
+          type: string
+      - description: Fill number of particular fill
+        name: fill_number
+        in: path
+        required: true
+        schema:
+          type: number
+      tags:
+      - Prescription
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model111'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model112'
+  /v1/prescription/discontinue/{prescription_token}:
+    post:
+      summary: Discontinue a Prescription by token
+      operationId: postV1PrescriptionDiscontinuePrescription_token
+      description: Discontinue a particular prescription
+      tags:
+      - Prescription
+      responses:
+        '200':
+          timestamp:
+            type: date
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - '2021-05-20T00:00:00.000Z'
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+            $_super: {}
+          status:
+            type: string
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - Unsuccessful
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+              replacements: null
+            $_super: {}
+          message:
+            type: string
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - An example error message
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+              replacements: null
+            $_super: {}
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: string
+        '400':
+          timestamp:
+            type: date
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - '2021-05-20T00:00:00.000Z'
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+            $_super: {}
+          status:
+            type: string
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - Unsuccessful
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+              replacements: null
+            $_super: {}
+          message:
+            type: string
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - An example error message
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+              replacements: null
+            $_super: {}
+          description: Bad Request
+        '401':
+          timestamp:
+            type: date
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - '2021-05-20T00:00:00.000Z'
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+            $_super: {}
+          status:
+            type: string
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - Unauthorized
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+              replacements: null
+            $_super: {}
+          message:
+            type: string
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - Customer not approved to use this endpoint
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+              replacements: null
+            $_super: {}
+          description: Unauthorized
+        '404':
+          timestamp:
+            type: date
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - '2021-05-20T00:00:00.000Z'
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+            $_super: {}
+          status:
+            type: string
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - Unsuccessful
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+              replacements: null
+            $_super: {}
+          message:
+            type: string
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - Prescription not found
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+              replacements: null
+            $_super: {}
+          description: Not Found
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Model227'
+  /v1/prescription/{prescription_token}/transfer_out:
+    post:
+      summary: TransferOut a Prescription by token
+      operationId: postV1PrescriptionPrescription_tokenTransfer_out
+      description: TransferOut a particular prescription
+      tags:
+      - Prescription
+      responses:
+        '200':
+          timestamp:
+            type: date
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - '2021-05-20T00:00:00.000Z'
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+            $_super: {}
+          status:
+            type: string
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - Success
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+              replacements: null
+            $_super: {}
+          message:
+            type: string
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - 'Transfer request pending retrieval of missing information: ["pharmacist_name"].'
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+              replacements: null
+            $_super: {}
+          details:
+            type: object
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples: null
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+              dependencies: null
+              keys:
+              - key: transfer_out_token
+                schema:
+                  type: string
+                  $_root:
+                    _types: {}
+                    version: 17.13.3
+                    cache: {}
+                  $_temp:
+                    ruleset: false
+                    whens: {}
+                  _ids:
+                    _byId: {}
+                    _byKey: {}
+                    _schemaChain: false
+                  _preferences: null
+                  _valids: null
+                  _invalids: null
+                  _rules: []
+                  _singleRules: {}
+                  _refs:
+                    refs: []
+                  _flags: {}
+                  _cache: null
+                  $_terms:
+                    alterations: null
+                    examples:
+                    - aa4dd1
+                    externals: null
+                    metas: []
+                    notes: []
+                    shared: null
+                    tags: []
+                    whens: null
+                    replacements: null
+                  $_super: {}
+              patterns: null
+              renames: null
+            $_super: {}
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: string
+        '403':
+          timestamp:
+            type: date
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - '2021-05-20T00:00:00.000Z'
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+            $_super: {}
+          status:
+            type: string
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - Unsuccessful
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+              replacements: null
+            $_super: {}
+          message:
+            type: string
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - Customer not approved to use this endpoint.
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+              replacements: null
+            $_super: {}
+          description: Forbidden
+        '404':
+          timestamp:
+            type: date
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - '2021-05-20T00:00:00.000Z'
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+            $_super: {}
+          status:
+            type: string
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - Unsuccessful
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+              replacements: null
+            $_super: {}
+          message:
+            type: string
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - Prescription not found.
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+              replacements: null
+            $_super: {}
+          description: Not Found
+        '409':
+          timestamp:
+            type: date
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - '2021-05-20T00:00:00.000Z'
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+            $_super: {}
+          status:
+            type: string
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - Unsuccessful
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+              replacements: null
+            $_super: {}
+          message:
+            type: string
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - Prescription already linked to another active transfer-out request.
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+              replacements: null
+            $_super: {}
+          description: Conflict
+        '500':
+          timestamp:
+            type: date
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - '2021-05-20T00:00:00.000Z'
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+            $_super: {}
+          status:
+            type: string
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - Unsuccessful
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+              replacements: null
+            $_super: {}
+          message:
+            type: string
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - There was a problem with this transfer request, please reach out to your Truepill customer representative.
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+              replacements: null
+            $_super: {}
+          description: Internal Server Error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Model229'
+  /v1/prescription/{prescription_token}/external_transfer:
+    post:
+      summary: Create an external transfer request for a prescription
+      operationId: postV1PrescriptionPrescription_tokenExternal_transfer
+      tags:
+      - Prescription
+      responses:
+        default:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: string
+  /api/v1/prescription/discontinue/{prescription_token}:
+    post:
+      summary: Discontinue a Prescription by token
+      operationId: postApiV1PrescriptionDiscontinuePrescription_token
+      description: Discontinue a particular prescription
+      tags:
+      - Prescription
+      responses:
+        '200':
+          timestamp:
+            type: date
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - '2021-05-20T00:00:00.000Z'
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+            $_super: {}
+          status:
+            type: string
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - Unsuccessful
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+              replacements: null
+            $_super: {}
+          message:
+            type: string
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - An example error message
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+              replacements: null
+            $_super: {}
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: string
+        '400':
+          timestamp:
+            type: date
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - '2021-05-20T00:00:00.000Z'
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+            $_super: {}
+          status:
+            type: string
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - Unsuccessful
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+              replacements: null
+            $_super: {}
+          message:
+            type: string
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - An example error message
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+              replacements: null
+            $_super: {}
+          description: Bad Request
+        '401':
+          timestamp:
+            type: date
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - '2021-05-20T00:00:00.000Z'
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+            $_super: {}
+          status:
+            type: string
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - Unauthorized
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+              replacements: null
+            $_super: {}
+          message:
+            type: string
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - Customer not approved to use this endpoint
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+              replacements: null
+            $_super: {}
+          description: Unauthorized
+        '404':
+          timestamp:
+            type: date
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - '2021-05-20T00:00:00.000Z'
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+            $_super: {}
+          status:
+            type: string
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - Unsuccessful
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+              replacements: null
+            $_super: {}
+          message:
+            type: string
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - Prescription not found
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+              replacements: null
+            $_super: {}
+          description: Not Found
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Model227'
+  /api/v1/prescription/{prescription_token}/external_transfer:
+    post:
+      summary: Create an external transfer request for a prescription
+      operationId: postApiV1PrescriptionPrescription_tokenExternal_transfer
+      tags:
+      - Prescription
+      responses:
+        default:
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: string
+  /api/v1/prescription/{prescription_token}/transfer_out:
+    post:
+      summary: TransferOut a Prescription by token
+      operationId: postApiV1PrescriptionPrescription_tokenTransfer_out
+      description: TransferOut a particular prescription
+      tags:
+      - Prescription
+      responses:
+        '200':
+          timestamp:
+            type: date
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - '2021-05-20T00:00:00.000Z'
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+            $_super: {}
+          status:
+            type: string
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - Success
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+              replacements: null
+            $_super: {}
+          message:
+            type: string
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - 'Transfer request pending retrieval of missing information: ["pharmacist_name"].'
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+              replacements: null
+            $_super: {}
+          details:
+            type: object
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples: null
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+              dependencies: null
+              keys:
+              - key: transfer_out_token
+                schema:
+                  type: string
+                  $_root:
+                    _types: {}
+                    version: 17.13.3
+                    cache: {}
+                  $_temp:
+                    ruleset: false
+                    whens: {}
+                  _ids:
+                    _byId: {}
+                    _byKey: {}
+                    _schemaChain: false
+                  _preferences: null
+                  _valids: null
+                  _invalids: null
+                  _rules: []
+                  _singleRules: {}
+                  _refs:
+                    refs: []
+                  _flags: {}
+                  _cache: null
+                  $_terms:
+                    alterations: null
+                    examples:
+                    - aa4dd1
+                    externals: null
+                    metas: []
+                    notes: []
+                    shared: null
+                    tags: []
+                    whens: null
+                    replacements: null
+                  $_super: {}
+              patterns: null
+              renames: null
+            $_super: {}
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: string
+        '403':
+          timestamp:
+            type: date
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - '2021-05-20T00:00:00.000Z'
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+            $_super: {}
+          status:
+            type: string
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - Unsuccessful
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+              replacements: null
+            $_super: {}
+          message:
+            type: string
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - Customer not approved to use this endpoint.
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+              replacements: null
+            $_super: {}
+          description: Forbidden
+        '404':
+          timestamp:
+            type: date
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - '2021-05-20T00:00:00.000Z'
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+            $_super: {}
+          status:
+            type: string
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - Unsuccessful
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+              replacements: null
+            $_super: {}
+          message:
+            type: string
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - Prescription not found.
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+              replacements: null
+            $_super: {}
+          description: Not Found
+        '409':
+          timestamp:
+            type: date
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - '2021-05-20T00:00:00.000Z'
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+            $_super: {}
+          status:
+            type: string
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - Unsuccessful
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+              replacements: null
+            $_super: {}
+          message:
+            type: string
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - Prescription already linked to another active transfer-out request.
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+              replacements: null
+            $_super: {}
+          description: Conflict
+        '500':
+          timestamp:
+            type: date
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - '2021-05-20T00:00:00.000Z'
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+            $_super: {}
+          status:
+            type: string
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - Unsuccessful
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+              replacements: null
+            $_super: {}
+          message:
+            type: string
+            $_root:
+              _types: {}
+              version: 17.13.3
+              cache: {}
+            $_temp:
+              ruleset: false
+              whens: {}
+            _ids:
+              _byId: {}
+              _byKey: {}
+              _schemaChain: false
+            _preferences: null
+            _valids: null
+            _invalids: null
+            _rules: []
+            _singleRules: {}
+            _refs:
+              refs: []
+            _flags: {}
+            _cache: null
+            $_terms:
+              alterations: null
+              examples:
+              - There was a problem with this transfer request, please reach out to your Truepill customer representative.
+              externals: null
+              metas: []
+              notes: []
+              shared: null
+              tags: []
+              whens: null
+              replacements: null
+            $_super: {}
+          description: Internal Server Error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Model229'
+components:
+  schemas:
+    Model227:
+      type: object
+      properties:
+        reason:
+          type: string
+          example: Discontinuation of therapy
+      required:
+      - reason
+    Model62:
+      type: object
+      properties:
+        prescription:
+          $ref: '#/components/schemas/prescription'
+    prescription:
+      type: object
+      properties:
+        prescription_token:
+          type: string
+          description: Token to reference the prescription
+          example: 7af31c1d350d
+        fillable:
+          type: boolean
+          description: Is this prescription fillable
+          example: true
+        is_refill:
+          type: number
+          description: Is prescription a refill or new fill
+          example: 0
+        rx_number:
+          type: string
+          description: Rx number of prescription
+          example: '1111111'
+        prescribed_drug_strength:
+          type: string
+          description: Drug strength prescribed
+          example: 20 mg
+        prescribed_written_name:
+          type: string
+          description: Name of medication prescribed as written
+          example: Cialis 20 Mg Tablet
+        prescribed_quantity:
+          type: number
+          description: Quantity of prescribed medication
+          example: 10
+        prescribed_quantity_unit:
+          type: string
+          description: Unit for the prescribed medication quantity
+          example: tablets
+        prescribed_ndc:
+          type: string
+          description: NDC of prescribed medication
+          example: '00002446430'
+        medication_sig:
+          type: string
+          description: Instructions for taking medication
+          example: Take one tablet by mouth 45-60 minutes prior to sexual activity. Take no more than once per day.
+        prescriber:
+          type: string
+          description: Name of prescriber
+          example: Dr. Doctor Doctor
+        prescriber_npi:
+          type: string
+          description: NPI of prescriber
+          example: '1111111111'
+        date_written:
+          type: string
+          format: date
+          description: When the prescription was written
+          example: '2021-06-30T00:00:00.000Z'
+        days_supply:
+          type: string
+          description: Number of days the medication covers
+          example: '30'
+        number_of_refills_allowed:
+          type: number
+          description: Number of refills allowed for prescription
+          example: 2
+        refills_remaining:
+          type: number
+          description: Number of refills on this prescription
+          example: 2
+        quantity_remaining:
+          type: number
+          description: Quantity of doses remaining on prescription
+          example: 30
+        current_rx_status_text:
+          type: string
+          description: Current status of the prescription
+          example: Active
+        rx_link:
+          type: string
+          description: URL link to the prescription details
+          example: rxl_cf1b5ce299ee432192b681d
+        medication_id:
+          type: string
+          description: Unique medication ID
+          example: ec09a90
+        prescribed_brand_name:
+          type: string
+          description: Name of medication prescribed
+          example: Cialis
+        expiration_date_utc:
+          type: string
+          format: date
+          description: When the prescription will expire
+          example: '2022-06-30T07:00:00.000Z'
+        expiration_date:
+          type: string
+          format: date
+          description: When the prescription will expire
+          example: '2022-06-30T07:00:00.000Z'
+        medication_name:
+          type: string
+          description: Name of the prescribed medication
+          example: Cialis
+        prescribed_generic_name:
+          type: string
+          description: Name of generic medication prescribed
+          example: tadalafil 20 mg tablet
+        formulary:
+          $ref: '#/components/schemas/formulary'
+        origin:
+          type: string
+          description: Original source of prescription
+          example: Electronic
+        prescriber_order_number:
+          type: string
+          description: Prescriber order number of escript
+          example: '2222222'
+        date_filled_utc:
+          type: string
+          format: date
+          description: Date and time when the prescription was filled, in UTC
+          example: '2021-06-30T00:00:00.000Z'
+        last_filled_date:
+          type: string
+          format: date
+          description: When prescription was last filled
+          example: '2021-06-30T00:00:00.000Z'
+        original_prescribed_ndc:
+          type: string
+          description: Original National Drug Code if different from prescribed
+          example: '00002446430'
+        prescriber_address:
+          $ref: '#/components/schemas/Prescriber%20Address%20details'
+        notes:
+          type: string
+          description: Prescription notes associated with Rx
+          example: A note
+        icd_codes:
+          $ref: '#/components/schemas/icd_codes'
+        is_daw:
+          type: boolean
+          description: Is prescription dispense-as-written
+          example: false
+        dea_schedule:
+          type: number
+          description: Controlled Substance Act drug schedule
+          example: 0
+        direct_transfer_token:
+          type: string
+          example: b5338d53e5
+        originator:
+          type: string
+          example: surescripts
+      required:
+      - prescription_token
+      - fillable
+      - is_refill
+      - rx_number
+      - prescribed_drug_strength
+      - prescribed_written_name
+      - prescribed_quantity
+      - prescribed_quantity_unit
+      - prescribed_ndc
+      - medication_sig
+      - prescriber
+      - prescriber_npi
+      - date_written
+      - days_supply
+      - number_of_refills_allowed
+      - refills_remaining
+      - quantity_remaining
+      - current_rx_status_text
+      - rx_link
+    Model229:
+      type: object
+      properties:
+        reason_code:
+          type: string
+          enum:
+          - RETAIL
+          - MAIL
+          - OON
+          - NOT_COVERED
+          - OTHER
+        additional_information:
+          type: string
+        transfer_to:
+          $ref: '#/components/schemas/transfer_to'
+      required:
+      - reason_code
+      - additional_information
+      - transfer_to
+    Model111:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model110'
+    Model110:
+      type: object
+      properties:
+        patient_copay_amount:
+          type: number
+          description: Expected patient copay amount from claim if adjudication is successful
+          example: 10
+        transaction_code:
+          type: string
+          description: Adjudication transaction type
+          example: B2
+        claim_type:
+          type: string
+          description: Insurance claim type
+          example: Reversal
+        transmission_date:
+          type: string
+          format: date
+          example: '2021-09-15T03:07:01.000Z'
+        insurance:
+          $ref: '#/components/schemas/insurance'
+        payor:
+          type: string
+          description: Payor's name
+          example: Health Partners
+        payor_adjudication_amount:
+          type: number
+          description: Payor adjudication amount
+          example: 0
+    icd_codes:
+      type: object
+    Model63:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 404
+        error:
+          type: string
+          example: Not Found
+        message:
+          type: string
+          example: Unable to find Prescription.
+    formulary:
+      type: object
+      description: Formulary details if available
+    Model106:
+      type: object
+      properties:
+        xml:
+          type: string
+    Model112:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 404
+        error:
+          type: string
+          example: Not Found
+        message:
+          type: string
+          example: Unable to find Rx.
+    Model228:
+      type: object
+      properties:
+        street1:
+          type: string
+        street2:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        zip:
+          type: string
+      required:
+      - street1
+      - city
+      - state
+      - zip
+    transfer_to:
+      type: object
+      properties:
+        pharmacy_name:
+          type: string
+        pharmacist_name:
+          type: string
+        npi:
+          type: string
+          pattern: ^[0-9]+$
+          x-constraint:
+            length: 10
+        phone:
+          type: string
+          pattern: ^\(?\d{3}\)?[-\s]?\d{3}[-\s]?\d{4}$
+        fax:
+          type: string
+          pattern: ^\(?\d{3}\)?[-\s]?\d{3}[-\s]?\d{4}$
+        address:
+          $ref: '#/components/schemas/Model228'
+      required:
+      - pharmacy_name
+      - address
+    insurance:
+      type: object
+      properties:
+        group_number:
+          type: string
+          description: Insurance group number associated to claim
+          example: GRP
+        bin:
+          type: string
+          description: Insurance BIN number associated to claim
+          example: '321654'
+        pcn:
+          type: string
+          description: Insurance PCN associated to claim
+          example: '321654'
+        cardholder_id:
+          type: string
+          description: Member ID number on insurance card
+          example: '321654'
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      name: Authorization
+      in: header
+x-alt-definitions:
+  selected_allergies:
+    type: array
+    items:
+      type: string
+  allergies:
+    type: object
+    properties:
+      selected_allergies:
+        $ref: '#/x-alt-definitions/selected_allergies'
+      presented_allergies:
+        $ref: '#/x-alt-definitions/selected_allergies'
+      free_form_allergy_information:
+        type: string
+    required:
+    - selected_allergies
+    - presented_allergies
+    - free_form_allergy_information
+  Model1:
+    type: object
+    properties:
+      name:
+        type: string
+      strength:
+        type: number
+      dosage:
+        type: string
+      frequency:
+        type: string
+    required:
+    - name
+  medications:
+    type: array
+    items:
+      $ref: '#/x-alt-definitions/Model1'
+  Model2:
+    type: object
+    properties:
+      type:
+        type: string
+      year:
+        type: number
+      reason:
+        type: string
+    required:
+    - type
+    - year
+    - reason
+  events:
+    type: array
+    items:
+      $ref: '#/x-alt-definitions/Model2'
+  patient_consent:
+    type: object
+    properties:
+      consent_statement:
+        type: string
+      consent_method:
+        type: string
+      consent_date:
+        type: string
+      consent_type:
+        type: string
+      patient_name:
+        type: string
+      consent_provided_by:
+        type: string
+      item:
+        type: string
+  Model3:
+    type: object
+    properties:
+      insurance_token:
+        type: string
+        description: Insurance token
+        example: adcbc795028c009d
+        minLength: 1
+      prior_authorization_number:
+        type: string
+        example: ABC123
+        pattern: ^[0-9a-zA-Z]{1,35}$
+      other_coverage_code:
+        type: string
+        example: '8'
+        pattern: ^[0-8]{1}$
+      submission_clarification_code:
+        type: string
+        example: '3'
+        pattern: ^(?:[1-9]\d?|0)$
+    required:
+    - insurance_token
+  claim_overrides:
+    type: array
+    items:
+      $ref: '#/x-alt-definitions/Model3'
+  pricing:
+    type: object
+    properties:
+      ingredient_cost_submitted:
+        type: number
+        x-constraint:
+          greater: 0
+          precision: 2
+  Model4:
+    type: object
+    properties:
+      prescription_token:
+        type: string
+        description: Prescription token
+        example: 4526d90a
+        minLength: 1
+      quantity:
+        type: number
+        example: 8.7
+      days_supply:
+        type: number
+        example: 30
+      patient_consent:
+        $ref: '#/x-alt-definitions/patient_consent'
+      claim_overrides:
+        $ref: '#/x-alt-definitions/claim_overrides'
+      ndc:
+        type: string
+        description: National drug code
+        example: '71858002504'
+        pattern: ^[0-9]{10,11}$
+      daw:
+        type: string
+        example: '2'
+        enum:
+        - '0'
+        - '2'
+      copay_limit:
+        type: number
+        minimum: 0
+        x-constraint:
+          precision: 2
+      pricing:
+        $ref: '#/x-alt-definitions/pricing'
+    required:
+    - prescription_token
+    - daw
+  insurance_token:
+    type: array
+    example:
+    - skhsyq83rkd3uht9
+    - ubqfc1a0a17hjb1c
+    - oi4aafwcsv5zzvvj
+    minItems: 1
+    items:
+      type: string
+  copay_payment:
+    type: object
+    properties:
+      cardholder_name:
+        type: string
+        description: Cardholder name
+        example: John Doe
+      payment_type:
+        type: string
+      last_four_digits:
+        type: string
+        example: '4132'
+      transaction_amount:
+        type: number
+      card_type:
+        type: string
+      transaction_date:
+        type: string
+      transaction_id:
+        type: string
+    required:
+    - payment_type
+  Medication:
+    type: object
+    description: Medication description
+    example:
+    - prescription_token: z3q2jr
+    - prescription_token: 3cs873
+    properties:
+      medication_name:
+        type: string
+        description: Medication name
+        example: Ritalin
+        maxLength: 255
+      quantity_dispensed:
+        type: number
+        description: Dispensed medication quantity
+        example: 60
+      days_supply:
+        type: number
+        description: Days supply
+        example: 30
+      is_refill:
+        type: boolean
+        description: Is prescription a refill or new fill
+        example: true
+      medication_sig:
+        type: string
+        description: Recommendations for medicines
+        example: Apply daily.
+      prescribing_doctor:
+        type: string
+        description: Prescribing doctor
+        example: Dr. Storm
+      prescription_token:
+        type: string
+        description: Prescription token
+        example: 4526d90a
+        minLength: 1
+      rx_link:
+        type: string
+        minLength: 1
+      quantity:
+        type: number
+        description: Quantity sent
+        example: 30
+        x-constraint:
+          greater: 0
+      copay_payment:
+        $ref: '#/x-alt-definitions/copay_payment'
+      ndc:
+        type: string
+        description: National drug code
+        example: '12345678901'
+        pattern: ^[0-9]{11}$
+      daw:
+        type: string
+        example: '2'
+        enum:
+        - '0'
+        - '2'
+      patient_consent:
+        $ref: '#/x-alt-definitions/patient_consent'
+    required:
+    - daw
+  MedicationArray:
+    type: array
+    x-constraint: {}
+    items:
+      $ref: '#/x-alt-definitions/Medication'
+  auto_refill:
+    type: object
+    properties:
+      date_provided:
+        type: string
+        format: date
+        description: Date of consent
+        example: '2022-05-12'
+      consent_statement:
+        type: string
+        description: Statement confirming consent
+        example: I consent
+    required:
+    - date_provided
+    - consent_statement
+  Model5:
+    type: object
+    properties:
+      consent_statement:
+        type: string
+      consent_method:
+        type: string
+      consent_date:
+        type: string
+      consent_type:
+        type: string
+      patient_name:
+        type: string
+      consent_provided_by:
+        type: string
+      item:
+        type: string
+      auto_refill:
+        $ref: '#/x-alt-definitions/auto_refill'
+  Model6:
+    type: object
+    description: Medication description
+    example:
+    - prescription_token: z3q2jr
+    - prescription_token: 3cs873
+    properties:
+      medication_name:
+        type: string
+        description: Medication name
+        example: Ritalin
+        maxLength: 255
+      quantity_dispensed:
+        type: number
+        description: Dispensed medication quantity
+        example: 60
+      days_supply:
+        type: number
+        description: Days supply
+        example: 30
+      is_refill:
+        type: boolean
+        description: Is prescription a refill or new fill
+        example: true
+      medication_sig:
+        type: string
+        description: Recommendations for medicines
+        example: Apply daily.
+      prescribing_doctor:
+        type: string
+        description: Prescribing doctor
+        example: Dr. Storm
+      prescription_token:
+        type: string
+        description: Prescription token
+        example: 4526d90a
+        minLength: 1
+      rx_link:
+        type: string
+        minLength: 1
+      quantity:
+        type: number
+        description: Quantity sent
+        example: 30
+        x-constraint:
+          greater: 0
+      copay_payment:
+        $ref: '#/x-alt-definitions/copay_payment'
+      ndc:
+        type: string
+        description: National drug code
+        example: '12345678901'
+        pattern: ^[0-9]{11}$
+      daw:
+        type: string
+        example: '2'
+        enum:
+        - '0'
+        - '2'
+      patient_consent:
+        $ref: '#/x-alt-definitions/Model5'
+    required:
+    - daw
+  Model7:
+    type: array
+    x-constraint: {}
+    items:
+      $ref: '#/x-alt-definitions/Model6'
+  Shipping Address:
+    type: object
+    properties:
+      name:
+        type: string
+        minLength: 1
+      company:
+        type: string
+        minLength: 0
+      street1:
+        type: string
+        description: Primary street of the address
+        minLength: 1
+      street2:
+        type: string
+        description: Secondary street
+        minLength: 0
+      city:
+        type: string
+        description: City
+        minLength: 1
+      state:
+        type: string
+        description: State
+        minLength: 1
+      zip:
+        type: string
+        minLength: 0
+        pattern: ^\d{5}(-\d{4})?$
+      country:
+        type: string
+        description: Country
+        default: US
+        minLength: 1
+      phone:
+        type: string
+        minLength: 0
+      email:
+        type: string
+        minLength: 1
+      fax:
+        type: string
+        minLength: 0
+    required:
+    - name
+    - street1
+    - city
+    - state
+    - zip
+    - country
+    - email
+  shipping_address:
+    type: object
+    properties:
+      phone:
+        type: string
+        minLength: 0
+    required:
+    - phone
+  external_location:
+    type: object
+    properties:
+      id:
+        type: string
+        description: 'Stringified UUIDv4.
+
+          See [RFC 4112](https://tools.ietf.org/html/rfc4122)'
+        minLength: 0
+        pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+      pharmacy:
+        type: string
+        description: References GET /v1/external_location_pharmacies
+        minLength: 0
+      npi:
+        type: string
+        description: NPI - likely type 2
+        minLength: 0
+        maxLength: 10
+        pattern: ^[0-9]{10}$
+      address_to_street1:
+        type: string
+        minLength: 0
+      address_to_street2:
+        type: string
+        minLength: 0
+      address_to_city:
+        type: string
+        minLength: 0
+      address_to_state:
+        type: string
+        minLength: 0
+        pattern: ^[A-Z]{2}$
+      address_to_zip:
+        type: string
+        minLength: 0
+        pattern: ^\d{5}(-?\d{4})?$
+      address_to_country:
+        type: string
+        minLength: 0
+        pattern: ^[A-Z]{2}$
+      address_to_phone:
+        type: string
+        minLength: 0
+        pattern: ^(\+)?[1-9]\d{1,14}$
+      address_to_fax:
+        type: string
+        description: The fax number of the address
+        minLength: 0
+        maxLength: 255
+        pattern: ^[1-9]\d{1,14}$
+    required:
+    - id
+    - pharmacy
+    - npi
+    - address_to_street1
+    - address_to_city
+    - address_to_state
+    - address_to_zip
+    - address_to_country
+  Model8:
+    type: object
+    properties:
+      ncpdpid:
+        type: string
+        description: NCPDP ID - National Council for Prescription Drug Programs
+        minLength: 0
+      distance_from_origin:
+        type: number
+        description: Approximate distance rounded to nearest 0.01 mile
+    required:
+    - ncpdpid

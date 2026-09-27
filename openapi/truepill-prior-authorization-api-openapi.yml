@@ -1,6 +1,6 @@
 openapi: 3.2.0
 info:
-  title: Truepill API documentation Scheduled Fill Requests API
+  title: Truepill API documentation Prior Authorization API
   version: 0.0.1
   description: DOCS
 servers:
@@ -9,250 +9,126 @@ servers:
 security:
 - apiKey: []
 tags:
-- name: scheduled-fill-requests
+- name: Prior Authorization
 paths:
-  /scheduled-fill-requests:
-    get:
-      summary: Retrieve details for a scheduled fill request by id
-      operationId: getScheduledfillrequests
-      description: Include either original_fill_request_token or id in the query parameters.
-      parameters:
-      - x-format:
-          guid: true
-        name: id
-        in: query
-        schema:
-          type: string
-      - name: original_fill_request_token
-        in: query
-        schema:
-          type: string
-      tags:
-      - scheduled-fill-requests
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model4'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model2'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model3'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model2'
+  /v1/prior_authorization:
     post:
-      summary: Reschedule a fill request that was submitted too soon
-      operationId: postScheduledfillrequests
+      summary: Create a Prior Authorization request
+      operationId: postV1Prior_authorization
+      description: 'A prior authorization can be created by making a Prior Authorization Request.
+
+
+        Truepill will provide a receipt confirmation of the request, and multiple subsequent webhook events throughout the lifecycle of your PA.'
       tags:
-      - scheduled-fill-requests
+      - Prior Authorization
       responses:
-        '200':
-          description: OK
+        '202':
+          description: Accepted
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model113'
+                $ref: '#/components/schemas/Model169'
         '400':
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model2'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model3'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model2'
+                $ref: '#/components/schemas/Model170'
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/POST%20ScheduledFill%20Request%20Payload'
-  /scheduled-fill-requests/{id}:
-    put:
-      summary: Update details for on scheduled fill request
-      operationId: putScheduledfillrequestsId
-      parameters:
-      - x-format:
-          guid: true
-        name: id
-        in: path
-        required: true
-        schema:
-          type: string
+              $ref: '#/components/schemas/Prior%20Authorization%20Request%20Fields'
+  /api/v1/prior_authorization:
+    post:
+      summary: Create a Prior Authorization request
+      operationId: postApiV1Prior_authorization
+      description: 'A prior authorization can be created by making a Prior Authorization Request.
+
+
+        Truepill will provide a receipt confirmation of the request, and multiple subsequent webhook events throughout the lifecycle of your PA.'
       tags:
-      - scheduled-fill-requests
+      - Prior Authorization
       responses:
-        '200':
-          description: OK
+        '202':
+          description: Accepted
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model113'
+                $ref: '#/components/schemas/Model169'
         '400':
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model2'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model3'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model2'
+                $ref: '#/components/schemas/Model170'
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PUT%20ScheduledFill%20Request%20Payload'
-    delete:
-      summary: Delete a scheduled fill request
-      operationId: deleteScheduledfillrequestsId
-      parameters:
-      - x-format:
-          guid: true
-        name: id
-        in: path
-        required: true
-        schema:
-          type: string
-      tags:
-      - scheduled-fill-requests
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model240'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model2'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model3'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model2'
+              $ref: '#/components/schemas/Prior%20Authorization%20Request%20Fields'
 components:
   schemas:
-    Model240:
-      type: object
-      properties:
-        id:
-          type: string
-          example: f716ba1c-bd4b-43c7-9395-84255cd943cd
-          x-format:
-            guid: true
-        status:
-          type: string
-          example: CANCELLED
-      required:
-      - id
-      - status
-    Model113:
-      type: object
-      properties:
-        id:
-          type: string
-          example: f716ba1c-bd4b-43c7-9395-84255cd943cd
-          x-format:
-            guid: true
-        submit_on:
-          type: string
-          format: date
-          example: '2022-01-01T00:00:00.000Z'
-        original_fill_request_token:
-          type: string
-          example: fill_request_token_abc123
-      required:
-      - id
-      - submit_on
-      - original_fill_request_token
-    Model3:
+    Model170:
       type: object
       properties:
         statusCode:
           type: number
-          example: 401
+          example: 400
         error:
           type: string
-          example: Unauthorized
+          example: Bad Request
         message:
           type: string
-          example: Invalid credentials
-    Model2:
+          example: Invalid request payload JSON format
+    Model168:
       type: object
       properties:
-        statusCode:
-          type: string
-          example: 0001 or 0002
         message:
           type: string
-          example: An example error message
+          example: Your prior authorization request has been processed successfully.
+        patient_token:
+          type: string
+          description: Associated patient's record token
+          example: 4526d90a
+        insurance_token:
+          type: string
+          description: Associated patient's insurance record token
+          example: 19sienglo92831n5
+        prescription_token:
+          type: string
+          description: Token to reference the prescription
+          example: z3q2jr
+        metadata:
+          type: string
+          description: Customer-side identifier to reference the PA request in customer system
+          example: cfe146
+        prescriber_phone:
+          type: string
+          description: Phone number associated with the prescribe
+          example: 1-800-123-4567
+        prescriber_fax:
+          type: string
+          description: Fax number associated with the prescriber
+          example: 1-800-123-4567
       required:
-      - statusCode
-      - message
-    Model4:
+      - patient_token
+      - insurance_token
+      - prescription_token
+    Model169:
       type: object
       properties:
-        id:
+        request_id:
           type: string
-          example: f716ba1c-bd4b-43c7-9395-84255cd943cd
-          x-format:
-            guid: true
+          example: e8ab3dc37eb5be523508cbb5d707adf0
+        timestamp:
+          type: integer
+          example: 1631571795
         status:
           type: string
-          example: PENDING
-        submit_on:
-          type: string
-          format: date
-          example: '2022-01-01T00:00:00.000Z'
-        original_fill_request_token:
-          type: string
-          example: fill_request_token_abc123
-      required:
-      - id
-      - status
-      - submit_on
-      - original_fill_request_token
+          example: success
+        details:
+          $ref: '#/components/schemas/Model168'
   securitySchemes:
     apiKey:
       type: apiKey

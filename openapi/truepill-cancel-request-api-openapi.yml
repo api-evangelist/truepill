@@ -1,6 +1,6 @@
 openapi: 3.2.0
 info:
-  title: Truepill API documentation Scheduled Fill Requests API
+  title: Truepill API documentation Cancel Request API
   version: 0.0.1
   description: DOCS
 servers:
@@ -9,250 +9,239 @@ servers:
 security:
 - apiKey: []
 tags:
-- name: scheduled-fill-requests
+- name: Cancel Request
 paths:
-  /scheduled-fill-requests:
-    get:
-      summary: Retrieve details for a scheduled fill request by id
-      operationId: getScheduledfillrequests
-      description: Include either original_fill_request_token or id in the query parameters.
-      parameters:
-      - x-format:
-          guid: true
-        name: id
-        in: query
-        schema:
-          type: string
-      - name: original_fill_request_token
-        in: query
-        schema:
-          type: string
-      tags:
-      - scheduled-fill-requests
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model4'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model2'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model3'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model2'
+  /v1/cancel_request:
     post:
-      summary: Reschedule a fill request that was submitted too soon
-      operationId: postScheduledfillrequests
+      summary: Cancel Fill Request
+      operationId: postV1Cancel_request
+      description: Cancel a Fill Request whose `request_id` field matches the respective user provided text parameter
       tags:
-      - scheduled-fill-requests
+      - Cancel Request
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model113'
+                $ref: '#/components/schemas/Model124'
         '400':
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model2'
-        '401':
-          description: Unauthorized
+                $ref: '#/components/schemas/Model125'
+        '403':
+          description: Forbidden
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model3'
+                $ref: '#/components/schemas/Model126'
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model2'
+                $ref: '#/components/schemas/Model127'
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/POST%20ScheduledFill%20Request%20Payload'
-  /scheduled-fill-requests/{id}:
-    put:
-      summary: Update details for on scheduled fill request
-      operationId: putScheduledfillrequestsId
-      parameters:
-      - x-format:
-          guid: true
-        name: id
-        in: path
-        required: true
-        schema:
-          type: string
+              $ref: '#/components/schemas/Model118'
+  /api/v1/cancel_request:
+    post:
+      summary: Cancel Fill Request
+      operationId: postApiV1Cancel_request
+      description: Cancel a Fill Request whose `request_id` field matches the respective user provided text parameter
       tags:
-      - scheduled-fill-requests
+      - Cancel Request
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model113'
+                $ref: '#/components/schemas/Model124'
         '400':
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model2'
-        '401':
-          description: Unauthorized
+                $ref: '#/components/schemas/Model125'
+        '403':
+          description: Forbidden
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model3'
+                $ref: '#/components/schemas/Model126'
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model2'
+                $ref: '#/components/schemas/Model127'
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PUT%20ScheduledFill%20Request%20Payload'
-    delete:
-      summary: Delete a scheduled fill request
-      operationId: deleteScheduledfillrequestsId
-      parameters:
-      - x-format:
-          guid: true
-        name: id
-        in: path
-        required: true
-        schema:
-          type: string
-      tags:
-      - scheduled-fill-requests
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model240'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model2'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model3'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model2'
+              $ref: '#/components/schemas/Model118'
 components:
   schemas:
-    Model240:
+    Model121:
       type: object
       properties:
-        id:
+        sku:
           type: string
-          example: f716ba1c-bd4b-43c7-9395-84255cd943cd
-          x-format:
-            guid: true
+          example: SKU-123-456
+    Model124:
+      type: object
+      properties:
+        request_id:
+          type: string
+          example: cancel_request_a11d9497b96e188365e41fecadb947df
+        timestamp:
+          type: integer
+          example: 1631571795.423
         status:
           type: string
-          example: CANCELLED
-      required:
-      - id
-      - status
-    Model113:
+          example: success
+        details:
+          $ref: '#/components/schemas/Model123'
+    cancelled_otc_products:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model121'
+    Model115:
+      type: array
+      description: Array of OTC products to cancel. If provided, only these OTC products will be cancelled. If all OTC products on the order are cancelled, the entire order will be cancelled.
+      items:
+        $ref: '#/components/schemas/Model114'
+    failed_medications:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model120'
+    Model116:
       type: object
       properties:
-        id:
+        prescription_token:
           type: string
-          example: f716ba1c-bd4b-43c7-9395-84255cd943cd
-          x-format:
-            guid: true
-        submit_on:
-          type: string
-          format: date
-          example: '2022-01-01T00:00:00.000Z'
-        original_fill_request_token:
-          type: string
-          example: fill_request_token_abc123
+          description: Prescription token to cancel
       required:
-      - id
-      - submit_on
-      - original_fill_request_token
-    Model3:
+      - prescription_token
+    Model119:
+      type: object
+      properties:
+        prescription_token:
+          type: string
+          example: e61e324f9018
+    Model126:
       type: object
       properties:
         statusCode:
           type: number
-          example: 401
+          example: 403
         error:
           type: string
-          example: Unauthorized
+          example: Forbidden
         message:
           type: string
-          example: Invalid credentials
-    Model2:
+          example: There was an error cancelling this request (fill_request_5c4b21b9aecaea155d67), either you are not the owner of the request, or have already cancelled the request. Please contact us at (855) 910-8606 for help if neither is the case.
+    Model127:
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          example: 1631571795.423
+        status:
+          type: string
+          example: error
+        message:
+          type: string
+          example: There was an error cancelling this request (fill_request_5c4b21b9aecaea155d67), either you are not the owner of the request, or have already cancelled the request. Please contact us at (855) 910-8606 for help if neither is the case.
+    failed_otc_products:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model122'
+    Model114:
+      type: object
+      properties:
+        sku:
+          type: string
+          description: SKU of the OTC product to cancel
+      required:
+      - sku
+    cancelled_medications:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model119'
+    Model125:
       type: object
       properties:
         statusCode:
+          type: number
+          example: 400
+        error:
           type: string
-          example: 0001 or 0002
+          example: Bad Request
         message:
           type: string
-          example: An example error message
-      required:
-      - statusCode
-      - message
-    Model4:
+          example: There was an error cancelling this request (fill_request_5c4b21b9aecaea155d67), either you are not the owner of the request, or have already cancelled the request. Please contact us at (855) 910-8606 for help if neither is the case.
+    Model122:
       type: object
       properties:
-        id:
+        sku:
           type: string
-          example: f716ba1c-bd4b-43c7-9395-84255cd943cd
-          x-format:
-            guid: true
-        status:
+          example: SKU-123-456
+        reason:
           type: string
-          example: PENDING
-        submit_on:
+          example: OTC Product already cancelled or cancellation failed
+    Model123:
+      type: object
+      properties:
+        code:
           type: string
-          format: date
-          example: '2022-01-01T00:00:00.000Z'
-        original_fill_request_token:
+          example: '03'
+        description:
           type: string
-          example: fill_request_token_abc123
+          example: Fill Request Cancelled by Customer Request
+        message:
+          type: string
+          example: 'Accepted: Fill Request fill_request_5c4b21b9aecaea155d67 has been cancelled.'
+        cancelled_medications:
+          $ref: '#/components/schemas/cancelled_medications'
+        failed_medications:
+          $ref: '#/components/schemas/failed_medications'
+        cancelled_otc_products:
+          $ref: '#/components/schemas/cancelled_otc_products'
+        failed_otc_products:
+          $ref: '#/components/schemas/failed_otc_products'
+    Model117:
+      type: array
+      description: Array of medications to cancel. If provided, only these medications will be cancelled. If all medications on the order are cancelled, the entire order will be cancelled.
+      items:
+        $ref: '#/components/schemas/Model116'
+    Model120:
+      type: object
+      properties:
+        prescription_token:
+          type: string
+          example: e61e324f9018
+        reason:
+          type: string
+          example: Medication already cancelled or cancellation failed
+    Model118:
+      type: object
+      properties:
+        request_id:
+          type: string
+          description: Request id
+          example: fill_request_5c4b21b9aecaea155d67
+        otc_products:
+          $ref: '#/components/schemas/Model115'
+        medications:
+          $ref: '#/components/schemas/Model117'
       required:
-      - id
-      - status
-      - submit_on
-      - original_fill_request_token
+      - request_id
   securitySchemes:
     apiKey:
       type: apiKey

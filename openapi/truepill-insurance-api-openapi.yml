@@ -1,6 +1,6 @@
 openapi: 3.2.0
 info:
-  title: Truepill API documentation Scheduled Fill Requests API
+  title: Truepill API documentation Insurance API
   version: 0.0.1
   description: DOCS
 servers:
@@ -9,250 +9,537 @@ servers:
 security:
 - apiKey: []
 tags:
-- name: scheduled-fill-requests
+- name: Insurance
 paths:
-  /scheduled-fill-requests:
+  /v1/insurance/{insurance_token}:
     get:
-      summary: Retrieve details for a scheduled fill request by id
-      operationId: getScheduledfillrequests
-      description: Include either original_fill_request_token or id in the query parameters.
+      summary: Get Insurance details
+      operationId: getV1InsuranceInsurance_token
       parameters:
-      - x-format:
-          guid: true
-        name: id
-        in: query
-        schema:
-          type: string
-      - name: original_fill_request_token
-        in: query
+      - description: Insurance token
+        name: insurance_token
+        in: path
+        required: true
         schema:
           type: string
       tags:
-      - scheduled-fill-requests
+      - Insurance
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model4'
-        '400':
-          description: Bad Request
+                $ref: '#/components/schemas/Model52'
+        '404':
+          description: Not Found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model2'
-        '401':
-          description: Unauthorized
+                $ref: '#/components/schemas/Model53'
+  /api/v1/insurance/{insurance_token}:
+    get:
+      summary: Get Insurance details
+      operationId: getApiV1InsuranceInsurance_token
+      parameters:
+      - description: Insurance token
+        name: insurance_token
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Insurance
+      responses:
+        '200':
+          description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model3'
-        '500':
-          description: Internal Server Error
+                $ref: '#/components/schemas/Model52'
+        '404':
+          description: Not Found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model2'
+                $ref: '#/components/schemas/Model53'
+  /v1/insurance:
     post:
-      summary: Reschedule a fill request that was submitted too soon
-      operationId: postScheduledfillrequests
+      summary: Create Insurance
+      operationId: postV1Insurance
+      description: 'Associate an Insurance with the Patient
+
+
+        With a Patient created in the Truepill ecosystem, you can associate an Insurance to that patient with the Create Insurance API endpoint using the `patient_token`.
+
+
+        Upon a successful response, an `insurance_token` is provided that can be used along with the existing `patient_token` for Copay and Fill Requests.
+
+
+        Truepill supports multiple insurances should a patient provide more than one insurance.'
       tags:
-      - scheduled-fill-requests
+      - Insurance
       responses:
-        '200':
-          description: OK
+        '201':
+          description: Created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model113'
+                $ref: '#/components/schemas/Model156'
         '400':
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model2'
-        '401':
-          description: Unauthorized
+                $ref: '#/components/schemas/Model159'
+        '404':
+          description: Not Found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model3'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model2'
+                $ref: '#/components/schemas/Model134'
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/POST%20ScheduledFill%20Request%20Payload'
-  /scheduled-fill-requests/{id}:
-    put:
-      summary: Update details for on scheduled fill request
-      operationId: putScheduledfillrequestsId
-      parameters:
-      - x-format:
-          guid: true
-        name: id
-        in: path
-        required: true
-        schema:
-          type: string
+              $ref: '#/components/schemas/Model154'
+  /api/v1/insurance:
+    post:
+      summary: Create Insurance
+      operationId: postApiV1Insurance
+      description: 'Associate an Insurance with the Patient
+
+
+        With a Patient created in the Truepill ecosystem, you can associate an Insurance to that patient with the Create Insurance API endpoint using the `patient_token`.
+
+
+        Upon a successful response, an `insurance_token` is provided that can be used along with the existing `patient_token` for Copay and Fill Requests.
+
+
+        Truepill supports multiple insurances should a patient provide more than one insurance.'
       tags:
-      - scheduled-fill-requests
+      - Insurance
       responses:
-        '200':
-          description: OK
+        '201':
+          description: Created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model113'
+                $ref: '#/components/schemas/Model156'
         '400':
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model2'
-        '401':
-          description: Unauthorized
+                $ref: '#/components/schemas/Model159'
+        '404':
+          description: Not Found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model3'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model2'
+                $ref: '#/components/schemas/Model134'
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PUT%20ScheduledFill%20Request%20Payload'
-    delete:
-      summary: Delete a scheduled fill request
-      operationId: deleteScheduledfillrequestsId
-      parameters:
-      - x-format:
-          guid: true
-        name: id
-        in: path
-        required: true
-        schema:
-          type: string
+              $ref: '#/components/schemas/Model154'
+  /v1/insurance/eligibility-check:
+    post:
+      summary: Check Insurance Eligibility
+      operationId: postV1InsuranceEligibilitycheck
+      description: 'Check patient insurance eligibility
+
+
+        This endpoint accepts either a patient_token or patient details to check insurance eligibility.
+
+
+        The request will be forwarded to the Insurance Service for processing.
+
+
+        Returns an array of insurances.'
       tags:
-      - scheduled-fill-requests
+      - Insurance
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model240'
+                $ref: '#/components/schemas/Model215'
         '400':
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model2'
-        '401':
-          description: Unauthorized
+                $ref: '#/components/schemas/Model216'
+        '404':
+          description: Not Found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model3'
-        '500':
-          description: Internal Server Error
+                $ref: '#/components/schemas/Model134'
+        '503':
+          description: Service Unavailable
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model2'
+                $ref: '#/components/schemas/Model217'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model218'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Model214'
+  /api/v1/insurance/eligibility-check:
+    post:
+      summary: Check Insurance Eligibility
+      operationId: postApiV1InsuranceEligibilitycheck
+      description: 'Check patient insurance eligibility
+
+
+        This endpoint accepts either a patient_token or patient details to check insurance eligibility.
+
+
+        The request will be forwarded to the Insurance Service for processing.
+
+
+        Returns an array of insurances.'
+      tags:
+      - Insurance
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model215'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model216'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model134'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model217'
+        '504':
+          description: Gateway Timeout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Model218'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Model214'
 components:
   schemas:
-    Model240:
+    Model157:
       type: object
       properties:
-        id:
+        key:
           type: string
-          example: f716ba1c-bd4b-43c7-9395-84255cd943cd
-          x-format:
-            guid: true
-        status:
+          example: insurance.cardholder_id
+        message:
           type: string
-          example: CANCELLED
-      required:
-      - id
-      - status
-    Model113:
+          example: cardholder_id must be a string
+    Model215:
       type: object
       properties:
-        id:
+        cardholder_id:
           type: string
-          example: f716ba1c-bd4b-43c7-9395-84255cd943cd
+          description: Cardholder ID
+          example: XBC1009876543
+        bin:
+          type: string
+          description: Bank identification number
+          example: '880099'
+        group_number:
+          type: string
+          description: Group number
+          example: D96009620
+        pcn:
+          type: string
+          description: Processor control number
+          example: SP9E6
+        plan_type:
+          type: string
+          description: Insurance plan type
+          example: commercial
+          enum:
+          - commercial
+          - medicare
+          - medicaid
+          - other
+        effective_date:
+          type: string
+          description: Insurance effective date
+          example: '2019-03-01T00:00:00.000Z'
           x-format:
-            guid: true
-        submit_on:
+            isoDate: true
+        termination_date:
           type: string
-          format: date
-          example: '2022-01-01T00:00:00.000Z'
-        original_fill_request_token:
+          description: Insurance termination date
+          example: '2020-02-29T00:00:00.000Z'
+          x-format:
+            isoDate: true
+        payer_name:
           type: string
-          example: fill_request_token_abc123
-      required:
-      - id
-      - submit_on
-      - original_fill_request_token
-    Model3:
+          description: Insurance payer name
+          example: Anthem BC
+        person_code:
+          type: string
+          description: Person code
+          example: '03'
+        patient_relationship:
+          type: string
+          description: Patient relationship to subscriber
+          example: Child
+    Model153:
+      type: object
+      properties:
+        cardholder_id:
+          type: string
+          description: Cardholder ID
+          example: A9321328
+        rx_group:
+          type: string
+          example: '006726'
+        rx_bin:
+          type: string
+          example: '997928'
+          pattern: ^[0-9]{6}$
+        pcn:
+          type: string
+          description: A processor control number (PCN) is identifier used to route pharmacy reimbursements
+          example: AXA
+        phone_number:
+          type: string
+          description: Insurance company phone number
+          example: (955) 372-4143
+        insurance_card_image_url:
+          type: string
+          description: Image URL for insurance card
+        relationship_code:
+          type: integer
+          description: Relationship of the patient to the cardholder
+          example: 1
+          minimum: 0
+          maximum: 8
+        card_type:
+          type: string
+          description: Insurance card type
+          example: insurance
+          enum:
+          - insurance
+          - savings_card
+          - commercial
+          - government
+          - medicare
+          - medicaid
+        person_code:
+          type: string
+          description: Code assigned to a specific individual covered under the policy.
+          example: '01'
+          maxLength: 3
+          x-format:
+            alphanum: true
+          x-convert:
+            case: upper
+            trim: true
+        coverage_type:
+          type: string
+          description: Insurance coverage type
+          example: insurance
+          enum:
+          - medicare_bridge
+          - medicare_part_d
+    Model53:
       type: object
       properties:
         statusCode:
           type: number
-          example: 401
+          example: 404
         error:
           type: string
-          example: Unauthorized
+          example: Not Found
         message:
           type: string
-          example: Invalid credentials
-    Model2:
+          example: Unable to find Insurance.
+    Model218:
       type: object
       properties:
         statusCode:
+          type: number
+          example: 504
+        error:
           type: string
-          example: 0001 or 0002
+          example: Gateway Timeout
         message:
           type: string
-          example: An example error message
-      required:
-      - statusCode
-      - message
-    Model4:
+          example: Surescripts service request timed out
+    Model216:
       type: object
       properties:
-        id:
+        statusCode:
+          type: number
+          example: 400
+        error:
           type: string
-          example: f716ba1c-bd4b-43c7-9395-84255cd943cd
-          x-format:
-            guid: true
+          example: Bad Request
+        message:
+          type: string
+          example: Invalid or missing patient_token
+    Model52:
+      type: object
+      properties:
+        cardholder_id:
+          type: string
+          example: A9321328
+        rx_group:
+          type: string
+          example: '006726'
+        rx_bin:
+          type: string
+          example: '997928'
+        pcn:
+          type: string
+          example: AXA
+    Model156:
+      type: object
+      properties:
+        request_id:
+          type: string
+          example: 6996e3bde41c7fabbbd3df39619f78bf
+        timestamp:
+          type: integer
+          example: 1631571795.423
         status:
           type: string
-          example: PENDING
-        submit_on:
+          example: success
+        details:
+          $ref: '#/components/schemas/Model155'
+    Model214:
+      type: object
+      description: Either patient_token or patient_details must be provided, but not both
+      properties:
+        patient_token:
           type: string
-          format: date
-          example: '2022-01-01T00:00:00.000Z'
-        original_fill_request_token:
+          description: Patient token
+          example: 4526d90a
+        patient_details:
+          $ref: '#/components/schemas/patient_details'
+    Model134:
+      type: object
+      properties:
+        message:
           type: string
-          example: fill_request_token_abc123
+          example: Patient not found
+    patient_details:
+      type: object
+      description: Patient details
+      properties:
+        first_name:
+          type: string
+          description: Patient first name
+          example: John
+        last_name:
+          type: string
+          description: Patient last name
+          example: Doe
+        dob:
+          type: string
+          description: Patient date of birth in YYYYMMDD format
+          example: '19950503'
+          pattern: ^\d{8}$
+        gender:
+          type: string
+          description: Patient gender
+          example: male
+          enum:
+          - male
+          - female
+        zip:
+          type: string
+          description: Patient zip code
+          example: '94105'
+          pattern: ^\d{5}(-\d{4})?$
+        city:
+          type: string
+          description: Patient city
+          example: San Francisco
+        state:
+          type: string
+          description: Patient state code
+          example: CA
+          x-constraint:
+            length: 2
       required:
-      - id
-      - status
-      - submit_on
-      - original_fill_request_token
+      - first_name
+      - last_name
+      - dob
+      - gender
+      - zip
+      - city
+    Model154:
+      type: object
+      properties:
+        insurance:
+          $ref: '#/components/schemas/Model153'
+        patient_token:
+          type: string
+          example: 4526d90a
+      required:
+      - insurance
+      - patient_token
+    Model155:
+      type: object
+      properties:
+        insurance_token:
+          type: string
+          example: 498147cb8c59541b
+    Model158:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model157'
+    Model217:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 503
+        error:
+          type: string
+          example: Service Unavailable
+        message:
+          type: string
+          example: Surescripts service is currently unavailable
+    Model159:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 400
+        error:
+          type: string
+          example: Bad Request
+        validation_errors:
+          $ref: '#/components/schemas/Model158'
   securitySchemes:
     apiKey:
       type: apiKey

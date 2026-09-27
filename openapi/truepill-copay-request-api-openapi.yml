@@ -1,6 +1,6 @@
 openapi: 3.2.0
 info:
-  title: Truepill API documentation Scheduled Fill Requests API
+  title: Truepill API documentation Copay Request API
   version: 0.0.1
   description: DOCS
 servers:
@@ -9,250 +9,421 @@ servers:
 security:
 - apiKey: []
 tags:
-- name: scheduled-fill-requests
+- name: Copay Request
 paths:
-  /scheduled-fill-requests:
+  /v1/copay_request/{request_id}:
     get:
-      summary: Retrieve details for a scheduled fill request by id
-      operationId: getScheduledfillrequests
-      description: Include either original_fill_request_token or id in the query parameters.
+      summary: Get Copay Request by request_id
+      operationId: getV1Copay_requestRequest_id
+      description: Get information around an existing Copay Request
       parameters:
-      - x-format:
-          guid: true
-        name: id
-        in: query
-        schema:
-          type: string
-      - name: original_fill_request_token
-        in: query
+      - description: Request id
+        name: request_id
+        in: path
+        required: true
         schema:
           type: string
       tags:
-      - scheduled-fill-requests
+      - Copay Request
       responses:
-        '200':
-          description: OK
+        '202':
+          description: Accepted
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model4'
-        '400':
-          description: Bad Request
+                $ref: '#/components/schemas/Model45'
+        '404':
+          description: Not Found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model2'
-        '401':
-          description: Unauthorized
+                $ref: '#/components/schemas/Model46'
+  /api/v1/copay_request/{request_id}:
+    get:
+      summary: Get Copay Request by request_id
+      operationId: getApiV1Copay_requestRequest_id
+      description: Get information around an existing Copay Request
+      parameters:
+      - description: Request id
+        name: request_id
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Copay Request
+      responses:
+        '202':
+          description: Accepted
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model3'
-        '500':
-          description: Internal Server Error
+                $ref: '#/components/schemas/Model45'
+        '404':
+          description: Not Found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model2'
+                $ref: '#/components/schemas/Model46'
+  /v1/copay_request:
     post:
-      summary: Reschedule a fill request that was submitted too soon
-      operationId: postScheduledfillrequests
+      summary: Create Copay Request
+      operationId: postV1Copay_request
+      description: Generate a Copay Request to retrieve copay information on a patient's prescription(s). We can support multiple insurances on a copay request
       tags:
-      - scheduled-fill-requests
+      - Copay Request
       responses:
-        '200':
-          description: OK
+        '202':
+          description: Accepted
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model113'
-        '400':
-          description: Bad Request
+                $ref: '#/components/schemas/Model133'
+        '404':
+          description: Not Found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model2'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model3'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model2'
+                $ref: '#/components/schemas/Model134'
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/POST%20ScheduledFill%20Request%20Payload'
-  /scheduled-fill-requests/{id}:
-    put:
-      summary: Update details for on scheduled fill request
-      operationId: putScheduledfillrequestsId
-      parameters:
-      - x-format:
-          guid: true
-        name: id
-        in: path
-        required: true
-        schema:
-          type: string
+              $ref: '#/components/schemas/Model130'
+  /api/v1/copay_request:
+    post:
+      summary: Create Copay Request
+      operationId: postApiV1Copay_request
+      description: Generate a Copay Request to retrieve copay information on a patient's prescription(s). We can support multiple insurances on a copay request
       tags:
-      - scheduled-fill-requests
+      - Copay Request
       responses:
-        '200':
-          description: OK
+        '202':
+          description: Accepted
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model113'
-        '400':
-          description: Bad Request
+                $ref: '#/components/schemas/Model133'
+        '404':
+          description: Not Found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model2'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model3'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Model2'
+                $ref: '#/components/schemas/Model134'
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PUT%20ScheduledFill%20Request%20Payload'
-    delete:
-      summary: Delete a scheduled fill request
-      operationId: deleteScheduledfillrequestsId
-      parameters:
-      - x-format:
-          guid: true
-        name: id
-        in: path
-        required: true
-        schema:
-          type: string
+              $ref: '#/components/schemas/Model130'
+  /v1/copay_request/cancel:
+    post:
+      summary: Cancel Copay Request
+      operationId: postV1Copay_requestCancel
+      description: Cancel an existing Copay Request if the status is 'Pending' or 'Triage'.
       tags:
-      - scheduled-fill-requests
+      - Copay Request
       responses:
-        '200':
-          description: OK
+        '202':
+          description: Accepted
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model240'
-        '400':
-          description: Bad Request
+                $ref: '#/components/schemas/Model212'
+        '404':
+          description: Not Found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model2'
-        '401':
-          description: Unauthorized
+                $ref: '#/components/schemas/Model213'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Model210'
+  /api/v1/copay_request/cancel:
+    post:
+      summary: Cancel Copay Request
+      operationId: postApiV1Copay_requestCancel
+      description: Cancel an existing Copay Request if the status is 'Pending' or 'Triage'.
+      tags:
+      - Copay Request
+      responses:
+        '202':
+          description: Accepted
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model3'
-        '500':
-          description: Internal Server Error
+                $ref: '#/components/schemas/Model212'
+        '404':
+          description: Not Found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model2'
+                $ref: '#/components/schemas/Model213'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Model210'
 components:
   schemas:
-    Model240:
-      type: object
-      properties:
-        id:
-          type: string
-          example: f716ba1c-bd4b-43c7-9395-84255cd943cd
-          x-format:
-            guid: true
-        status:
-          type: string
-          example: CANCELLED
-      required:
-      - id
-      - status
-    Model113:
-      type: object
-      properties:
-        id:
-          type: string
-          example: f716ba1c-bd4b-43c7-9395-84255cd943cd
-          x-format:
-            guid: true
-        submit_on:
-          type: string
-          format: date
-          example: '2022-01-01T00:00:00.000Z'
-        original_fill_request_token:
-          type: string
-          example: fill_request_token_abc123
-      required:
-      - id
-      - submit_on
-      - original_fill_request_token
-    Model3:
+    Model46:
       type: object
       properties:
         statusCode:
           type: number
-          example: 401
+          example: 404
         error:
           type: string
-          example: Unauthorized
+          example: Not Found
         message:
           type: string
-          example: Invalid credentials
-    Model2:
+          example: Unable to find Copay Request.
+    Model45:
       type: object
       properties:
-        statusCode:
+        created_at:
           type: string
-          example: 0001 or 0002
-        message:
-          type: string
-          example: An example error message
-      required:
-      - statusCode
-      - message
-    Model4:
-      type: object
-      properties:
-        id:
-          type: string
-          example: f716ba1c-bd4b-43c7-9395-84255cd943cd
-          x-format:
-            guid: true
+          example: '2021-09-14T14:22:37.000Z'
         status:
           type: string
-          example: PENDING
-        submit_on:
+          example: success
+        error_code:
           type: string
-          format: date
-          example: '2022-01-01T00:00:00.000Z'
-        original_fill_request_token:
+          example: CR019
+        rejection_reason:
           type: string
-          example: fill_request_token_abc123
+          example: Bad Insurance Details
+        additional_rejection_details:
+          type: string
+          example: Missing/Invalid Group Number
+        triage_reason:
+          type: string
+          example: Other Reason
+        additional_triage_details:
+          type: string
+          example: Maint dose
+        patient_token:
+          type: string
+          example: abc123
+        insurance_tokens:
+          $ref: '#/components/schemas/insurance_tokens'
+        prescriptions:
+          $ref: '#/components/schemas/prescriptions'
+        metadata:
+          type: string
+          example: RX12343565
+        notes:
+          type: string
+          example: Med notes
+        ship_to_state:
+          type: string
+          example: CA
+          x-constraint:
+            length: 2
+    Model212:
+      type: object
+      properties:
+        request_id:
+          type: string
+          example: 40277544de5c6ba685dc4161e189d3e2
+        timestamp:
+          type: integer
+          example: 1631571795.423
+        status:
+          type: string
+          example: success
+        details:
+          $ref: '#/components/schemas/Model211'
+    Model129:
+      type: array
+      example:
+      - skhsyq83rkd3uht9
+      - ubqfc1a0a17hjb1c
+      - oi4aafwcsv5zzvvj
+      minItems: 1
+      items:
+        type: string
+    Model210:
+      type: object
+      properties:
+        copay_request_token:
+          type: string
+          description: Copay token
+          example: 4526d90a
+        request_id:
+          type: string
+          description: Request id
+          example: bf11da52584eb54188bf8ebed33ef15f
+    copay_request_prescriptions_tokens:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model131'
+    Model132:
+      type: object
+      properties:
+        copay_request_token:
+          type: string
+          example: a2fcd842de60b010
+        copay_request_prescriptions_tokens:
+          $ref: '#/components/schemas/copay_request_prescriptions_tokens'
+    prescriptions:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model44'
+    Model133:
+      type: object
+      properties:
+        request_id:
+          type: string
+          example: 40277544de5c6ba685dc4161e189d3e2
+        timestamp:
+          type: integer
+          example: 1631571795.423
+        status:
+          type: string
+          example: success
+        details:
+          $ref: '#/components/schemas/Model132'
+    Model213:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Copay not found
+    Model134:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Patient not found
+    Model44:
+      type: object
+      properties:
+        prescription_token:
+          type: string
+          example: abc123
+        prescribed_written_name:
+          type: string
+          example: Ibuprofen
+        quantity:
+          type: number
+          example: 30
+        copay_amount:
+          type: number
+          example: 10
+        fill_number:
+          type: number
+          example: 1
+        error_code:
+          type: string
+          example: R009
+        rejection_reason:
+          type: string
+          example: Not covered by insurance
+        additional_rejection_details:
+          type: string
+          example: Med not covered by insurance
+    Model130:
+      type: object
+      properties:
+        prescriptions:
+          $ref: '#/components/schemas/Model128'
+        insurance_token:
+          $ref: '#/components/schemas/Model129'
+          x-alternatives:
+          - $ref: '#/x-alt-definitions/insurance_token'
+          - type: string
+        metadata:
+          type: string
+          description: Customer-side identifier to reference the Copay Request in Customer system
+          example: cfe146
+        patient_token:
+          type: string
+          description: Patient token
+          example: 4526d90a
+        notes:
+          type: string
+          description: Additional information customer wishes to convey relating to this Copay Request
+          example: This is a note
+        ship_to_state:
+          type: string
+          description: State prescription is being shipped to as 2 letter abbreviation
+          example: CA
+          x-constraint:
+            length: 2
+          x-convert:
+            case: upper
+        patient_payment_type:
+          type: string
+          description: Whether to run with insurance (must be provided) or as cash
+          enum:
+          - cash
+          - insurance
       required:
-      - id
-      - status
-      - submit_on
-      - original_fill_request_token
+      - patient_token
+    insurance_tokens:
+      type: array
+      items:
+        type: string
+    Model131:
+      type: object
+      properties:
+        prescription_token:
+          type: string
+          example: 9df7a51822e2
+        copay_request_prescription_token:
+          type: string
+          example: e13eab97b91c6b27
+        status:
+          type: string
+          example: pending
+    Model211:
+      type: object
+      properties:
+        code:
+          type: string
+          example: CUSTOMER_CANCELLATION_REQUEST
+        description:
+          type: string
+          example: Copay Request Cancelled by Customer Request
+        message:
+          type: string
+          example: 'Accepted: Copay Request 34f68f71f980f78bb0bc has been cancelled.'
+    Model128:
+      type: array
+      description: Patient's prescriptions.
+      example:
+      - prescription_token: z3q2jr
+        quantity: 8.7
+        days_supply: 30
+        patient_consent:
+          consent_statement: Patient Bruce Banner consented that Truepill pharmacy will bill their insurance in order to provide a fill of Medication Sildenafil 10mg for a quantity of 10.
+          patient_name: Bruce Banner
+          consent_provided_by: Hulk
+          item: sildenafil 10mg
+          consent_method: VERBAL
+          consent_date: ' 2021-01-25 15:17:51.000Z'
+          consent_type: INSURANCE
+        claim_overrides:
+        - insurance_token: adcbc795028c009d
+          prior_authorization_number: ABC123
+          submission_clarification_code: '4'
+        - insurance_token: 75539ed9ffb86f38
+          other_coverage_code: '8'
+      - b5q3t2
+      - h3r55c
+      items:
+        type: string
+        description: Prescription token
+        example: 4526d90a
+        minLength: 1
+        x-alternatives:
+        - type: string
+          description: Prescription token
+          example: 4526d90a
+          minLength: 1
+        - $ref: '#/x-alt-definitions/Model4'
   securitySchemes:
     apiKey:
       type: apiKey

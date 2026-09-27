@@ -103,25 +103,6 @@ apis:
     url: overlays/truepill-diagnostics-api-overlay.yaml
   - type: Documentation
     url: https://rxdocs.fuzehealth.com
-- aid: truepill:truepill-api-api
-  name: Truepill API
-  description: The api API from Truepill — 61 operation(s) for api.
-  humanURL: https://rxdocs.fuzehealth.com
-  baseURL: https://rxapi.fuzehealth.com/v1
-  tags: []
-  tags_raw:
-  - api
-  properties:
-  - type: OpenAPI
-    url: openapi/truepill-api-api-openapi.yml
-  - type: Documentation
-    url: https://rxdocs.fuzehealth.com
-  - type: PostmanCollection
-    url: collections/truepill.postman_collection.json
-  - type: OpenCollection
-    url: collections/truepill.opencollection.json
-  - type: APIReference
-    url: https://tpos-api.truepill.com/documentation/
 - aid: truepill:truepill-scheduled-actions-api
   name: Truepill Scheduled Actions API
   description: The scheduled-actions API from Truepill — 1 operation(s) for scheduled-actions.
@@ -161,16 +142,16 @@ apis:
     url: collections/truepill.opencollection.json
   - type: APIReference
     url: https://tpos-api.truepill.com/documentation/
-- aid: truepill:truepill-v0-api
-  name: Truepill V0 API
-  description: The v0 API from Truepill — 1 operation(s) for v0.
+- aid: truepill:truepill-auto-refill-api
+  name: Truepill Auto Refill API
+  description: The Auto Refill API from Truepill — 10 operation(s) for auto refill.
   humanURL: https://rxdocs.fuzehealth.com
-  baseURL: https://rxapi.fuzehealth.com/v1
+  baseURL: https://rxapi.fuzehealth.com/consults/v0
   tags:
-  - v0
+  - Auto Refill
   properties:
   - type: OpenAPI
-    url: openapi/truepill-v0-api-openapi.yml
+    url: openapi/truepill-auto-refill-api-openapi.yml
   - type: Documentation
     url: https://rxdocs.fuzehealth.com
   - type: PostmanCollection
@@ -179,16 +160,16 @@ apis:
     url: collections/truepill.opencollection.json
   - type: APIReference
     url: https://tpos-api.truepill.com/documentation/
-- aid: truepill:truepill-v1-api
-  name: Truepill V1 API
-  description: The v1 API from Truepill — 58 operation(s) for v1.
+- aid: truepill:truepill-availability-api
+  name: Truepill Availability API
+  description: The Availability API from Truepill — 2 operation(s) for availability.
   humanURL: https://rxdocs.fuzehealth.com
-  baseURL: https://rxapi.fuzehealth.com/v1
+  baseURL: https://rxapi.fuzehealth.com/consults/v0
   tags:
-  - v1
+  - Availability
   properties:
   - type: OpenAPI
-    url: openapi/truepill-v1-api-openapi.yml
+    url: openapi/truepill-availability-api-openapi.yml
   - type: Documentation
     url: https://rxdocs.fuzehealth.com
   - type: PostmanCollection
@@ -197,16 +178,487 @@ apis:
     url: collections/truepill.opencollection.json
   - type: APIReference
     url: https://tpos-api.truepill.com/documentation/
-- aid: truepill:truepill-v2-api
-  name: Truepill V2 API
-  description: The v2 API from Truepill — 3 operation(s) for v2.
+- aid: truepill:truepill-cancel-request-api
+  name: Truepill Cancel Request API
+  description: The Cancel Request API from Truepill — 2 operation(s) for cancel request.
   humanURL: https://rxdocs.fuzehealth.com
-  baseURL: https://rxapi.fuzehealth.com/v1
+  baseURL: https://rxapi.fuzehealth.com/consults/v0
   tags:
-  - v2
+  - Cancel Request
   properties:
   - type: OpenAPI
-    url: openapi/truepill-v2-api-openapi.yml
+    url: openapi/truepill-cancel-request-api-openapi.yml
+  - type: Documentation
+    url: https://rxdocs.fuzehealth.com
+  - type: PostmanCollection
+    url: collections/truepill.postman_collection.json
+  - type: OpenCollection
+    url: collections/truepill.opencollection.json
+  - type: APIReference
+    url: https://tpos-api.truepill.com/documentation/
+- aid: truepill:truepill-copay-request-api
+  name: Truepill Copay Request API
+  description: The Copay Request API from Truepill — 6 operation(s) for copay request.
+  humanURL: https://rxdocs.fuzehealth.com
+  baseURL: https://rxapi.fuzehealth.com/consults/v0
+  tags:
+  - Copay Request
+  properties:
+  - type: OpenAPI
+    url: openapi/truepill-copay-request-api-openapi.yml
+  - type: Documentation
+    url: https://rxdocs.fuzehealth.com
+  - type: PostmanCollection
+    url: collections/truepill.postman_collection.json
+  - type: OpenCollection
+    url: collections/truepill.opencollection.json
+  - type: APIReference
+    url: https://tpos-api.truepill.com/documentation/
+- aid: truepill:truepill-coverage-request-api
+  name: Truepill Coverage Request API
+  description: The Coverage Request API from Truepill — 2 operation(s) for coverage request.
+  humanURL: https://rxdocs.fuzehealth.com
+  baseURL: https://rxapi.fuzehealth.com/consults/v0
+  tags:
+  - Coverage Request
+  properties:
+  - type: OpenAPI
+    url: openapi/truepill-coverage-request-api-openapi.yml
+  - type: Documentation
+    url: https://rxdocs.fuzehealth.com
+  - type: PostmanCollection
+    url: collections/truepill.postman_collection.json
+  - type: OpenCollection
+    url: collections/truepill.opencollection.json
+  - type: APIReference
+    url: https://tpos-api.truepill.com/documentation/
+- aid: truepill:truepill-direct-transfer-api
+  name: Truepill Direct Transfer API
+  description: The Direct Transfer API from Truepill — 8 operation(s) for direct transfer.
+  humanURL: https://rxdocs.fuzehealth.com
+  baseURL: https://rxapi.fuzehealth.com/consults/v0
+  tags:
+  - Direct Transfer
+  properties:
+  - type: OpenAPI
+    url: openapi/truepill-direct-transfer-api-openapi.yml
+  - type: Documentation
+    url: https://rxdocs.fuzehealth.com
+  - type: PostmanCollection
+    url: collections/truepill.postman_collection.json
+  - type: OpenCollection
+    url: collections/truepill.opencollection.json
+  - type: APIReference
+    url: https://tpos-api.truepill.com/documentation/
+- aid: truepill:truepill-external-location-matches-api
+  name: Truepill External Location Matches API
+  description: >-
+    The External Location Matches API from Truepill — 2 operation(s) for external location matches.
+  humanURL: https://rxdocs.fuzehealth.com
+  baseURL: https://rxapi.fuzehealth.com/consults/v0
+  tags:
+  - External Location Matches
+  properties:
+  - type: OpenAPI
+    url: openapi/truepill-external-location-matches-api-openapi.yml
+  - type: Documentation
+    url: https://rxdocs.fuzehealth.com
+  - type: PostmanCollection
+    url: collections/truepill.postman_collection.json
+  - type: OpenCollection
+    url: collections/truepill.opencollection.json
+  - type: APIReference
+    url: https://tpos-api.truepill.com/documentation/
+- aid: truepill:truepill-external-locations-api
+  name: Truepill External Locations API
+  description: The External Locations API from Truepill — 4 operation(s) for external locations.
+  humanURL: https://rxdocs.fuzehealth.com
+  baseURL: https://rxapi.fuzehealth.com/consults/v0
+  tags:
+  - External Locations
+  properties:
+  - type: OpenAPI
+    url: openapi/truepill-external-locations-api-openapi.yml
+  - type: Documentation
+    url: https://rxdocs.fuzehealth.com
+  - type: PostmanCollection
+    url: collections/truepill.postman_collection.json
+  - type: OpenCollection
+    url: collections/truepill.opencollection.json
+  - type: APIReference
+    url: https://tpos-api.truepill.com/documentation/
+- aid: truepill:truepill-external-transfers-api
+  name: Truepill External Transfers API
+  description: The External Transfers API from Truepill — 2 operation(s) for external transfers.
+  humanURL: https://rxdocs.fuzehealth.com
+  baseURL: https://rxapi.fuzehealth.com/consults/v0
+  tags:
+  - External Transfers
+  properties:
+  - type: OpenAPI
+    url: openapi/truepill-external-transfers-api-openapi.yml
+  - type: Documentation
+    url: https://rxdocs.fuzehealth.com
+  - type: PostmanCollection
+    url: collections/truepill.postman_collection.json
+  - type: OpenCollection
+    url: collections/truepill.opencollection.json
+  - type: APIReference
+    url: https://tpos-api.truepill.com/documentation/
+- aid: truepill:truepill-fill-request-api
+  name: Truepill Fill Request API
+  description: The Fill Request API from Truepill — 8 operation(s) for fill request.
+  humanURL: https://rxdocs.fuzehealth.com
+  baseURL: https://rxapi.fuzehealth.com/consults/v0
+  tags:
+  - Fill Request
+  properties:
+  - type: OpenAPI
+    url: openapi/truepill-fill-request-api-openapi.yml
+  - type: Documentation
+    url: https://rxdocs.fuzehealth.com
+  - type: PostmanCollection
+    url: collections/truepill.postman_collection.json
+  - type: OpenCollection
+    url: collections/truepill.opencollection.json
+  - type: APIReference
+    url: https://tpos-api.truepill.com/documentation/
+- aid: truepill:truepill-fill-requests-api
+  name: Truepill Fill Requests API
+  description: The Fill Requests API from Truepill — 2 operation(s) for fill requests.
+  humanURL: https://rxdocs.fuzehealth.com
+  baseURL: https://rxapi.fuzehealth.com/consults/v0
+  tags:
+  - Fill Requests
+  properties:
+  - type: OpenAPI
+    url: openapi/truepill-fill-requests-api-openapi.yml
+  - type: Documentation
+    url: https://rxdocs.fuzehealth.com
+  - type: PostmanCollection
+    url: collections/truepill.postman_collection.json
+  - type: OpenCollection
+    url: collections/truepill.opencollection.json
+  - type: APIReference
+    url: https://tpos-api.truepill.com/documentation/
+- aid: truepill:truepill-fuzion-test-api
+  name: Truepill Fuzion Test API
+  description: The Fuzion Test API from Truepill — 2 operation(s) for fuzion test.
+  humanURL: https://rxdocs.fuzehealth.com
+  baseURL: https://rxapi.fuzehealth.com/consults/v0
+  tags:
+  - Fuzion Test
+  properties:
+  - type: OpenAPI
+    url: openapi/truepill-fuzion-test-api-openapi.yml
+  - type: Documentation
+    url: https://rxdocs.fuzehealth.com
+  - type: PostmanCollection
+    url: collections/truepill.postman_collection.json
+  - type: OpenCollection
+    url: collections/truepill.opencollection.json
+  - type: APIReference
+    url: https://tpos-api.truepill.com/documentation/
+- aid: truepill:truepill-insurance-api
+  name: Truepill Insurance API
+  description: The Insurance API from Truepill — 6 operation(s) for insurance.
+  humanURL: https://rxdocs.fuzehealth.com
+  baseURL: https://rxapi.fuzehealth.com/consults/v0
+  tags:
+  - Insurance
+  properties:
+  - type: OpenAPI
+    url: openapi/truepill-insurance-api-openapi.yml
+  - type: Documentation
+    url: https://rxdocs.fuzehealth.com
+  - type: PostmanCollection
+    url: collections/truepill.postman_collection.json
+  - type: OpenCollection
+    url: collections/truepill.opencollection.json
+  - type: APIReference
+    url: https://tpos-api.truepill.com/documentation/
+- aid: truepill:truepill-media-api
+  name: Truepill Media API
+  description: The Media API from Truepill — 12 operation(s) for media.
+  humanURL: https://rxdocs.fuzehealth.com
+  baseURL: https://rxapi.fuzehealth.com/consults/v0
+  tags:
+  - Media
+  properties:
+  - type: OpenAPI
+    url: openapi/truepill-media-api-openapi.yml
+  - type: Documentation
+    url: https://rxdocs.fuzehealth.com
+  - type: PostmanCollection
+    url: collections/truepill.postman_collection.json
+  - type: OpenCollection
+    url: collections/truepill.opencollection.json
+  - type: APIReference
+    url: https://tpos-api.truepill.com/documentation/
+- aid: truepill:truepill-nearby-same-day-pickup-locations-api
+  name: Truepill Nearby Same Day Pickup Locations API
+  description: >-
+    The Nearby Same Day Pickup Locations API from Truepill — 2 operation(s) for nearby same day pickup
+    locations.
+  humanURL: https://rxdocs.fuzehealth.com
+  baseURL: https://rxapi.fuzehealth.com/consults/v0
+  tags:
+  - Nearby Same Day Pickup Locations
+  properties:
+  - type: OpenAPI
+    url: openapi/truepill-nearby-same-day-pickup-locations-api-openapi.yml
+  - type: Documentation
+    url: https://rxdocs.fuzehealth.com
+  - type: PostmanCollection
+    url: collections/truepill.postman_collection.json
+  - type: OpenCollection
+    url: collections/truepill.opencollection.json
+  - type: APIReference
+    url: https://tpos-api.truepill.com/documentation/
+- aid: truepill:truepill-open-api-api
+  name: Truepill Open API
+  description: The Open Api API from Truepill — 2 operation(s) for open api.
+  humanURL: https://rxdocs.fuzehealth.com
+  baseURL: https://rxapi.fuzehealth.com/consults/v0
+  tags:
+  - Open Api
+  properties:
+  - type: OpenAPI
+    url: openapi/truepill-open-api-api-openapi.yml
+  - type: Documentation
+    url: https://rxdocs.fuzehealth.com
+  - type: PostmanCollection
+    url: collections/truepill.postman_collection.json
+  - type: OpenCollection
+    url: collections/truepill.opencollection.json
+  - type: APIReference
+    url: https://tpos-api.truepill.com/documentation/
+- aid: truepill:truepill-order-api
+  name: Truepill Order API
+  description: The Order API from Truepill — 4 operation(s) for order.
+  humanURL: https://rxdocs.fuzehealth.com
+  baseURL: https://rxapi.fuzehealth.com/consults/v0
+  tags:
+  - Order
+  properties:
+  - type: OpenAPI
+    url: openapi/truepill-order-api-openapi.yml
+  - type: Documentation
+    url: https://rxdocs.fuzehealth.com
+  - type: PostmanCollection
+    url: collections/truepill.postman_collection.json
+  - type: OpenCollection
+    url: collections/truepill.opencollection.json
+  - type: APIReference
+    url: https://tpos-api.truepill.com/documentation/
+- aid: truepill:truepill-patient-api
+  name: Truepill Patient API
+  description: The Patient API from Truepill — 8 operation(s) for patient.
+  humanURL: https://rxdocs.fuzehealth.com
+  baseURL: https://rxapi.fuzehealth.com/consults/v0
+  tags:
+  - Patient
+  properties:
+  - type: OpenAPI
+    url: openapi/truepill-patient-api-openapi.yml
+  - type: Documentation
+    url: https://rxdocs.fuzehealth.com
+  - type: PostmanCollection
+    url: collections/truepill.postman_collection.json
+  - type: OpenCollection
+    url: collections/truepill.opencollection.json
+  - type: APIReference
+    url: https://tpos-api.truepill.com/documentation/
+- aid: truepill:truepill-pharmacy-coverage-api
+  name: Truepill Pharmacy Coverage API
+  description: The Pharmacy Coverage API from Truepill — 2 operation(s) for pharmacy coverage.
+  humanURL: https://rxdocs.fuzehealth.com
+  baseURL: https://rxapi.fuzehealth.com/consults/v0
+  tags:
+  - Pharmacy Coverage
+  properties:
+  - type: OpenAPI
+    url: openapi/truepill-pharmacy-coverage-api-openapi.yml
+  - type: Documentation
+    url: https://rxdocs.fuzehealth.com
+  - type: PostmanCollection
+    url: collections/truepill.postman_collection.json
+  - type: OpenCollection
+    url: collections/truepill.opencollection.json
+  - type: APIReference
+    url: https://tpos-api.truepill.com/documentation/
+- aid: truepill:truepill-prescriber-api
+  name: Truepill Prescriber API
+  description: The Prescriber API from Truepill — 4 operation(s) for prescriber.
+  humanURL: https://rxdocs.fuzehealth.com
+  baseURL: https://rxapi.fuzehealth.com/consults/v0
+  tags:
+  - Prescriber
+  properties:
+  - type: OpenAPI
+    url: openapi/truepill-prescriber-api-openapi.yml
+  - type: Documentation
+    url: https://rxdocs.fuzehealth.com
+  - type: PostmanCollection
+    url: collections/truepill.postman_collection.json
+  - type: OpenCollection
+    url: collections/truepill.opencollection.json
+  - type: APIReference
+    url: https://tpos-api.truepill.com/documentation/
+- aid: truepill:truepill-prescription-api
+  name: Truepill Prescription API
+  description: The Prescription API from Truepill — 12 operation(s) for prescription.
+  humanURL: https://rxdocs.fuzehealth.com
+  baseURL: https://rxapi.fuzehealth.com/consults/v0
+  tags:
+  - Prescription
+  properties:
+  - type: OpenAPI
+    url: openapi/truepill-prescription-api-openapi.yml
+  - type: Documentation
+    url: https://rxdocs.fuzehealth.com
+  - type: PostmanCollection
+    url: collections/truepill.postman_collection.json
+  - type: OpenCollection
+    url: collections/truepill.opencollection.json
+  - type: APIReference
+    url: https://tpos-api.truepill.com/documentation/
+- aid: truepill:truepill-prescriptions-api
+  name: Truepill Prescriptions API
+  description: The Prescriptions API from Truepill — 2 operation(s) for prescriptions.
+  humanURL: https://rxdocs.fuzehealth.com
+  baseURL: https://rxapi.fuzehealth.com/consults/v0
+  tags:
+  - Prescriptions
+  properties:
+  - type: OpenAPI
+    url: openapi/truepill-prescriptions-api-openapi.yml
+  - type: Documentation
+    url: https://rxdocs.fuzehealth.com
+  - type: PostmanCollection
+    url: collections/truepill.postman_collection.json
+  - type: OpenCollection
+    url: collections/truepill.opencollection.json
+  - type: APIReference
+    url: https://tpos-api.truepill.com/documentation/
+- aid: truepill:truepill-prior-authorization-api
+  name: Truepill Prior Authorization API
+  description: The Prior Authorization API from Truepill — 2 operation(s) for prior authorization.
+  humanURL: https://rxdocs.fuzehealth.com
+  baseURL: https://rxapi.fuzehealth.com/consults/v0
+  tags:
+  - Prior Authorization
+  properties:
+  - type: OpenAPI
+    url: openapi/truepill-prior-authorization-api-openapi.yml
+  - type: Documentation
+    url: https://rxdocs.fuzehealth.com
+  - type: PostmanCollection
+    url: collections/truepill.postman_collection.json
+  - type: OpenCollection
+    url: collections/truepill.opencollection.json
+  - type: APIReference
+    url: https://tpos-api.truepill.com/documentation/
+- aid: truepill:truepill-same-day-delivery-api
+  name: Truepill Same Day Delivery API
+  description: The Same Day Delivery API from Truepill — 4 operation(s) for same day delivery.
+  humanURL: https://rxdocs.fuzehealth.com
+  baseURL: https://rxapi.fuzehealth.com/consults/v0
+  tags:
+  - Same Day Delivery
+  properties:
+  - type: OpenAPI
+    url: openapi/truepill-same-day-delivery-api-openapi.yml
+  - type: Documentation
+    url: https://rxdocs.fuzehealth.com
+  - type: PostmanCollection
+    url: collections/truepill.postman_collection.json
+  - type: OpenCollection
+    url: collections/truepill.opencollection.json
+  - type: APIReference
+    url: https://tpos-api.truepill.com/documentation/
+- aid: truepill:truepill-schedule-api
+  name: Truepill Schedule API
+  description: The Schedule API from Truepill — 1 operation(s) for schedule.
+  humanURL: https://rxdocs.fuzehealth.com
+  baseURL: https://rxapi.fuzehealth.com/consults/v0
+  tags:
+  - Schedule
+  properties:
+  - type: OpenAPI
+    url: openapi/truepill-schedule-api-openapi.yml
+  - type: Documentation
+    url: https://rxdocs.fuzehealth.com
+  - type: PostmanCollection
+    url: collections/truepill.postman_collection.json
+  - type: OpenCollection
+    url: collections/truepill.opencollection.json
+  - type: APIReference
+    url: https://tpos-api.truepill.com/documentation/
+- aid: truepill:truepill-specialty-pharmacies-api
+  name: Truepill Specialty Pharmacies API
+  description: The Specialty Pharmacies API from Truepill — 2 operation(s) for specialty pharmacies.
+  humanURL: https://rxdocs.fuzehealth.com
+  baseURL: https://rxapi.fuzehealth.com/consults/v0
+  tags:
+  - Specialty Pharmacies
+  properties:
+  - type: OpenAPI
+    url: openapi/truepill-specialty-pharmacies-api-openapi.yml
+  - type: Documentation
+    url: https://rxdocs.fuzehealth.com
+  - type: PostmanCollection
+    url: collections/truepill.postman_collection.json
+  - type: OpenCollection
+    url: collections/truepill.opencollection.json
+  - type: APIReference
+    url: https://tpos-api.truepill.com/documentation/
+- aid: truepill:truepill-transfer-request-api
+  name: Truepill Transfer Request API
+  description: The Transfer Request API from Truepill — 4 operation(s) for transfer request.
+  humanURL: https://rxdocs.fuzehealth.com
+  baseURL: https://rxapi.fuzehealth.com/consults/v0
+  tags:
+  - Transfer Request
+  properties:
+  - type: OpenAPI
+    url: openapi/truepill-transfer-request-api-openapi.yml
+  - type: Documentation
+    url: https://rxdocs.fuzehealth.com
+  - type: PostmanCollection
+    url: collections/truepill.postman_collection.json
+  - type: OpenCollection
+    url: collections/truepill.opencollection.json
+  - type: APIReference
+    url: https://tpos-api.truepill.com/documentation/
+- aid: truepill:truepill-update-request-api
+  name: Truepill Update Request API
+  description: The Update Request API from Truepill — 2 operation(s) for update request.
+  humanURL: https://rxdocs.fuzehealth.com
+  baseURL: https://rxapi.fuzehealth.com/consults/v0
+  tags:
+  - Update Request
+  properties:
+  - type: OpenAPI
+    url: openapi/truepill-update-request-api-openapi.yml
+  - type: Documentation
+    url: https://rxdocs.fuzehealth.com
+  - type: PostmanCollection
+    url: collections/truepill.postman_collection.json
+  - type: OpenCollection
+    url: collections/truepill.opencollection.json
+  - type: APIReference
+    url: https://tpos-api.truepill.com/documentation/
+- aid: truepill:truepill-webhook-events-api
+  name: Truepill Webhook Events API
+  description: The Webhook Events API from Truepill — 4 operation(s) for webhook events.
+  humanURL: https://rxdocs.fuzehealth.com
+  baseURL: https://rxapi.fuzehealth.com/consults/v0
+  tags:
+  - Webhook Events
+  properties:
+  - type: OpenAPI
+    url: openapi/truepill-webhook-events-api-openapi.yml
   - type: Documentation
     url: https://rxdocs.fuzehealth.com
   - type: PostmanCollection
