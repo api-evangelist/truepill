@@ -525,28 +525,160 @@ paths:
               $ref: '#/components/schemas/CreateMediaV2'
 components:
   schemas:
-    Model160:
+    Model56:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 404
+        error:
+          type: string
+          example: Not Found
+        message:
+          type: string
+          example: Media with id not found
+    CreateMedia:
+      type: object
+      properties:
+        fileName:
+          type: string
+          description: File name which is unique uuid identifier
+          example: 812750e4-1cae-44e5-8212-a9a2f9776fca
+          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+        title:
+          type: string
+          description: Human readable media title
+          example: Skin damage media
+      required:
+      - fileName
+    Model161:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 404
+        error:
+          type: string
+          example: Not Found
+        message:
+          type: string
+          example: Media not found
+    Model54:
       type: object
       properties:
         id:
           type: string
           example: 059d52b6-b2b0-4bd1-97df-082b1e2196c1
+          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
         createdAt:
           type: string
-          description: Date when media was uploaded to the bucket
           example: '2021-11-09T08:00:00.000Z'
         updatedAt:
           type: string
-          description: Date when media status had been changed
           example: '2021-11-09T08:00:00.000Z'
         title:
           type: string
-          description: Human readable media title
-          example: Skin damage media
+          example: Right ear
         status:
           type: string
-          description: Captures whether we are currently scanning the media, or whether it is safe or not. Quarantined medias are inaccessible
           example: AVAILABLE
+    Model75:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 059d52b6-b2b0-4bd1-97df-082b1e2196c1
+          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+        name:
+          type: string
+          example: Right ear
+        status:
+          type: string
+          example: AVAILABLE
+          enum:
+          - REVIEWING
+          - AVAILABLE
+          - QUARANTINE
+          - AWAITING_UPLOADING
+        url:
+          type: string
+          description: This link is for read file using GET. Lifetime 24h.
+          example: https://storage.googleapis.com/1512a193-065b-4360-bd1f-48b8a260f140?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=upload-scanner%40serviceaccount.com%2F20211126%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20211126T130011Z&X-Goog-Expires=900&X-Goog-SignedHeaders=content-type%3Bhost&X-Goog-Signature=123
+      required:
+      - id
+      - name
+      - status
+      - url
+    Model3:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 401
+        error:
+          type: string
+          example: Unauthorized
+        message:
+          type: string
+          example: Invalid credentials
+    Model108:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 403
+        error:
+          type: string
+          example: Forbidden
+        message:
+          type: string
+          example: This file cannot be downloaded
+    Model55:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 401
+        error:
+          type: string
+          example: Unauthorized
+        message:
+          type: string
+          example: Invalid Credentials passed
+    CreateMediaV2:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Human readable media title
+          example: Skin damage media
+          maxLength: 255
+      required:
+      - name
+    Model9:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 500
+        error:
+          type: string
+          example: An internal server error occurred
+        message:
+          type: string
+          example: An internal server error occurred
+    Model109:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 422
+        error:
+          type: string
+          example: Unprocessable Entity
+        message:
+          type: string
+          example: File with this name already exists
     Model188:
       type: object
       properties:
@@ -578,160 +710,28 @@ components:
       - name
       - status
       - upload_url
-    Model54:
+    Model160:
       type: object
       properties:
         id:
           type: string
           example: 059d52b6-b2b0-4bd1-97df-082b1e2196c1
-          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
         createdAt:
           type: string
+          description: Date when media was uploaded to the bucket
           example: '2021-11-09T08:00:00.000Z'
         updatedAt:
           type: string
+          description: Date when media status had been changed
           example: '2021-11-09T08:00:00.000Z'
         title:
           type: string
-          example: Right ear
-        status:
-          type: string
-          example: AVAILABLE
-    CreateMediaV2:
-      type: object
-      properties:
-        name:
-          type: string
           description: Human readable media title
           example: Skin damage media
-          maxLength: 255
-      required:
-      - name
-    Model9:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 500
-        error:
-          type: string
-          example: An internal server error occurred
-        message:
-          type: string
-          example: An internal server error occurred
-    CreateMedia:
-      type: object
-      properties:
-        fileName:
-          type: string
-          description: File name which is unique uuid identifier
-          example: 812750e4-1cae-44e5-8212-a9a2f9776fca
-          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
-        title:
-          type: string
-          description: Human readable media title
-          example: Skin damage media
-      required:
-      - fileName
-    Model3:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 401
-        error:
-          type: string
-          example: Unauthorized
-        message:
-          type: string
-          example: Invalid credentials
-    Model109:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 422
-        error:
-          type: string
-          example: Unprocessable Entity
-        message:
-          type: string
-          example: File with this name already exists
-    Model108:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 403
-        error:
-          type: string
-          example: Forbidden
-        message:
-          type: string
-          example: This file cannot be downloaded
-    Model55:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 401
-        error:
-          type: string
-          example: Unauthorized
-        message:
-          type: string
-          example: Invalid Credentials passed
-    Model161:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 404
-        error:
-          type: string
-          example: Not Found
-        message:
-          type: string
-          example: Media not found
-    Model56:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 404
-        error:
-          type: string
-          example: Not Found
-        message:
-          type: string
-          example: Media with id not found
-    Model75:
-      type: object
-      properties:
-        id:
-          type: string
-          example: 059d52b6-b2b0-4bd1-97df-082b1e2196c1
-          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
-        name:
-          type: string
-          example: Right ear
         status:
           type: string
+          description: Captures whether we are currently scanning the media, or whether it is safe or not. Quarantined medias are inaccessible
           example: AVAILABLE
-          enum:
-          - REVIEWING
-          - AVAILABLE
-          - QUARANTINE
-          - AWAITING_UPLOADING
-        url:
-          type: string
-          description: This link is for read file using GET. Lifetime 24h.
-          example: https://storage.googleapis.com/1512a193-065b-4360-bd1f-48b8a260f140?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=upload-scanner%40serviceaccount.com%2F20211126%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20211126T130011Z&X-Goog-Expires=900&X-Goog-SignedHeaders=content-type%3Bhost&X-Goog-Signature=123
-      required:
-      - id
-      - name
-      - status
-      - url
   securitySchemes:
     apiKey:
       type: apiKey

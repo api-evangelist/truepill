@@ -117,6 +117,166 @@ paths:
               $ref: '#/components/schemas/Model163'
 components:
   schemas:
+    Model162:
+      type: object
+      description: Prescriber's address details
+      properties:
+        clinic_name:
+          type: string
+          description: Clinic name that the prescriber works at
+          example: True Clinic
+        street1:
+          type: string
+          description: Street 1 of prescriber’s working address
+          example: 3121 Diablo Ave
+        street2:
+          type: string
+          description: Street 2 of prescriber’s working address
+          example: 123 Some Lane
+        city:
+          type: string
+          description: City of prescriber’s working address
+          example: Hayward
+        state:
+          type: string
+          description: State of prescriber’s working address. Two-letter state abbreviation
+          example: CA
+        country:
+          type: string
+          description: US (default)
+          example: US
+          default: US
+        zip:
+          type: string
+          description: Zip code of prescriber’s working address
+          example: '94545'
+          pattern: ^\d{5}(-\d{4})?$
+        phone:
+          type: string
+          description: Prescriber’s phone number
+          example: (855) 910-8606
+        email:
+          type: string
+          description: Prescriber’s email
+          example: truepill@truepill.com
+          x-format:
+            email: true
+        fax:
+          type: string
+          description: Prescriber’s fax number
+          example: (855) 910-8606
+      required:
+      - street1
+      - city
+      - state
+      - zip
+      - phone
+    Model165:
+      type: object
+      properties:
+        key:
+          type: string
+          example: address.phone
+        message:
+          type: string
+          example: is required
+    Model60:
+      type: object
+      properties:
+        prescriber_type:
+          type: string
+          example: OD
+        first_name:
+          type: string
+          description: Prescriber’s first name
+          example: Bruce
+        last_name:
+          type: string
+          description: Prescriber’s last name
+          example: Banner
+        dea:
+          type: string
+          description: Prescriber’s DEA license ID
+          example: BI7884668
+        npi:
+          type: string
+          description: Prescriber’s National Provider Identifier
+          example: '1497742761'
+        address:
+          $ref: '#/components/schemas/Model59'
+        prescriber_token:
+          type: string
+          example: b6aba8097c2059820fb3
+      required:
+      - first_name
+      - last_name
+    Model61:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 404
+        error:
+          type: string
+          example: Not Found
+        message:
+          type: string
+          example: Unable to find Prescriber.
+    Model59:
+      type: object
+      description: Prescriber's address details
+      properties:
+        name:
+          type: string
+          description: Clinic name that the prescriber works at
+          example: Test clinic
+        street1:
+          type: string
+          description: Street 1 of prescriber’s working address
+          example: 123 Some Lane
+        street2:
+          type: string
+          description: Street 2 of prescriber’s working address
+          example: Apt. 123
+        city:
+          type: string
+          description: City of prescriber’s working address
+          example: Los Angeles
+        state:
+          type: string
+          description: State of prescriber’s working address. Two-letter state abbreviation
+          example: CA
+        zip:
+          type: string
+          description: Zip code of prescriber’s working address
+          example: '01000'
+        country:
+          type: string
+          description: US (default)
+          example: US
+        phone:
+          type: string
+          description: Prescriber’s phone number
+          example: '4303043949'
+        email:
+          type: string
+          description: Prescriber’s email
+          example: hulkout@hulk.com
+        fax:
+          type: string
+          description: Prescriber’s fax number
+          example: '430304394'
+    Model167:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 400
+        error:
+          type: string
+          example: Bad Request
+        validation_errors:
+          $ref: '#/components/schemas/Model166'
     Model163:
       type: object
       properties:
@@ -185,172 +345,12 @@ components:
       - npi
       - active
       - address
-    Model60:
-      type: object
-      properties:
-        prescriber_type:
-          type: string
-          example: OD
-        first_name:
-          type: string
-          description: Prescriber’s first name
-          example: Bruce
-        last_name:
-          type: string
-          description: Prescriber’s last name
-          example: Banner
-        dea:
-          type: string
-          description: Prescriber’s DEA license ID
-          example: BI7884668
-        npi:
-          type: string
-          description: Prescriber’s National Provider Identifier
-          example: '1497742761'
-        address:
-          $ref: '#/components/schemas/Model59'
-        prescriber_token:
-          type: string
-          example: b6aba8097c2059820fb3
-      required:
-      - first_name
-      - last_name
-    Model165:
-      type: object
-      properties:
-        key:
-          type: string
-          example: address.phone
-        message:
-          type: string
-          example: is required
-    Model167:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 400
-        error:
-          type: string
-          example: Bad Request
-        validation_errors:
-          $ref: '#/components/schemas/Model166'
-    Model61:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 404
-        error:
-          type: string
-          example: Not Found
-        message:
-          type: string
-          example: Unable to find Prescriber.
     Model164:
       type: object
       properties:
         prescriber_token:
           type: string
           example: e9c4778365b209a81bc9
-    Model59:
-      type: object
-      description: Prescriber's address details
-      properties:
-        name:
-          type: string
-          description: Clinic name that the prescriber works at
-          example: Test clinic
-        street1:
-          type: string
-          description: Street 1 of prescriber’s working address
-          example: 123 Some Lane
-        street2:
-          type: string
-          description: Street 2 of prescriber’s working address
-          example: Apt. 123
-        city:
-          type: string
-          description: City of prescriber’s working address
-          example: Los Angeles
-        state:
-          type: string
-          description: State of prescriber’s working address. Two-letter state abbreviation
-          example: CA
-        zip:
-          type: string
-          description: Zip code of prescriber’s working address
-          example: '01000'
-        country:
-          type: string
-          description: US (default)
-          example: US
-        phone:
-          type: string
-          description: Prescriber’s phone number
-          example: '4303043949'
-        email:
-          type: string
-          description: Prescriber’s email
-          example: hulkout@hulk.com
-        fax:
-          type: string
-          description: Prescriber’s fax number
-          example: '430304394'
-    Model162:
-      type: object
-      description: Prescriber's address details
-      properties:
-        clinic_name:
-          type: string
-          description: Clinic name that the prescriber works at
-          example: True Clinic
-        street1:
-          type: string
-          description: Street 1 of prescriber’s working address
-          example: 3121 Diablo Ave
-        street2:
-          type: string
-          description: Street 2 of prescriber’s working address
-          example: 123 Some Lane
-        city:
-          type: string
-          description: City of prescriber’s working address
-          example: Hayward
-        state:
-          type: string
-          description: State of prescriber’s working address. Two-letter state abbreviation
-          example: CA
-        country:
-          type: string
-          description: US (default)
-          example: US
-          default: US
-        zip:
-          type: string
-          description: Zip code of prescriber’s working address
-          example: '94545'
-          pattern: ^\d{5}(-\d{4})?$
-        phone:
-          type: string
-          description: Prescriber’s phone number
-          example: (855) 910-8606
-        email:
-          type: string
-          description: Prescriber’s email
-          example: truepill@truepill.com
-          x-format:
-            email: true
-        fax:
-          type: string
-          description: Prescriber’s fax number
-          example: (855) 910-8606
-      required:
-      - street1
-      - city
-      - state
-      - zip
-      - phone
     Model166:
       type: array
       items:

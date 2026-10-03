@@ -93,20 +93,11 @@ paths:
                 $ref: '#/components/schemas/Model9'
 components:
   schemas:
-    Model10:
+    Model11:
       type: object
       properties:
-        start:
-          type: string
-          format: date-time
-          example: '2022-04-06T05:00:00.000Z'
-        end:
-          type: string
-          format: date-time
-          example: '2022-04-07T08:00:00.000Z'
-      required:
-      - start
-      - end
+        availabilities:
+          $ref: '#/components/schemas/availabilities'
     Model12:
       type: object
       properties:
@@ -116,18 +107,6 @@ components:
         message:
           type: string
           example: length must be 24 characters long
-    Model14:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 404
-        error:
-          type: string
-          example: Not Found
-        message:
-          type: string
-          example: Consult questionnaire not found. (You may not be authorized to it)
     Model8:
       type: object
       properties:
@@ -144,23 +123,6 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Model10'
-    Model9:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 500
-        error:
-          type: string
-          example: An internal server error occurred
-        message:
-          type: string
-          example: An internal server error occurred
-    Model11:
-      type: object
-      properties:
-        availabilities:
-          $ref: '#/components/schemas/availabilities'
     validation_errors:
       type: array
       items:
@@ -176,6 +138,44 @@ components:
           example: Bad Request
         validation_errors:
           $ref: '#/components/schemas/validation_errors'
+    Model9:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 500
+        error:
+          type: string
+          example: An internal server error occurred
+        message:
+          type: string
+          example: An internal server error occurred
+    Model10:
+      type: object
+      properties:
+        start:
+          type: string
+          format: date-time
+          example: '2022-04-06T05:00:00.000Z'
+        end:
+          type: string
+          format: date-time
+          example: '2022-04-07T08:00:00.000Z'
+      required:
+      - start
+      - end
+    Model14:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 404
+        error:
+          type: string
+          example: Not Found
+        message:
+          type: string
+          example: Consult questionnaire not found. (You may not be authorized to it)
   securitySchemes:
     apiKey:
       type: apiKey

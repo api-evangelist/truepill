@@ -38,9 +38,7 @@
     "truepill-scheduled-actions-api-openapi.yml",
     "truepill-scheduled-fill-requests-api-openapi.yml"
   ],
-  "archived": [
-    "deleted 4 superseded output(s) from the previous generation"
-  ],
+  "archived": [],
   "errors": [
     "truepill-fuzerx-swagger.json: dangling $ref: #/definitions/Current%20medication",
     "truepill-fuzerx-swagger.json: dangling $ref: #/definitions/Lab%20tests",
@@ -232,17 +230,41 @@
     "truepill-fuzerx-swagger.json: declared missing tag: diagnostics",
     "truepill-fuzerx-swagger.json: declared missing tag: scheduled-actions",
     "truepill-fuzerx-swagger.json: declared missing tag: scheduled-fill-requests",
-    "superseded outputs removed: truepill-api-api-openapi.yml, truepill-v0-api-openapi.yml, truepill-v1-api-openapi.yml, truepill-v2-api-openapi.yml",
-    "apis.yml register: written (+29 apis, 33 total)"
+    "apis.yml register: already-registered"
   ],
   "skipped": [
-    "truepill-api-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "truepill-auto-refill-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "truepill-availability-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "truepill-cancel-request-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "truepill-consults-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "truepill-copay-request-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "truepill-coverage-request-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "truepill-diagnostics-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "truepill-direct-transfer-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "truepill-external-location-matches-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "truepill-external-locations-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "truepill-external-transfers-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "truepill-fill-request-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "truepill-fill-requests-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "truepill-fuzion-test-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "truepill-insurance-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "truepill-media-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "truepill-nearby-same-day-pickup-locations-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "truepill-open-api-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "truepill-order-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "truepill-patient-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "truepill-pharmacy-coverage-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "truepill-prescriber-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "truepill-prescription-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "truepill-prescriptions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "truepill-prior-authorization-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "truepill-same-day-delivery-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "truepill-schedule-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "truepill-scheduled-actions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "truepill-scheduled-fill-requests-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "truepill-v0-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "truepill-v1-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "truepill-v2-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+    "truepill-specialty-pharmacies-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "truepill-transfer-request-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "truepill-update-request-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "truepill-webhook-events-api-openapi.yml: previously refined output, superseded by openapi/_original/"
   ]
 }

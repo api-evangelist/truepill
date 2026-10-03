@@ -89,37 +89,10 @@ paths:
                 $ref: '#/components/schemas/Model9'
 components:
   schemas:
-    otc_product:
-      type: object
-      properties:
-        sku:
-          type: string
-          example: SKU-123-456
-        quantity:
-          type: number
-          example: 1
-        patient_consent:
-          $ref: '#/components/schemas/patient_consent'
-        is_cancellable:
-          type: boolean
-          description: Indicates whether this OTC product can be cancelled. False if packing slip has been printed.
-          example: true
-    results:
+    otc_products:
       type: array
       items:
-        $ref: '#/components/schemas/Model21'
-    Model22:
-      type: object
-      properties:
-        results:
-          $ref: '#/components/schemas/results'
-        next_page_token:
-          type: string
-          example: JpdiI6IjdkNWViNWU5MTViNjAzNzAwYjQ4NTI3YjEyZjIzNDFkIiwiY29udGVudCI6IjE2YTcyNmQ4OGI3NTNlYzRjMTE5ZDc5NWIyMmE4MDRkN2UzYzA3YTA1M
-    medications:
-      type: array
-      items:
-        $ref: '#/components/schemas/medication_response'
+        $ref: '#/components/schemas/otc_product'
     patient_survey:
       type: object
       example:
@@ -190,10 +163,14 @@ components:
       - allergies
       - medications
       - conditions
-    receipt_items:
-      type: array
-      items:
-        $ref: '#/components/schemas/Model20'
+    Model22:
+      type: object
+      properties:
+        results:
+          $ref: '#/components/schemas/results'
+        next_page_token:
+          type: string
+          example: JpdiI6IjdkNWViNWU5MTViNjAzNzAwYjQ4NTI3YjEyZjIzNDFkIiwiY29udGVudCI6IjE2YTcyNmQ4OGI3NTNlYzRjMTE5ZDc5NWIyMmE4MDRkN2UzYzA3YTA1M
     medication_response:
       type: object
       properties:
@@ -207,10 +184,46 @@ components:
           type: boolean
           description: Indicates whether this medication/fill can be cancelled.
           example: true
-    otc_products:
+    otc_product:
+      type: object
+      properties:
+        sku:
+          type: string
+          example: SKU-123-456
+        quantity:
+          type: number
+          example: 1
+        patient_consent:
+          $ref: '#/components/schemas/patient_consent'
+        is_cancellable:
+          type: boolean
+          description: Indicates whether this OTC product can be cancelled. False if packing slip has been printed.
+          example: true
+    medications:
       type: array
       items:
-        $ref: '#/components/schemas/otc_product'
+        $ref: '#/components/schemas/medication_response'
+    patient_consent:
+      type: object
+      properties:
+        consent_statement:
+          type: string
+        consent_method:
+          type: string
+        consent_date:
+          type: string
+        consent_type:
+          type: string
+        patient_name:
+          type: string
+        consent_provided_by:
+          type: string
+        item:
+          type: string
+    receipt_items:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model20'
     Model20:
       type: object
       properties:
@@ -237,23 +250,6 @@ components:
       - category
       - prescription_token
       - amount
-    patient_consent:
-      type: object
-      properties:
-        consent_statement:
-          type: string
-        consent_method:
-          type: string
-        consent_date:
-          type: string
-        consent_type:
-          type: string
-        patient_name:
-          type: string
-        consent_provided_by:
-          type: string
-        item:
-          type: string
     current_stripe_payment:
       type: object
       properties:
@@ -277,6 +273,22 @@ components:
       required:
       - stripe_id
       - amount
+    Model9:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 500
+        error:
+          type: string
+          example: An internal server error occurred
+        message:
+          type: string
+          example: An internal server error occurred
+    results:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model21'
     Model21:
       type: object
       properties:
@@ -352,18 +364,6 @@ components:
           $ref: '#/components/schemas/current_stripe_payment'
       required:
       - patient_survey
-    Model9:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 500
-        error:
-          type: string
-          example: An internal server error occurred
-        message:
-          type: string
-          example: An internal server error occurred
   securitySchemes:
     apiKey:
       type: apiKey

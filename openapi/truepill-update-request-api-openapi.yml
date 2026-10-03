@@ -79,15 +79,6 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Model185'
-    Model185:
-      type: object
-      properties:
-        key:
-          type: string
-          example: patient_token
-        message:
-          type: string
-          example: is not allowed
     Model184:
       type: object
       properties:
@@ -102,17 +93,6 @@ components:
           example: success
         details:
           $ref: '#/components/schemas/Model183'
-    Model187:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 400
-        error:
-          type: string
-          example: Bad Request
-        validation_errors:
-          $ref: '#/components/schemas/Model186'
     Model182:
       type: object
       properties:
@@ -213,6 +193,26 @@ components:
       - address_to_state
       - address_to_zip
       - address_to_phone
+    Model185:
+      type: object
+      properties:
+        key:
+          type: string
+          example: patient_token
+        message:
+          type: string
+          example: is not allowed
+    Model187:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 400
+        error:
+          type: string
+          example: Bad Request
+        validation_errors:
+          $ref: '#/components/schemas/Model186'
   securitySchemes:
     apiKey:
       type: apiKey

@@ -87,12 +87,41 @@ paths:
               $ref: '#/components/schemas/Model118'
 components:
   schemas:
-    Model121:
+    cancelled_medications:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model119'
+    Model114:
       type: object
       properties:
         sku:
           type: string
-          example: SKU-123-456
+          description: SKU of the OTC product to cancel
+      required:
+      - sku
+    Model119:
+      type: object
+      properties:
+        prescription_token:
+          type: string
+          example: e61e324f9018
+    Model127:
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          example: 1631571795.423
+        status:
+          type: string
+          example: error
+        message:
+          type: string
+          example: There was an error cancelling this request (fill_request_5c4b21b9aecaea155d67), either you are not the owner of the request, or have already cancelled the request. Please contact us at (855) 910-8606 for help if neither is the case.
+    Model117:
+      type: array
+      description: Array of medications to cancel. If provided, only these medications will be cancelled. If all medications on the order are cancelled, the entire order will be cancelled.
+      items:
+        $ref: '#/components/schemas/Model116'
     Model124:
       type: object
       properties:
@@ -111,29 +140,6 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Model121'
-    Model115:
-      type: array
-      description: Array of OTC products to cancel. If provided, only these OTC products will be cancelled. If all OTC products on the order are cancelled, the entire order will be cancelled.
-      items:
-        $ref: '#/components/schemas/Model114'
-    failed_medications:
-      type: array
-      items:
-        $ref: '#/components/schemas/Model120'
-    Model116:
-      type: object
-      properties:
-        prescription_token:
-          type: string
-          description: Prescription token to cancel
-      required:
-      - prescription_token
-    Model119:
-      type: object
-      properties:
-        prescription_token:
-          type: string
-          example: e61e324f9018
     Model126:
       type: object
       properties:
@@ -146,34 +152,15 @@ components:
         message:
           type: string
           example: There was an error cancelling this request (fill_request_5c4b21b9aecaea155d67), either you are not the owner of the request, or have already cancelled the request. Please contact us at (855) 910-8606 for help if neither is the case.
-    Model127:
-      type: object
-      properties:
-        timestamp:
-          type: integer
-          example: 1631571795.423
-        status:
-          type: string
-          example: error
-        message:
-          type: string
-          example: There was an error cancelling this request (fill_request_5c4b21b9aecaea155d67), either you are not the owner of the request, or have already cancelled the request. Please contact us at (855) 910-8606 for help if neither is the case.
     failed_otc_products:
       type: array
       items:
         $ref: '#/components/schemas/Model122'
-    Model114:
-      type: object
-      properties:
-        sku:
-          type: string
-          description: SKU of the OTC product to cancel
-      required:
-      - sku
-    cancelled_medications:
+    Model115:
       type: array
+      description: Array of OTC products to cancel. If provided, only these OTC products will be cancelled. If all OTC products on the order are cancelled, the entire order will be cancelled.
       items:
-        $ref: '#/components/schemas/Model119'
+        $ref: '#/components/schemas/Model114'
     Model125:
       type: object
       properties:
@@ -186,15 +173,6 @@ components:
         message:
           type: string
           example: There was an error cancelling this request (fill_request_5c4b21b9aecaea155d67), either you are not the owner of the request, or have already cancelled the request. Please contact us at (855) 910-8606 for help if neither is the case.
-    Model122:
-      type: object
-      properties:
-        sku:
-          type: string
-          example: SKU-123-456
-        reason:
-          type: string
-          example: OTC Product already cancelled or cancellation failed
     Model123:
       type: object
       properties:
@@ -215,11 +193,6 @@ components:
           $ref: '#/components/schemas/cancelled_otc_products'
         failed_otc_products:
           $ref: '#/components/schemas/failed_otc_products'
-    Model117:
-      type: array
-      description: Array of medications to cancel. If provided, only these medications will be cancelled. If all medications on the order are cancelled, the entire order will be cancelled.
-      items:
-        $ref: '#/components/schemas/Model116'
     Model120:
       type: object
       properties:
@@ -229,6 +202,15 @@ components:
         reason:
           type: string
           example: Medication already cancelled or cancellation failed
+    Model122:
+      type: object
+      properties:
+        sku:
+          type: string
+          example: SKU-123-456
+        reason:
+          type: string
+          example: OTC Product already cancelled or cancellation failed
     Model118:
       type: object
       properties:
@@ -242,6 +224,24 @@ components:
           $ref: '#/components/schemas/Model117'
       required:
       - request_id
+    Model116:
+      type: object
+      properties:
+        prescription_token:
+          type: string
+          description: Prescription token to cancel
+      required:
+      - prescription_token
+    Model121:
+      type: object
+      properties:
+        sku:
+          type: string
+          example: SKU-123-456
+    failed_medications:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model120'
   securitySchemes:
     apiKey:
       type: apiKey

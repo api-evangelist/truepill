@@ -69,18 +69,6 @@ paths:
               $ref: '#/components/schemas/Prior%20Authorization%20Request%20Fields'
 components:
   schemas:
-    Model170:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 400
-        error:
-          type: string
-          example: Bad Request
-        message:
-          type: string
-          example: Invalid request payload JSON format
     Model168:
       type: object
       properties:
@@ -115,6 +103,18 @@ components:
       - patient_token
       - insurance_token
       - prescription_token
+    Model170:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 400
+        error:
+          type: string
+          example: Bad Request
+        message:
+          type: string
+          example: Invalid request payload JSON format
     Model169:
       type: object
       properties:

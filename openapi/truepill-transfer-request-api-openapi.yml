@@ -221,18 +221,14 @@ paths:
                 $ref: '#/components/schemas/Model69'
 components:
   schemas:
-    Model175:
-      type: object
-      properties:
-        transfer_medication_id:
-          type: string
-          example: a4d262ba4793835c
-        transfer_medication_token:
-          type: string
-          example: a4d262ba4793835c
-        medication_name:
-          type: string
-          example: Lisinopril 5 mg Oral Tablet *[41]*
+    transfer_medications:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model29'
+    Model176:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model175'
     Model178:
       type: object
       properties:
@@ -247,49 +243,18 @@ components:
           example: success
         details:
           $ref: '#/components/schemas/Model177'
-    Model181:
+    Model24:
       type: object
       properties:
         statusCode:
           type: number
-          example: 400
+          example: 404
         error:
           type: string
-          example: Bad Request
-        validation_errors:
-          $ref: '#/components/schemas/Model180'
-    Model65:
-      type: object
-      properties:
-        url_token:
-          type: string
-          example: e6014ac9da658c1c
-        medication_name:
-          type: string
-          example: duloxetine 30mg capsule
-        rejection_reason:
-          type: string
-        rejection_reason_other:
-          type: string
-        prescription:
-          $ref: '#/components/schemas/Model64'
-    Model31:
-      type: array
-      items:
-        $ref: '#/components/schemas/Model30'
-    Model179:
-      type: object
-      properties:
-        key:
-          type: string
-          example: ''
+          example: Not Found
         message:
           type: string
-          example: Transfer request must contain at least one of [patient_token, patient_first_name]
-    Model176:
-      type: array
-      items:
-        $ref: '#/components/schemas/Model175'
+          example: Unable to find Patient.
     Model177:
       type: object
       properties:
@@ -310,101 +275,6 @@ components:
         patient_token:
           type: string
           example: 507ee4b3ea5318b7
-    Model30:
-      type: object
-      properties:
-        created_at:
-          type: string
-          format: date
-          example: '2021-02-28T22:34:50.000Z'
-        url_token:
-          type: string
-          example: e4bce6d1e2
-        status:
-          type: string
-          example: completed
-        transfer_medications:
-          $ref: '#/components/schemas/transfer_medications'
-    Model66:
-      type: array
-      items:
-        $ref: '#/components/schemas/Model65'
-    Model64:
-      type: object
-      properties:
-        url_token:
-          type: string
-          example: 0a5211b5f1db
-        prescribed_written_name:
-          type: string
-          example: Lisinopril 5 mg Oral Tablet
-        prescribed_generic_name:
-          type: string
-          example: Generic 10mg tablet
-        last_filled_date:
-          type: string
-          example: '2021-02-28T22:34:50.000Z'
-        prescribed_quantity:
-          type: number
-          example: 60
-        prescriber:
-          type: string
-          example: Dr. Nick Rivera
-        num_refills_remaining:
-          type: number
-          example: 0
-        medication_name:
-          type: string
-          example: Generic 10mg tablet
-        prescription_date:
-          type: string
-        days_supply:
-          type: string
-          example: '30'
-        num_refills_filled:
-          type: string
-          example: '0'
-    Model29:
-      type: object
-      properties:
-        url_token:
-          type: string
-          example: e6014ac9da658c1c
-        medication_name:
-          type: string
-          example: duloxetine 30mg capsule
-    Model24:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 404
-        error:
-          type: string
-          example: Not Found
-        message:
-          type: string
-          example: Unable to find Patient.
-    transfer_medications:
-      type: array
-      items:
-        $ref: '#/components/schemas/Model29'
-    Model180:
-      type: array
-      items:
-        $ref: '#/components/schemas/Model179'
-    Model69:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 404
-        error:
-          type: string
-          example: Not Found
-        message:
-          type: string
-          example: Transfer not found.
     Model67:
       type: object
       properties:
@@ -447,6 +317,136 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Model67'
+    Model30:
+      type: object
+      properties:
+        created_at:
+          type: string
+          format: date
+          example: '2021-02-28T22:34:50.000Z'
+        url_token:
+          type: string
+          example: e4bce6d1e2
+        status:
+          type: string
+          example: completed
+        transfer_medications:
+          $ref: '#/components/schemas/transfer_medications'
+    Model29:
+      type: object
+      properties:
+        url_token:
+          type: string
+          example: e6014ac9da658c1c
+        medication_name:
+          type: string
+          example: duloxetine 30mg capsule
+    Model31:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model30'
+    Model65:
+      type: object
+      properties:
+        url_token:
+          type: string
+          example: e6014ac9da658c1c
+        medication_name:
+          type: string
+          example: duloxetine 30mg capsule
+        rejection_reason:
+          type: string
+        rejection_reason_other:
+          type: string
+        prescription:
+          $ref: '#/components/schemas/Model64'
+    Model69:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 404
+        error:
+          type: string
+          example: Not Found
+        message:
+          type: string
+          example: Transfer not found.
+    Model180:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model179'
+    Model66:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model65'
+    Model175:
+      type: object
+      properties:
+        transfer_medication_id:
+          type: string
+          example: a4d262ba4793835c
+        transfer_medication_token:
+          type: string
+          example: a4d262ba4793835c
+        medication_name:
+          type: string
+          example: Lisinopril 5 mg Oral Tablet *[41]*
+    Model181:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 400
+        error:
+          type: string
+          example: Bad Request
+        validation_errors:
+          $ref: '#/components/schemas/Model180'
+    Model179:
+      type: object
+      properties:
+        key:
+          type: string
+          example: ''
+        message:
+          type: string
+          example: Transfer request must contain at least one of [patient_token, patient_first_name]
+    Model64:
+      type: object
+      properties:
+        url_token:
+          type: string
+          example: 0a5211b5f1db
+        prescribed_written_name:
+          type: string
+          example: Lisinopril 5 mg Oral Tablet
+        prescribed_generic_name:
+          type: string
+          example: Generic 10mg tablet
+        last_filled_date:
+          type: string
+          example: '2021-02-28T22:34:50.000Z'
+        prescribed_quantity:
+          type: number
+          example: 60
+        prescriber:
+          type: string
+          example: Dr. Nick Rivera
+        num_refills_remaining:
+          type: number
+          example: 0
+        medication_name:
+          type: string
+          example: Generic 10mg tablet
+        prescription_date:
+          type: string
+        days_supply:
+          type: string
+          example: '30'
+        num_refills_filled:
+          type: string
+          example: '0'
   securitySchemes:
     apiKey:
       type: apiKey

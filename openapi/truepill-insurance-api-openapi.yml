@@ -249,15 +249,73 @@ paths:
               $ref: '#/components/schemas/Model214'
 components:
   schemas:
-    Model157:
+    Model158:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model157'
+    Model217:
       type: object
       properties:
-        key:
+        statusCode:
+          type: number
+          example: 503
+        error:
           type: string
-          example: insurance.cardholder_id
+          example: Service Unavailable
         message:
           type: string
-          example: cardholder_id must be a string
+          example: Surescripts service is currently unavailable
+    Model156:
+      type: object
+      properties:
+        request_id:
+          type: string
+          example: 6996e3bde41c7fabbbd3df39619f78bf
+        timestamp:
+          type: integer
+          example: 1631571795.423
+        status:
+          type: string
+          example: success
+        details:
+          $ref: '#/components/schemas/Model155'
+    Model52:
+      type: object
+      properties:
+        cardholder_id:
+          type: string
+          example: A9321328
+        rx_group:
+          type: string
+          example: '006726'
+        rx_bin:
+          type: string
+          example: '997928'
+        pcn:
+          type: string
+          example: AXA
+    Model214:
+      type: object
+      description: Either patient_token or patient_details must be provided, but not both
+      properties:
+        patient_token:
+          type: string
+          description: Patient token
+          example: 4526d90a
+        patient_details:
+          $ref: '#/components/schemas/patient_details'
+    Model218:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 504
+        error:
+          type: string
+          example: Gateway Timeout
+        message:
+          type: string
+          example: Surescripts service request timed out
     Model215:
       type: object
       properties:
@@ -310,6 +368,50 @@ components:
           type: string
           description: Patient relationship to subscriber
           example: Child
+    Model157:
+      type: object
+      properties:
+        key:
+          type: string
+          example: insurance.cardholder_id
+        message:
+          type: string
+          example: cardholder_id must be a string
+    Model134:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Patient not found
+    Model155:
+      type: object
+      properties:
+        insurance_token:
+          type: string
+          example: 498147cb8c59541b
+    Model216:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 400
+        error:
+          type: string
+          example: Bad Request
+        message:
+          type: string
+          example: Invalid or missing patient_token
+    Model159:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 400
+        error:
+          type: string
+          example: Bad Request
+        validation_errors:
+          $ref: '#/components/schemas/Model158'
     Model153:
       type: object
       properties:
@@ -381,75 +483,6 @@ components:
         message:
           type: string
           example: Unable to find Insurance.
-    Model218:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 504
-        error:
-          type: string
-          example: Gateway Timeout
-        message:
-          type: string
-          example: Surescripts service request timed out
-    Model216:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 400
-        error:
-          type: string
-          example: Bad Request
-        message:
-          type: string
-          example: Invalid or missing patient_token
-    Model52:
-      type: object
-      properties:
-        cardholder_id:
-          type: string
-          example: A9321328
-        rx_group:
-          type: string
-          example: '006726'
-        rx_bin:
-          type: string
-          example: '997928'
-        pcn:
-          type: string
-          example: AXA
-    Model156:
-      type: object
-      properties:
-        request_id:
-          type: string
-          example: 6996e3bde41c7fabbbd3df39619f78bf
-        timestamp:
-          type: integer
-          example: 1631571795.423
-        status:
-          type: string
-          example: success
-        details:
-          $ref: '#/components/schemas/Model155'
-    Model214:
-      type: object
-      description: Either patient_token or patient_details must be provided, but not both
-      properties:
-        patient_token:
-          type: string
-          description: Patient token
-          example: 4526d90a
-        patient_details:
-          $ref: '#/components/schemas/patient_details'
-    Model134:
-      type: object
-      properties:
-        message:
-          type: string
-          example: Patient not found
     patient_details:
       type: object
       description: Patient details
@@ -507,39 +540,6 @@ components:
       required:
       - insurance
       - patient_token
-    Model155:
-      type: object
-      properties:
-        insurance_token:
-          type: string
-          example: 498147cb8c59541b
-    Model158:
-      type: array
-      items:
-        $ref: '#/components/schemas/Model157'
-    Model217:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 503
-        error:
-          type: string
-          example: Service Unavailable
-        message:
-          type: string
-          example: Surescripts service is currently unavailable
-    Model159:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 400
-        error:
-          type: string
-          example: Bad Request
-        validation_errors:
-          $ref: '#/components/schemas/Model158'
   securitySchemes:
     apiKey:
       type: apiKey

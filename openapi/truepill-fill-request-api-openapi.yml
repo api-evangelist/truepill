@@ -341,121 +341,46 @@ paths:
               $ref: '#/components/schemas/Model235'
 components:
   schemas:
-    stripe_payment:
+    otc_products:
+      type: array
+      items:
+        $ref: '#/components/schemas/otc_product'
+    Model145:
       type: object
       properties:
-        category:
+        item:
           type: string
-          example: stripe
-        cardholder_name:
-          type: string
-          example: Bruce Banner
-        last_four_digits:
-          type: string
-          example: '6789'
-        stripe_id:
-          type: string
-          example: pi_10f410zj3018s2
-        amount:
-          type: number
-          example: 12.75
-        description:
-          type: string
-          example: Paid by patient
-      required:
-      - category
-      - stripe_id
-      - amount
-    Model149:
-      type: object
-      properties:
-        request_id:
-          type: string
-          example: fill_request_d1f54cea86bb7e030f09
-        timestamp:
-          type: integer
-          example: 1631571795
-        status:
-          type: string
-          example: success
-        details:
-          $ref: '#/components/schemas/Model148'
-    payload:
-      type: object
-      properties:
-        timestamp:
-          type: number
-          example: 1631593381
-        callback_type:
-          type: string
-          example: ORDER
-        details:
-          $ref: '#/components/schemas/Model34'
-    remaining_refills:
-      type: object
-      properties:
-        total_remaining_refills:
-          type: number
-          example: 5
-        total_quantity_remaining:
-          type: number
-          example: 150
-    otc_product:
-      type: object
-      properties:
-        sku:
-          type: string
-          example: SKU-123-456
-        quantity:
-          type: number
-          example: 1
-        patient_consent:
-          $ref: '#/components/schemas/patient_consent'
-        is_cancellable:
-          type: boolean
-          description: Indicates whether this OTC product can be cancelled. False if packing slip has been printed.
-          example: true
-    Model150:
-      type: object
-      properties:
-        key:
-          type: string
-          example: address_to_phone
-        message:
-          type: string
-          example: X is not a valid phone number of the form +17895551234 (10-15 digits)
-    Model103:
-      type: object
-      properties:
-        results:
-          $ref: '#/components/schemas/Model102'
-    Model144:
-      type: object
-      properties:
+          example: Vitamin B
         sku:
           type: string
           description: Store keeping unit
           example: '14147565'
+        bundle_id:
+          type: string
+        bundle_item_partial_return_allowed:
+          type: boolean
+          default: false
         quantity:
           type: number
           description: Quantity
           example: 30
           minimum: 1
-      required:
-      - sku
-      - quantity
-    Model235:
-      type: object
-      properties:
-        stripe_id:
+        customer_item_id:
           type: string
-          example: pi_10f410zj3018s2
+          description: Customer item ID
+        days_supply:
+          type: number
+          description: Days supply
+        pricing:
+          $ref: '#/components/schemas/pricing'
+        patient_consent:
+          $ref: '#/components/schemas/patient_consent'
       required:
-      - stripe_id
-    medications:
+      - quantity
+    Model102:
       type: array
       items:
-        $ref: '#/components/schemas/medication_response'
+        $ref: '#/components/schemas/Model101'
     delivery_data:
       type: object
       properties:
@@ -535,6 +460,27 @@ components:
       - allergies
       - medications
       - conditions
+    MedicationArray:
+      type: array
+      x-constraint: {}
+      items:
+        $ref: '#/components/schemas/Medication'
+    packing_materials:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model144'
+    Model51:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 404
+        error:
+          type: string
+          example: Not Found
+        message:
+          type: string
+          example: Unable to find Fill Request.
     Model50:
       type: object
       properties:
@@ -547,28 +493,274 @@ components:
         message:
           type: string
           example: Unauthorized from viewing this fill request
-    copay_payment:
+    Model150:
+      type: object
+      properties:
+        key:
+          type: string
+          example: address_to_phone
+        message:
+          type: string
+          example: X is not a valid phone number of the form +17895551234 (10-15 digits)
+    remaining_refills:
+      type: object
+      properties:
+        total_remaining_refills:
+          type: number
+          example: 5
+        total_quantity_remaining:
+          type: number
+          example: 150
+    medication_response:
+      type: object
+      properties:
+        prescription_token:
+          type: string
+          example: e61e324f9018
+        quantity:
+          type: number
+          example: 30
+        is_cancellable:
+          type: boolean
+          description: Indicates whether this medication/fill can be cancelled.
+          example: true
+    otc_product:
+      type: object
+      properties:
+        sku:
+          type: string
+          example: SKU-123-456
+        quantity:
+          type: number
+          example: 1
+        patient_consent:
+          $ref: '#/components/schemas/patient_consent'
+        is_cancellable:
+          type: boolean
+          description: Indicates whether this OTC product can be cancelled. False if packing slip has been printed.
+          example: true
+    Model239:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Unauthorized from viewing this fill request
+    Model144:
+      type: object
+      properties:
+        sku:
+          type: string
+          description: Store keeping unit
+          example: '14147565'
+        quantity:
+          type: number
+          description: Quantity
+          example: 30
+          minimum: 1
+      required:
+      - sku
+      - quantity
+    medications:
+      type: array
+      items:
+        $ref: '#/components/schemas/medication_response'
+    Model151:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model150'
+    Model148:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Your fill request has been processed successfully.
+        metadata:
+          type: string
+          example: Some metadata
+    Model32:
+      type: object
+      properties:
+        medication_name:
+          type: string
+          example: Bupropion Hcl XL 150 mg tablet
+        dispensed_medication_name:
+          type: string
+          example: Bupropion Hcl XL 150 mg tablet
+        requested_medication_name:
+          type: string
+          example: Bupropion Hcl XL 150 mg tablet
+        original_requested_prescription_token:
+          type: string
+          example: e61e324f9018
+        days_supply:
+          type: number
+          example: 30
+        quantity:
+          type: number
+          example: 30
+        fill_number:
+          type: number
+          example: 0
+        rx_number:
+          type: string
+          example: '201877000'
+        total_refills_allowed:
+          type: number
+          example: 5
+        prescription_token:
+          type: string
+          example: e61e324f9018
+        medication_token:
+          type: string
+          example: 11bb9146f972
+        remaining_refills:
+          $ref: '#/components/schemas/remaining_refills'
+        patient_cash_amount:
+          type: number
+          example: 10.5
+        rx_link:
+          type: string
+          example: rxl_d374bfb72980319f2a80f8af
+    Model235:
+      type: object
+      properties:
+        stripe_id:
+          type: string
+          example: pi_10f410zj3018s2
+      required:
+      - stripe_id
+    payload:
+      type: object
+      properties:
+        timestamp:
+          type: number
+          example: 1631593381
+        callback_type:
+          type: string
+          example: ORDER
+        details:
+          $ref: '#/components/schemas/Model34'
+    stripe_payment:
+      type: object
+      properties:
+        category:
+          type: string
+          example: stripe
+        cardholder_name:
+          type: string
+          example: Bruce Banner
+        last_four_digits:
+          type: string
+          example: '6789'
+        stripe_id:
+          type: string
+          example: pi_10f410zj3018s2
+        amount:
+          type: number
+          example: 12.75
+        description:
+          type: string
+          example: Paid by patient
+      required:
+      - category
+      - stripe_id
+      - amount
+    Model33:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model32'
+    patient_consent:
+      type: object
+      properties:
+        consent_statement:
+          type: string
+        consent_method:
+          type: string
+        consent_date:
+          type: string
+        consent_type:
+          type: string
+        patient_name:
+          type: string
+        consent_provided_by:
+          type: string
+        item:
+          type: string
+    Model152:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 400
+        error:
+          type: string
+          example: Bad Request
+        validation_errors:
+          $ref: '#/components/schemas/Model151'
+    receipt_items:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model20'
+    Model237:
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          example: 1631571795.423
+        status:
+          type: string
+          example: success
+        details:
+          $ref: '#/components/schemas/Model236'
+    Model20:
+      type: object
+      properties:
+        category:
+          type: string
+          example: prescription_copay
+          enum:
+          - prescription_copay
+          - tax
+          - shipping
+          - prescription_cash
+          - tax_copay
+          - processing_fee
+        prescription_token:
+          type: string
+          example: 0154cc7b065
+        amount:
+          type: number
+          example: 11.43
+        description:
+          type: string
+          example: Copay for medication A
+      required:
+      - category
+      - prescription_token
+      - amount
+    current_stripe_payment:
       type: object
       properties:
         cardholder_name:
           type: string
-          description: Cardholder name
-          example: John Doe
-        payment_type:
-          type: string
+          example: Bruce Banner
         last_four_digits:
           type: string
-          example: '4132'
-        transaction_amount:
+          example: '6789'
+        stripe_id:
+          type: string
+          example: pi_10f410zj3018s2
+        amount:
           type: number
-        card_type:
+          example: 12.75
+        description:
           type: string
-        transaction_date:
-          type: string
-        transaction_id:
+          example: Paid by patient
+        intent_status:
           type: string
       required:
-      - payment_type
+      - stripe_id
+      - amount
     Model236:
       type: object
       properties:
@@ -581,6 +773,15 @@ components:
       required:
       - stripe_id
       - fill_request_token
+    pricing:
+      type: object
+      properties:
+        cost:
+          type: number
+        tax:
+          type: number
+        total:
+          type: number
     Model147:
       type: object
       properties:
@@ -736,82 +937,54 @@ components:
       - address_to_zip
       - address_to_phone
       - patient_survey
-    receipt_items:
-      type: array
-      items:
-        $ref: '#/components/schemas/Model20'
-    Model152:
+    Model34:
       type: object
       properties:
-        statusCode:
-          type: number
-          example: 400
-        error:
+        metadata:
           type: string
-          example: Bad Request
-        validation_errors:
-          $ref: '#/components/schemas/Model151'
-    medication_response:
-      type: object
-      properties:
-        prescription_token:
-          type: string
-          example: e61e324f9018
-        quantity:
-          type: number
-          example: 30
-        is_cancellable:
-          type: boolean
-          description: Indicates whether this medication/fill can be cancelled.
-          example: true
-    Model145:
-      type: object
-      properties:
-        item:
-          type: string
-          example: Vitamin B
-        sku:
-          type: string
-          description: Store keeping unit
-          example: '14147565'
-        bundle_id:
-          type: string
-        bundle_item_partial_return_allowed:
-          type: boolean
-          default: false
-        quantity:
-          type: number
-          description: Quantity
-          example: 30
-          minimum: 1
-        customer_item_id:
-          type: string
-          description: Customer item ID
-        days_supply:
-          type: number
-          description: Days supply
-        pricing:
-          $ref: '#/components/schemas/pricing'
-        patient_consent:
-          $ref: '#/components/schemas/patient_consent'
-      required:
-      - quantity
-    Model51:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 404
-        error:
-          type: string
-          example: Not Found
+          example: some metadata
         message:
           type: string
-          example: Unable to find Fill Request.
-    otc_products:
-      type: array
-      items:
-        $ref: '#/components/schemas/otc_product'
+          example: Your fill request was processed and is pending shipment.
+        date_filled:
+          type: string
+          example: Wed, 08 Sep 2021 10:04:25 GMT
+        order_token:
+          type: string
+          example: e4469e
+        medications:
+          $ref: '#/components/schemas/Model33'
+        tracking_url:
+          type: string
+          example: https://tools.usps.com/go/TrackConfirmAction_input?origTrackNum=48081107879780000000000000
+        location:
+          type: string
+          example: Brooklyn, NY
+        patient_token:
+          type: string
+          example: fa4ca2d7c1214214
+    copay_payment:
+      type: object
+      properties:
+        cardholder_name:
+          type: string
+          description: Cardholder name
+          example: John Doe
+        payment_type:
+          type: string
+        last_four_digits:
+          type: string
+          example: '4132'
+        transaction_amount:
+          type: number
+        card_type:
+          type: string
+        transaction_date:
+          type: string
+        transaction_id:
+          type: string
+      required:
+      - payment_type
     Model101:
       type: object
       properties:
@@ -819,78 +992,94 @@ components:
           $ref: '#/components/schemas/payload'
         delivery_data:
           $ref: '#/components/schemas/delivery_data'
-    Model20:
+    Model103:
       type: object
       properties:
-        category:
-          type: string
-          example: prescription_copay
-          enum:
-          - prescription_copay
-          - tax
-          - shipping
-          - prescription_cash
-          - tax_copay
-          - processing_fee
-        prescription_token:
-          type: string
-          example: 0154cc7b065
-        amount:
-          type: number
-          example: 11.43
-        description:
-          type: string
-          example: Copay for medication A
-      required:
-      - category
-      - prescription_token
-      - amount
-    patient_consent:
-      type: object
-      properties:
-        consent_statement:
-          type: string
-        consent_method:
-          type: string
-        consent_date:
-          type: string
-        consent_type:
-          type: string
-        patient_name:
-          type: string
-        consent_provided_by:
-          type: string
-        item:
-          type: string
-    current_stripe_payment:
-      type: object
-      properties:
-        cardholder_name:
-          type: string
-          example: Bruce Banner
-        last_four_digits:
-          type: string
-          example: '6789'
-        stripe_id:
-          type: string
-          example: pi_10f410zj3018s2
-        amount:
-          type: number
-          example: 12.75
-        description:
-          type: string
-          example: Paid by patient
-        intent_status:
-          type: string
-      required:
-      - stripe_id
-      - amount
+        results:
+          $ref: '#/components/schemas/Model102'
     Model238:
       type: object
       properties:
         message:
           type: string
           example: Invalid Stripe ID
+    Medication:
+      type: object
+      description: Medication description
+      example:
+      - prescription_token: z3q2jr
+      - prescription_token: 3cs873
+      properties:
+        medication_name:
+          type: string
+          description: Medication name
+          example: Ritalin
+          maxLength: 255
+        quantity_dispensed:
+          type: number
+          description: Dispensed medication quantity
+          example: 60
+        days_supply:
+          type: number
+          description: Days supply
+          example: 30
+        is_refill:
+          type: boolean
+          description: Is prescription a refill or new fill
+          example: true
+        medication_sig:
+          type: string
+          description: Recommendations for medicines
+          example: Apply daily.
+        prescribing_doctor:
+          type: string
+          description: Prescribing doctor
+          example: Dr. Storm
+        prescription_token:
+          type: string
+          description: Prescription token
+          example: 4526d90a
+          minLength: 1
+        rx_link:
+          type: string
+          minLength: 1
+        quantity:
+          type: number
+          description: Quantity sent
+          example: 30
+          x-constraint:
+            greater: 0
+        copay_payment:
+          $ref: '#/components/schemas/copay_payment'
+        ndc:
+          type: string
+          description: National drug code
+          example: '12345678901'
+          pattern: ^[0-9]{11}$
+        daw:
+          type: string
+          example: '2'
+          enum:
+          - '0'
+          - '2'
+        patient_consent:
+          $ref: '#/components/schemas/patient_consent'
+      required:
+      - daw
+    Model149:
+      type: object
+      properties:
+        request_id:
+          type: string
+          example: fill_request_d1f54cea86bb7e030f09
+        timestamp:
+          type: integer
+          example: 1631571795
+        status:
+          type: string
+          example: success
+        details:
+          $ref: '#/components/schemas/Model148'
     Model21:
       type: object
       properties:
@@ -966,191 +1155,6 @@ components:
           $ref: '#/components/schemas/current_stripe_payment'
       required:
       - patient_survey
-    Medication:
-      type: object
-      description: Medication description
-      example:
-      - prescription_token: z3q2jr
-      - prescription_token: 3cs873
-      properties:
-        medication_name:
-          type: string
-          description: Medication name
-          example: Ritalin
-          maxLength: 255
-        quantity_dispensed:
-          type: number
-          description: Dispensed medication quantity
-          example: 60
-        days_supply:
-          type: number
-          description: Days supply
-          example: 30
-        is_refill:
-          type: boolean
-          description: Is prescription a refill or new fill
-          example: true
-        medication_sig:
-          type: string
-          description: Recommendations for medicines
-          example: Apply daily.
-        prescribing_doctor:
-          type: string
-          description: Prescribing doctor
-          example: Dr. Storm
-        prescription_token:
-          type: string
-          description: Prescription token
-          example: 4526d90a
-          minLength: 1
-        rx_link:
-          type: string
-          minLength: 1
-        quantity:
-          type: number
-          description: Quantity sent
-          example: 30
-          x-constraint:
-            greater: 0
-        copay_payment:
-          $ref: '#/components/schemas/copay_payment'
-        ndc:
-          type: string
-          description: National drug code
-          example: '12345678901'
-          pattern: ^[0-9]{11}$
-        daw:
-          type: string
-          example: '2'
-          enum:
-          - '0'
-          - '2'
-        patient_consent:
-          $ref: '#/components/schemas/patient_consent'
-      required:
-      - daw
-    Model32:
-      type: object
-      properties:
-        medication_name:
-          type: string
-          example: Bupropion Hcl XL 150 mg tablet
-        dispensed_medication_name:
-          type: string
-          example: Bupropion Hcl XL 150 mg tablet
-        requested_medication_name:
-          type: string
-          example: Bupropion Hcl XL 150 mg tablet
-        original_requested_prescription_token:
-          type: string
-          example: e61e324f9018
-        days_supply:
-          type: number
-          example: 30
-        quantity:
-          type: number
-          example: 30
-        fill_number:
-          type: number
-          example: 0
-        rx_number:
-          type: string
-          example: '201877000'
-        total_refills_allowed:
-          type: number
-          example: 5
-        prescription_token:
-          type: string
-          example: e61e324f9018
-        medication_token:
-          type: string
-          example: 11bb9146f972
-        remaining_refills:
-          $ref: '#/components/schemas/remaining_refills'
-        patient_cash_amount:
-          type: number
-          example: 10.5
-        rx_link:
-          type: string
-          example: rxl_d374bfb72980319f2a80f8af
-    Model102:
-      type: array
-      items:
-        $ref: '#/components/schemas/Model101'
-    MedicationArray:
-      type: array
-      x-constraint: {}
-      items:
-        $ref: '#/components/schemas/Medication'
-    Model239:
-      type: object
-      properties:
-        message:
-          type: string
-          example: Unauthorized from viewing this fill request
-    Model148:
-      type: object
-      properties:
-        message:
-          type: string
-          example: Your fill request has been processed successfully.
-        metadata:
-          type: string
-          example: Some metadata
-    Model33:
-      type: array
-      items:
-        $ref: '#/components/schemas/Model32'
-    Model237:
-      type: object
-      properties:
-        timestamp:
-          type: integer
-          example: 1631571795.423
-        status:
-          type: string
-          example: success
-        details:
-          $ref: '#/components/schemas/Model236'
-    Model34:
-      type: object
-      properties:
-        metadata:
-          type: string
-          example: some metadata
-        message:
-          type: string
-          example: Your fill request was processed and is pending shipment.
-        date_filled:
-          type: string
-          example: Wed, 08 Sep 2021 10:04:25 GMT
-        order_token:
-          type: string
-          example: e4469e
-        medications:
-          $ref: '#/components/schemas/Model33'
-        tracking_url:
-          type: string
-          example: https://tools.usps.com/go/TrackConfirmAction_input?origTrackNum=48081107879780000000000000
-        location:
-          type: string
-          example: Brooklyn, NY
-        patient_token:
-          type: string
-          example: fa4ca2d7c1214214
-    pricing:
-      type: object
-      properties:
-        cost:
-          type: number
-        tax:
-          type: number
-        total:
-          type: number
-    Model151:
-      type: array
-      items:
-        $ref: '#/components/schemas/Model150'
     Model146:
       type: array
       example:
@@ -1158,10 +1162,6 @@ components:
         quantity: 30
       items:
         $ref: '#/components/schemas/Model145'
-    packing_materials:
-      type: array
-      items:
-        $ref: '#/components/schemas/Model144'
   securitySchemes:
     apiKey:
       type: apiKey

@@ -2343,11 +2343,6 @@ components:
           example: Discontinuation of therapy
       required:
       - reason
-    Model62:
-      type: object
-      properties:
-        prescription:
-          $ref: '#/components/schemas/prescription'
     prescription:
       type: object
       properties:
@@ -2520,25 +2515,61 @@ components:
       - quantity_remaining
       - current_rx_status_text
       - rx_link
-    Model229:
+    Model106:
       type: object
       properties:
-        reason_code:
+        xml:
           type: string
-          enum:
-          - RETAIL
-          - MAIL
-          - OON
-          - NOT_COVERED
-          - OTHER
-        additional_information:
+    Model63:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 404
+        error:
           type: string
-        transfer_to:
-          $ref: '#/components/schemas/transfer_to'
+          example: Not Found
+        message:
+          type: string
+          example: Unable to find Prescription.
+    Model112:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 404
+        error:
+          type: string
+          example: Not Found
+        message:
+          type: string
+          example: Unable to find Rx.
+    formulary:
+      type: object
+      description: Formulary details if available
+    transfer_to:
+      type: object
+      properties:
+        pharmacy_name:
+          type: string
+        pharmacist_name:
+          type: string
+        npi:
+          type: string
+          pattern: ^[0-9]+$
+          x-constraint:
+            length: 10
+        phone:
+          type: string
+          pattern: ^\(?\d{3}\)?[-\s]?\d{3}[-\s]?\d{4}$
+        fax:
+          type: string
+          pattern: ^\(?\d{3}\)?[-\s]?\d{3}[-\s]?\d{4}$
+        address:
+          $ref: '#/components/schemas/Model228'
       required:
-      - reason_code
-      - additional_information
-      - transfer_to
+      - pharmacy_name
+      - address
     Model111:
       type: array
       items:
@@ -2572,40 +2603,6 @@ components:
           type: number
           description: Payor adjudication amount
           example: 0
-    icd_codes:
-      type: object
-    Model63:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 404
-        error:
-          type: string
-          example: Not Found
-        message:
-          type: string
-          example: Unable to find Prescription.
-    formulary:
-      type: object
-      description: Formulary details if available
-    Model106:
-      type: object
-      properties:
-        xml:
-          type: string
-    Model112:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 404
-        error:
-          type: string
-          example: Not Found
-        message:
-          type: string
-          example: Unable to find Rx.
     Model228:
       type: object
       properties:
@@ -2624,29 +2621,27 @@ components:
       - city
       - state
       - zip
-    transfer_to:
+    icd_codes:
+      type: object
+    Model229:
       type: object
       properties:
-        pharmacy_name:
+        reason_code:
           type: string
-        pharmacist_name:
+          enum:
+          - RETAIL
+          - MAIL
+          - OON
+          - NOT_COVERED
+          - OTHER
+        additional_information:
           type: string
-        npi:
-          type: string
-          pattern: ^[0-9]+$
-          x-constraint:
-            length: 10
-        phone:
-          type: string
-          pattern: ^\(?\d{3}\)?[-\s]?\d{3}[-\s]?\d{4}$
-        fax:
-          type: string
-          pattern: ^\(?\d{3}\)?[-\s]?\d{3}[-\s]?\d{4}$
-        address:
-          $ref: '#/components/schemas/Model228'
+        transfer_to:
+          $ref: '#/components/schemas/transfer_to'
       required:
-      - pharmacy_name
-      - address
+      - reason_code
+      - additional_information
+      - transfer_to
     insurance:
       type: object
       properties:
@@ -2666,6 +2661,11 @@ components:
           type: string
           description: Member ID number on insurance card
           example: '321654'
+    Model62:
+      type: object
+      properties:
+        prescription:
+          $ref: '#/components/schemas/prescription'
   securitySchemes:
     apiKey:
       type: apiKey

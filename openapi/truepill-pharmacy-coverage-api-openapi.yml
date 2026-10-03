@@ -115,15 +115,20 @@ paths:
                 $ref: '#/components/schemas/Model28'
 components:
   schemas:
-    Model27:
+    Model28:
       type: object
       properties:
         statusCode:
           type: number
-          example: 401
+          example: 403
         message:
           type: string
-          example: Unauthorized
+          example: Forbidden
+    message:
+      type: array
+      items:
+        type: string
+        example: Invalid bin field length. bin must be in numeric string format and length must be equal to 6 characters
     Model26:
       type: object
       properties:
@@ -135,6 +140,15 @@ components:
         error:
           type: string
           example: Bad Request
+    Model27:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 401
+        message:
+          type: string
+          example: Unauthorized
     Model25:
       type: object
       properties:
@@ -169,20 +183,6 @@ components:
         phone:
           type: string
           example: (111) 123-4321
-    message:
-      type: array
-      items:
-        type: string
-        example: Invalid bin field length. bin must be in numeric string format and length must be equal to 6 characters
-    Model28:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 403
-        message:
-          type: string
-          example: Forbidden
   securitySchemes:
     apiKey:
       type: apiKey

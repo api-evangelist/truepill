@@ -213,75 +213,6 @@ paths:
                 $ref: '#/components/schemas/Model74'
 components:
   schemas:
-    Model72:
-      type: object
-      properties:
-        payload:
-          $ref: '#/components/schemas/Model71'
-        delivery_data:
-          $ref: '#/components/schemas/delivery_data'
-        next_page_token:
-          type: string
-          example: eyJpdiI6IjRiNDc2ODM3ODI2MWU4N2Q1ZmQwNzQ2MzhlZWFiZmQ3IiwiY29udGVudCI6IjY3YWYxNGRmYTQ4Mzg1ZTMzMjBhZTA0MjAwODBhOTQ4OTIzNjMzYzIxODIwMzIifZ==
-    Model35:
-      type: object
-      properties:
-        payload:
-          $ref: '#/components/schemas/payload'
-        delivery_data:
-          $ref: '#/components/schemas/delivery_data'
-        next_page_token:
-          type: string
-          example: eyJpdiI6IjRiNDc2ODM3ODI2MWU4N2Q1ZmQwNzQ2MzhlZWFiZmQ3IiwiY29udGVudCI6IjY3YWYxNGRmYTQ4Mzg1ZTMzMjBhZTA0MjAwODBhOTQ4OTIzNjMzYzIxODIwMzIifZ==
-    delivery_data:
-      type: object
-      properties:
-        status:
-          type: string
-          example: success
-        status_code:
-          type: number
-          example: 204
-    Model74:
-      type: object
-      properties:
-        results:
-          $ref: '#/components/schemas/Model73'
-    Model71:
-      type: object
-      properties:
-        timestamp:
-          type: number
-          example: 1631593381
-        callback_type:
-          type: string
-          example: NOTIFY_RX
-        details:
-          $ref: '#/components/schemas/Model70'
-    Model37:
-      type: object
-      properties:
-        results:
-          $ref: '#/components/schemas/Model36'
-    insurance_tokens:
-      type: array
-      items:
-        type: string
-    payload:
-      type: object
-      properties:
-        timestamp:
-          type: number
-          example: 1631593381
-        callback_type:
-          type: string
-          example: ORDER
-        details:
-          $ref: '#/components/schemas/Model34'
-    Model33:
-      type: array
-      items:
-        $ref: '#/components/schemas/Model32'
     Model34:
       type: object
       properties:
@@ -317,6 +248,54 @@ components:
         total_quantity_remaining:
           type: number
           example: 150
+    Model37:
+      type: object
+      properties:
+        results:
+          $ref: '#/components/schemas/Model36'
+    Model33:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model32'
+    Model74:
+      type: object
+      properties:
+        results:
+          $ref: '#/components/schemas/Model73'
+    Model71:
+      type: object
+      properties:
+        timestamp:
+          type: number
+          example: 1631593381
+        callback_type:
+          type: string
+          example: NOTIFY_RX
+        details:
+          $ref: '#/components/schemas/Model70'
+    delivery_data:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        status_code:
+          type: number
+          example: 204
+    Model72:
+      type: object
+      properties:
+        payload:
+          $ref: '#/components/schemas/Model71'
+        delivery_data:
+          $ref: '#/components/schemas/delivery_data'
+        next_page_token:
+          type: string
+          example: eyJpdiI6IjRiNDc2ODM3ODI2MWU4N2Q1ZmQwNzQ2MzhlZWFiZmQ3IiwiY29udGVudCI6IjY3YWYxNGRmYTQ4Mzg1ZTMzMjBhZTA0MjAwODBhOTQ4OTIzNjMzYzIxODIwMzIifZ==
+    insurance_tokens:
+      type: array
+      items:
+        type: string
     Model36:
       type: array
       items:
@@ -365,6 +344,27 @@ components:
         rx_link:
           type: string
           example: rxl_d374bfb72980319f2a80f8af
+    Model35:
+      type: object
+      properties:
+        payload:
+          $ref: '#/components/schemas/payload'
+        delivery_data:
+          $ref: '#/components/schemas/delivery_data'
+        next_page_token:
+          type: string
+          example: eyJpdiI6IjRiNDc2ODM3ODI2MWU4N2Q1ZmQwNzQ2MzhlZWFiZmQ3IiwiY29udGVudCI6IjY3YWYxNGRmYTQ4Mzg1ZTMzMjBhZTA0MjAwODBhOTQ4OTIzNjMzYzIxODIwMzIifZ==
+    payload:
+      type: object
+      properties:
+        timestamp:
+          type: number
+          example: 1631593381
+        callback_type:
+          type: string
+          example: ORDER
+        details:
+          $ref: '#/components/schemas/Model34'
     Model70:
       type: object
       properties:

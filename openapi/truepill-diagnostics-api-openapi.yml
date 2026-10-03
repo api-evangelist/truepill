@@ -333,6 +333,58 @@ paths:
               $ref: '#/components/schemas/RegisterOrder'
 components:
   schemas:
+    Kit:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Kit id
+          example: f4fa75be-7112-4d0b-8f4d-97fe81bddfa8
+          x-format:
+            guid: true
+        sku:
+          type: string
+          description: Order stock-keeping unit
+          example: Abbott Rapid Antigen Kit
+        serial:
+          type: string
+          description: Serial number of the kit to associate with this order
+          example: 010081187701133017333333101H
+        return_shipment:
+          $ref: '#/components/schemas/return_shipment'
+    OrderResultResponseV2:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model107'
+    Model107:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Result name
+          example: FEVER CHECK
+        quantitative_value:
+          type: string
+          example: '100.4'
+        qualitative_value:
+          type: string
+          example: POSITIVE
+        measured_at:
+          type: string
+          format: date
+          description: 'Date of receipt of the result '
+          example: '2011-10-05T14:48:00.000Z'
+        panel_name:
+          type: string
+        severity:
+          type: string
+          description: Severity of drug warning for this patient
+          example: moderate
+        media_ids:
+          $ref: '#/components/schemas/Media_IDs'
+      required:
+      - name
+      - measured_at
     Test:
       type: object
       description: Test description
@@ -347,6 +399,399 @@ components:
           type: string
           description: Result name
           example: FEVER CHECK
+    Media_IDs:
+      type: array
+      description: Used to request media files.
+      example:
+      - 5201130d-118e-439a-9343-b8d23dee4fe3
+      items:
+        type: string
+    questionnaireResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model40'
+    DOB:
+      type: object
+      description: Patient date of birth
+      properties:
+        day:
+          type: number
+          example: 12
+        month:
+          type: number
+          example: 7
+        year:
+          type: number
+          example: 1997
+    OrderResult:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Result name
+          example: FEVER CHECK
+        quantitative_value:
+          type: string
+          example: '100.4'
+        qualitative_value:
+          type: string
+          example: POSITIVE
+        measured_at:
+          type: string
+          format: date
+          description: 'Date of receipt of the result '
+          example: '2011-10-05T14:48:00.000Z'
+        panel_name:
+          type: string
+        severity:
+          type: string
+          description: Severity of drug warning for this patient
+          example: moderate
+      required:
+      - name
+      - measured_at
+    return_shipment:
+      type: object
+      properties:
+        carrier:
+          type: string
+          example: usps
+        tracking_number:
+          type: string
+          example: 9400 1234 5678 9999 8765 00
+    Model38:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Creatinine
+        description:
+          type: string
+      required:
+      - name
+    Physician:
+      type: object
+      description: Physician providing requisition
+      properties:
+        first_name:
+          type: string
+          description: Physician first name
+        last_name:
+          type: string
+          description: Physician last name
+        npi:
+          type: string
+          description: National provider identifier
+          example: '1234567890'
+        facility:
+          type: string
+          description: Physician Facility
+        address:
+          type: string
+          description: Physician Address
+        city:
+          type: string
+          description: Physician city
+          example: San Mateo
+        state:
+          type: string
+          description: Physician state
+          example: CA
+        zip:
+          type: string
+          description: Physician postal code
+          example: '60660'
+          pattern: ^\d{5}(-\d{4})?$
+        phone:
+          type: string
+          description: Physician contact phone number
+          example: 430-304-3949
+        credential:
+          type: string
+          description: Physician credential
+          example: MD
+      required:
+      - first_name
+      - last_name
+      - npi
+    OrderResponse:
+      type: object
+      properties:
+        nextPageToken:
+          type: string
+        results:
+          $ref: '#/components/schemas/OrderArray'
+    Order:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Order ID
+          example: e457d2e7-ebf4-403c-b2c1-a1970f16d011
+          x-format:
+            guid: true
+        test:
+          $ref: '#/components/schemas/Test'
+        panels:
+          $ref: '#/components/schemas/Panels'
+        kit:
+          $ref: '#/components/schemas/Kit'
+        status:
+          type: string
+          description: Order status
+          example: PENDING
+        updated_at:
+          type: string
+          format: date
+          description: Update date
+          example: '2021-06-08T14:10:08.512Z'
+        patient:
+          $ref: '#/components/schemas/PatientResponse'
+        address:
+          $ref: '#/components/schemas/Address'
+        physician:
+          $ref: '#/components/schemas/Physician'
+        insurance:
+          $ref: '#/components/schemas/Insurance'
+        fill_request_id:
+          type: string
+          description: Fill request ID to associate with this order
+          example: fill_request_bd6825a9d66a49b3d7a7
+        accession_id:
+          type: string
+        custom_data_1:
+          type: string
+          description: A custom data string for external use. This can be any arbitrary UTF-8 string
+          example: '2012-01-26T13:51:50.417-07:00'
+        custom_data_2:
+          type: string
+          description: A custom data string for external use. This can be any arbitrary UTF-8 string
+          example: '2012-01-26T13:51:50.417-07:00'
+        custom_data_3:
+          type: string
+          description: A custom data string for external use. This can be any arbitrary UTF-8 string
+          example: '2012-01-26T13:51:50.417-07:00'
+        media_ids:
+          $ref: '#/components/schemas/Media%20IDs'
+        specimen:
+          $ref: '#/components/schemas/specimen'
+      required:
+      - patient
+    KitWithoutSerial:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Kit ID
+          example: 5d03c2b9-9a92-4745-83b1-2312599ca1c3
+          x-format:
+            guid: true
+        sku:
+          type: string
+          description: SKU of items as specified on kit
+          example: SampleCorp Covid Antigen Kit
+    Model39:
+      type: object
+      properties:
+        valueCoding:
+          $ref: '#/components/schemas/valueCoding'
+        valueBoolean:
+          type: boolean
+        valueString:
+          type: string
+        valueDate:
+          type: string
+    Address:
+      type: object
+      description: Shipping Address Object
+      properties:
+        name:
+          type: string
+          description: Name
+          example: Bill Lumbergh
+        street1:
+          type: string
+          description: Shipping street 1
+          example: 1234 Main St
+        street2:
+          type: string
+          description: Shipping street 2
+          example: Apt 9B
+        city:
+          type: string
+          description: Shipping city
+          example: San Mateo
+        state:
+          type: string
+          description: Shipping state
+          example: CA
+          x-constraint:
+            length: 2
+        zip:
+          type: string
+          description: Shipping postal code
+          example: '60660'
+          pattern: ^\d{5}(-\d{4})?$
+      required:
+      - name
+      - street1
+      - city
+      - zip
+    Model204:
+      type: object
+      description: Patient information
+      properties:
+        first_name:
+          type: string
+          description: Patient first name
+          example: John
+        last_name:
+          type: string
+          description: Patient last name
+          example: Doe
+        dob:
+          type: string
+          description: Patient date of birth
+          example: '19950503'
+          pattern: ^(19|20)\d\d(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])$
+        gender:
+          type: string
+          description: Patient gender
+          example: male
+          enum:
+          - male
+          - female
+          - unknown
+        email:
+          type: string
+          description: Patient contact email address
+          example: some_mail@gmail.com
+          x-format:
+            email: true
+        phone:
+          type: string
+          description: Patient contact phone number
+          example: 430-304-3949
+        street1:
+          type: string
+          description: Patient street 1
+          example: 1234 Main St
+        street2:
+          type: string
+          description: Patient street 2
+          example: Apt 9B
+        city:
+          type: string
+          description: Patient city
+          example: San Mateo
+        state:
+          type: string
+          description: Patient state
+          example: CA
+          x-constraint:
+            length: 2
+        zip:
+          type: string
+          description: Location postal code
+          example: '60660'
+          pattern: ^\d{5}(-\d{4})?$
+      required:
+      - first_name
+      - last_name
+      - dob
+      - gender
+      - zip
+    TestResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/Test'
+    GetOrderRejectionResponse:
+      type: object
+      properties:
+        reason:
+          type: string
+          description: Reason
+        rejected_at:
+          type: string
+          format: date
+          description: Reason where was rejected
+          example: '2011-10-05T14:48:00.000Z'
+        fixable:
+          type: boolean
+          description: Could be fixeable or not
+          example: false
+        panel_name:
+          type: string
+      required:
+      - rejected_at
+    Insurance:
+      type: object
+      description: Insurance information
+      properties:
+        payer_name:
+          type: string
+          description: Payer name
+          example: Bruce Banner
+        group_id:
+          type: string
+          description: Group ID on insurance card
+          example: '006726'
+        member_id:
+          type: string
+          description: Member ID on insurance card
+          example: A9321328
+        bin:
+          type: string
+          description: RX Bin on card, always 6 characters
+          example: '997928'
+      required:
+      - payer_name
+      - group_id
+      - member_id
+      - bin
+    specimen:
+      type: object
+      properties:
+        specimenCollectedDate:
+          type: string
+        questionnaireResponse:
+          $ref: '#/components/schemas/questionnaireResponse'
+    Panels:
+      type: array
+      description: Essentially used for blood tests to ask for certain items to be run
+      items:
+        $ref: '#/components/schemas/Model38'
+    Model205:
+      type: array
+      minItems: 1
+      items:
+        type: string
+    Model40:
+      type: object
+      properties:
+        linkId:
+          type: string
+        answer:
+          $ref: '#/components/schemas/answer'
+    answer:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model39'
+    OrderArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/Order'
+    OrderResultResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/OrderResult'
+    valueCoding:
+      type: object
+      properties:
+        code:
+          type: string
+        display:
+          type: string
     RegisterOrder:
       type: object
       description: Register a new order using the existing kit serial
@@ -460,107 +905,10 @@ components:
       - last_name
       - gender
       - zip
-    Physician:
-      type: object
-      description: Physician providing requisition
-      properties:
-        first_name:
-          type: string
-          description: Physician first name
-        last_name:
-          type: string
-          description: Physician last name
-        npi:
-          type: string
-          description: National provider identifier
-          example: '1234567890'
-        facility:
-          type: string
-          description: Physician Facility
-        address:
-          type: string
-          description: Physician Address
-        city:
-          type: string
-          description: Physician city
-          example: San Mateo
-        state:
-          type: string
-          description: Physician state
-          example: CA
-        zip:
-          type: string
-          description: Physician postal code
-          example: '60660'
-          pattern: ^\d{5}(-\d{4})?$
-        phone:
-          type: string
-          description: Physician contact phone number
-          example: 430-304-3949
-        credential:
-          type: string
-          description: Physician credential
-          example: MD
-      required:
-      - first_name
-      - last_name
-      - npi
-    Order:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Order ID
-          example: e457d2e7-ebf4-403c-b2c1-a1970f16d011
-          x-format:
-            guid: true
-        test:
-          $ref: '#/components/schemas/Test'
-        panels:
-          $ref: '#/components/schemas/Panels'
-        kit:
-          $ref: '#/components/schemas/Kit'
-        status:
-          type: string
-          description: Order status
-          example: PENDING
-        updated_at:
-          type: string
-          format: date
-          description: Update date
-          example: '2021-06-08T14:10:08.512Z'
-        patient:
-          $ref: '#/components/schemas/PatientResponse'
-        address:
-          $ref: '#/components/schemas/Address'
-        physician:
-          $ref: '#/components/schemas/Physician'
-        insurance:
-          $ref: '#/components/schemas/Insurance'
-        fill_request_id:
-          type: string
-          description: Fill request ID to associate with this order
-          example: fill_request_bd6825a9d66a49b3d7a7
-        accession_id:
-          type: string
-        custom_data_1:
-          type: string
-          description: A custom data string for external use. This can be any arbitrary UTF-8 string
-          example: '2012-01-26T13:51:50.417-07:00'
-        custom_data_2:
-          type: string
-          description: A custom data string for external use. This can be any arbitrary UTF-8 string
-          example: '2012-01-26T13:51:50.417-07:00'
-        custom_data_3:
-          type: string
-          description: A custom data string for external use. This can be any arbitrary UTF-8 string
-          example: '2012-01-26T13:51:50.417-07:00'
-        media_ids:
-          $ref: '#/components/schemas/Media%20IDs'
-        specimen:
-          $ref: '#/components/schemas/specimen'
-      required:
-      - patient
+    KitResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/KitWithoutSerial'
     PostOrders:
       type: object
       properties:
@@ -611,354 +959,6 @@ components:
       required:
       - address
       - test_id
-    Panels:
-      type: array
-      description: Essentially used for blood tests to ask for certain items to be run
-      items:
-        $ref: '#/components/schemas/Model38'
-    Model107:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Result name
-          example: FEVER CHECK
-        quantitative_value:
-          type: string
-          example: '100.4'
-        qualitative_value:
-          type: string
-          example: POSITIVE
-        measured_at:
-          type: string
-          format: date
-          description: 'Date of receipt of the result '
-          example: '2011-10-05T14:48:00.000Z'
-        panel_name:
-          type: string
-        severity:
-          type: string
-          description: Severity of drug warning for this patient
-          example: moderate
-        media_ids:
-          $ref: '#/components/schemas/Media_IDs'
-      required:
-      - name
-      - measured_at
-    KitWithoutSerial:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Kit ID
-          example: 5d03c2b9-9a92-4745-83b1-2312599ca1c3
-          x-format:
-            guid: true
-        sku:
-          type: string
-          description: SKU of items as specified on kit
-          example: SampleCorp Covid Antigen Kit
-    OrderArray:
-      type: array
-      items:
-        $ref: '#/components/schemas/Order'
-    Media_IDs:
-      type: array
-      description: Used to request media files.
-      example:
-      - 5201130d-118e-439a-9343-b8d23dee4fe3
-      items:
-        type: string
-    return_shipment:
-      type: object
-      properties:
-        carrier:
-          type: string
-          example: usps
-        tracking_number:
-          type: string
-          example: 9400 1234 5678 9999 8765 00
-    Address:
-      type: object
-      description: Shipping Address Object
-      properties:
-        name:
-          type: string
-          description: Name
-          example: Bill Lumbergh
-        street1:
-          type: string
-          description: Shipping street 1
-          example: 1234 Main St
-        street2:
-          type: string
-          description: Shipping street 2
-          example: Apt 9B
-        city:
-          type: string
-          description: Shipping city
-          example: San Mateo
-        state:
-          type: string
-          description: Shipping state
-          example: CA
-          x-constraint:
-            length: 2
-        zip:
-          type: string
-          description: Shipping postal code
-          example: '60660'
-          pattern: ^\d{5}(-\d{4})?$
-      required:
-      - name
-      - street1
-      - city
-      - zip
-    specimen:
-      type: object
-      properties:
-        specimenCollectedDate:
-          type: string
-        questionnaireResponse:
-          $ref: '#/components/schemas/questionnaireResponse'
-    Insurance:
-      type: object
-      description: Insurance information
-      properties:
-        payer_name:
-          type: string
-          description: Payer name
-          example: Bruce Banner
-        group_id:
-          type: string
-          description: Group ID on insurance card
-          example: '006726'
-        member_id:
-          type: string
-          description: Member ID on insurance card
-          example: A9321328
-        bin:
-          type: string
-          description: RX Bin on card, always 6 characters
-          example: '997928'
-      required:
-      - payer_name
-      - group_id
-      - member_id
-      - bin
-    valueCoding:
-      type: object
-      properties:
-        code:
-          type: string
-        display:
-          type: string
-    DOB:
-      type: object
-      description: Patient date of birth
-      properties:
-        day:
-          type: number
-          example: 12
-        month:
-          type: number
-          example: 7
-        year:
-          type: number
-          example: 1997
-    Model40:
-      type: object
-      properties:
-        linkId:
-          type: string
-        answer:
-          $ref: '#/components/schemas/answer'
-    GetOrderRejectionResponse:
-      type: object
-      properties:
-        reason:
-          type: string
-          description: Reason
-        rejected_at:
-          type: string
-          format: date
-          description: Reason where was rejected
-          example: '2011-10-05T14:48:00.000Z'
-        fixable:
-          type: boolean
-          description: Could be fixeable or not
-          example: false
-        panel_name:
-          type: string
-      required:
-      - rejected_at
-    TestResponse:
-      type: array
-      items:
-        $ref: '#/components/schemas/Test'
-    answer:
-      type: array
-      items:
-        $ref: '#/components/schemas/Model39'
-    OrderResultResponseV2:
-      type: array
-      items:
-        $ref: '#/components/schemas/Model107'
-    OrderResponse:
-      type: object
-      properties:
-        nextPageToken:
-          type: string
-        results:
-          $ref: '#/components/schemas/OrderArray'
-    OrderResult:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Result name
-          example: FEVER CHECK
-        quantitative_value:
-          type: string
-          example: '100.4'
-        qualitative_value:
-          type: string
-          example: POSITIVE
-        measured_at:
-          type: string
-          format: date
-          description: 'Date of receipt of the result '
-          example: '2011-10-05T14:48:00.000Z'
-        panel_name:
-          type: string
-        severity:
-          type: string
-          description: Severity of drug warning for this patient
-          example: moderate
-      required:
-      - name
-      - measured_at
-    KitResponse:
-      type: array
-      items:
-        $ref: '#/components/schemas/KitWithoutSerial'
-    Model205:
-      type: array
-      minItems: 1
-      items:
-        type: string
-    Model38:
-      type: object
-      properties:
-        name:
-          type: string
-          example: Creatinine
-        description:
-          type: string
-      required:
-      - name
-    questionnaireResponse:
-      type: array
-      items:
-        $ref: '#/components/schemas/Model40'
-    OrderResultResponse:
-      type: array
-      items:
-        $ref: '#/components/schemas/OrderResult'
-    Kit:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Kit id
-          example: f4fa75be-7112-4d0b-8f4d-97fe81bddfa8
-          x-format:
-            guid: true
-        sku:
-          type: string
-          description: Order stock-keeping unit
-          example: Abbott Rapid Antigen Kit
-        serial:
-          type: string
-          description: Serial number of the kit to associate with this order
-          example: 010081187701133017333333101H
-        return_shipment:
-          $ref: '#/components/schemas/return_shipment'
-    Model204:
-      type: object
-      description: Patient information
-      properties:
-        first_name:
-          type: string
-          description: Patient first name
-          example: John
-        last_name:
-          type: string
-          description: Patient last name
-          example: Doe
-        dob:
-          type: string
-          description: Patient date of birth
-          example: '19950503'
-          pattern: ^(19|20)\d\d(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])$
-        gender:
-          type: string
-          description: Patient gender
-          example: male
-          enum:
-          - male
-          - female
-          - unknown
-        email:
-          type: string
-          description: Patient contact email address
-          example: some_mail@gmail.com
-          x-format:
-            email: true
-        phone:
-          type: string
-          description: Patient contact phone number
-          example: 430-304-3949
-        street1:
-          type: string
-          description: Patient street 1
-          example: 1234 Main St
-        street2:
-          type: string
-          description: Patient street 2
-          example: Apt 9B
-        city:
-          type: string
-          description: Patient city
-          example: San Mateo
-        state:
-          type: string
-          description: Patient state
-          example: CA
-          x-constraint:
-            length: 2
-        zip:
-          type: string
-          description: Location postal code
-          example: '60660'
-          pattern: ^\d{5}(-\d{4})?$
-      required:
-      - first_name
-      - last_name
-      - dob
-      - gender
-      - zip
-    Model39:
-      type: object
-      properties:
-        valueCoding:
-          $ref: '#/components/schemas/valueCoding'
-        valueBoolean:
-          type: boolean
-        valueString:
-          type: string
-        valueDate:
-          type: string
   securitySchemes:
     apiKey:
       type: apiKey
