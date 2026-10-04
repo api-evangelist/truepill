@@ -115,52 +115,6 @@ paths:
                 $ref: '#/components/schemas/Model28'
 components:
   schemas:
-    Model28:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 403
-        message:
-          type: string
-          example: Forbidden
-    message:
-      type: array
-      items:
-        type: string
-        example: Invalid bin field length. bin must be in numeric string format and length must be equal to 6 characters
-    Model26:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 400
-        message:
-          $ref: '#/components/schemas/message'
-        error:
-          type: string
-          example: Bad Request
-    Model27:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 401
-        message:
-          type: string
-          example: Unauthorized
-    Model25:
-      type: object
-      properties:
-        pharmacy_name:
-          type: string
-          example: Test Pharmacy
-        npi:
-          type: string
-          example: 1231231234
-          pattern: ^\d{10}$
-        address:
-          $ref: '#/components/schemas/address'
     address:
       type: object
       properties:
@@ -183,6 +137,52 @@ components:
         phone:
           type: string
           example: (111) 123-4321
+    Model26:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 400
+        message:
+          $ref: '#/components/schemas/message'
+        error:
+          type: string
+          example: Bad Request
+    message:
+      type: array
+      items:
+        type: string
+        example: Invalid bin field length. bin must be in numeric string format and length must be equal to 6 characters
+    Model28:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 403
+        message:
+          type: string
+          example: Forbidden
+    Model27:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 401
+        message:
+          type: string
+          example: Unauthorized
+    Model25:
+      type: object
+      properties:
+        pharmacy_name:
+          type: string
+          example: Test Pharmacy
+        npi:
+          type: string
+          example: 1231231234
+          pattern: ^\d{10}$
+        address:
+          $ref: '#/components/schemas/address'
   securitySchemes:
     apiKey:
       type: apiKey

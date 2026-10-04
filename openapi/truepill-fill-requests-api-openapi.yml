@@ -93,137 +93,6 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/otc_product'
-    patient_survey:
-      type: object
-      example:
-        medications: Tafluprost
-        allergies: Penicillian
-        conditions: Glaucoma
-      properties:
-        allergies:
-          type: string
-          x-alternatives:
-          - type: string
-          - $ref: '#/x-alt-definitions/allergies'
-        medications:
-          type: string
-          x-alternatives:
-          - type: string
-          - $ref: '#/x-alt-definitions/medications'
-        conditions:
-          type: string
-        events:
-          type: string
-          x-alternatives:
-          - type: string
-          - $ref: '#/x-alt-definitions/events'
-        smoking_frequency:
-          type: string
-        drinking_frequency:
-          type: string
-        asthma_breathing:
-          type: boolean
-        heart_disease:
-          type: boolean
-        arthritis:
-          type: boolean
-        lung_disorder:
-          type: boolean
-        bleeding_clotting_disorder:
-          type: boolean
-        neurological_chronic_headaches:
-          type: boolean
-        blood_transfusion:
-          type: boolean
-        psychiatric_disorder:
-          type: boolean
-        bowel_stomach:
-          type: boolean
-        pulmonary_embolism:
-          type: boolean
-        cancer:
-          type: boolean
-        stroke:
-          type: boolean
-        cholesterol_disorder:
-          type: boolean
-        seizure_epilepsy:
-          type: boolean
-        diabetes:
-          type: boolean
-        thyroid_disorder:
-          type: boolean
-        eye_disorder:
-          type: boolean
-        urinary_kidney_disorder:
-          type: boolean
-        pregnancy:
-          type: boolean
-      required:
-      - allergies
-      - medications
-      - conditions
-    Model22:
-      type: object
-      properties:
-        results:
-          $ref: '#/components/schemas/results'
-        next_page_token:
-          type: string
-          example: JpdiI6IjdkNWViNWU5MTViNjAzNzAwYjQ4NTI3YjEyZjIzNDFkIiwiY29udGVudCI6IjE2YTcyNmQ4OGI3NTNlYzRjMTE5ZDc5NWIyMmE4MDRkN2UzYzA3YTA1M
-    medication_response:
-      type: object
-      properties:
-        prescription_token:
-          type: string
-          example: e61e324f9018
-        quantity:
-          type: number
-          example: 30
-        is_cancellable:
-          type: boolean
-          description: Indicates whether this medication/fill can be cancelled.
-          example: true
-    otc_product:
-      type: object
-      properties:
-        sku:
-          type: string
-          example: SKU-123-456
-        quantity:
-          type: number
-          example: 1
-        patient_consent:
-          $ref: '#/components/schemas/patient_consent'
-        is_cancellable:
-          type: boolean
-          description: Indicates whether this OTC product can be cancelled. False if packing slip has been printed.
-          example: true
-    medications:
-      type: array
-      items:
-        $ref: '#/components/schemas/medication_response'
-    patient_consent:
-      type: object
-      properties:
-        consent_statement:
-          type: string
-        consent_method:
-          type: string
-        consent_date:
-          type: string
-        consent_type:
-          type: string
-        patient_name:
-          type: string
-        consent_provided_by:
-          type: string
-        item:
-          type: string
-    receipt_items:
-      type: array
-      items:
-        $ref: '#/components/schemas/Model20'
     Model20:
       type: object
       properties:
@@ -250,6 +119,64 @@ components:
       - category
       - prescription_token
       - amount
+    results:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model21'
+    Model22:
+      type: object
+      properties:
+        results:
+          $ref: '#/components/schemas/results'
+        next_page_token:
+          type: string
+          example: JpdiI6IjdkNWViNWU5MTViNjAzNzAwYjQ4NTI3YjEyZjIzNDFkIiwiY29udGVudCI6IjE2YTcyNmQ4OGI3NTNlYzRjMTE5ZDc5NWIyMmE4MDRkN2UzYzA3YTA1M
+    Model9:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 500
+        error:
+          type: string
+          example: An internal server error occurred
+        message:
+          type: string
+          example: An internal server error occurred
+    medication_response:
+      type: object
+      properties:
+        prescription_token:
+          type: string
+          example: e61e324f9018
+        quantity:
+          type: number
+          example: 30
+        is_cancellable:
+          type: boolean
+          description: Indicates whether this medication/fill can be cancelled.
+          example: true
+    patient_consent:
+      type: object
+      properties:
+        consent_statement:
+          type: string
+        consent_method:
+          type: string
+        consent_date:
+          type: string
+        consent_type:
+          type: string
+        patient_name:
+          type: string
+        consent_provided_by:
+          type: string
+        item:
+          type: string
+    medications:
+      type: array
+      items:
+        $ref: '#/components/schemas/medication_response'
     current_stripe_payment:
       type: object
       properties:
@@ -273,22 +200,21 @@ components:
       required:
       - stripe_id
       - amount
-    Model9:
+    otc_product:
       type: object
       properties:
-        statusCode:
+        sku:
+          type: string
+          example: SKU-123-456
+        quantity:
           type: number
-          example: 500
-        error:
-          type: string
-          example: An internal server error occurred
-        message:
-          type: string
-          example: An internal server error occurred
-    results:
-      type: array
-      items:
-        $ref: '#/components/schemas/Model21'
+          example: 1
+        patient_consent:
+          $ref: '#/components/schemas/patient_consent'
+        is_cancellable:
+          type: boolean
+          description: Indicates whether this OTC product can be cancelled. False if packing slip has been printed.
+          example: true
     Model21:
       type: object
       properties:
@@ -364,6 +290,80 @@ components:
           $ref: '#/components/schemas/current_stripe_payment'
       required:
       - patient_survey
+    patient_survey:
+      type: object
+      example:
+        medications: Tafluprost
+        allergies: Penicillian
+        conditions: Glaucoma
+      properties:
+        allergies:
+          type: string
+          x-alternatives:
+          - type: string
+          - $ref: '#/x-alt-definitions/allergies'
+        medications:
+          type: string
+          x-alternatives:
+          - type: string
+          - $ref: '#/x-alt-definitions/medications'
+        conditions:
+          type: string
+        events:
+          type: string
+          x-alternatives:
+          - type: string
+          - $ref: '#/x-alt-definitions/events'
+        smoking_frequency:
+          type: string
+        drinking_frequency:
+          type: string
+        asthma_breathing:
+          type: boolean
+        heart_disease:
+          type: boolean
+        arthritis:
+          type: boolean
+        lung_disorder:
+          type: boolean
+        bleeding_clotting_disorder:
+          type: boolean
+        neurological_chronic_headaches:
+          type: boolean
+        blood_transfusion:
+          type: boolean
+        psychiatric_disorder:
+          type: boolean
+        bowel_stomach:
+          type: boolean
+        pulmonary_embolism:
+          type: boolean
+        cancer:
+          type: boolean
+        stroke:
+          type: boolean
+        cholesterol_disorder:
+          type: boolean
+        seizure_epilepsy:
+          type: boolean
+        diabetes:
+          type: boolean
+        thyroid_disorder:
+          type: boolean
+        eye_disorder:
+          type: boolean
+        urinary_kidney_disorder:
+          type: boolean
+        pregnancy:
+          type: boolean
+      required:
+      - allergies
+      - medications
+      - conditions
+    receipt_items:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model20'
   securitySchemes:
     apiKey:
       type: apiKey

@@ -823,55 +823,6 @@ paths:
                 $ref: '#/components/schemas/Model24'
 components:
   schemas:
-    Model58:
-      type: object
-      properties:
-        guardian:
-          type: string
-        species:
-          type: string
-          description: Pet type
-          example: Dog
-        first_name:
-          type: string
-          description: Legal patient first name
-          example: Lola
-        last_name:
-          type: string
-          description: Legal patient last name
-          example: Martin
-        dob:
-          type: string
-          description: Legal patient date of birth, YYYYMMDD format
-          example: '20180401'
-        gender:
-          type: string
-          description: 'Assigned gender at birth: male or female'
-          example: male
-        address:
-          $ref: '#/components/schemas/Model57'
-        communications_opt_in:
-          type: boolean
-        patient_token:
-          type: string
-          example: a35be240f1f5da6b
-        mbi:
-          type: string
-          description: Medicare Beneficiary ID
-          example: 1EG4TE5MK73
-    Model222:
-      type: object
-      properties:
-        key:
-          type: string
-          example: first_name
-        message:
-          type: string
-          example: is not allowed
-    Model233:
-      type: array
-      items:
-        $ref: '#/components/schemas/Model232'
     Model24:
       type: object
       properties:
@@ -884,129 +835,6 @@ components:
         message:
           type: string
           example: Unable to find Patient.
-    Prescription:
-      type: object
-      properties:
-        date_written:
-          type: string
-          format: date
-          description: When the prescribed was written
-          example: '2021-09-11T13:09:27.000Z'
-        days_supply:
-          type: string
-          description: Days supply
-          example: '90'
-        is_refill:
-          type: number
-          description: Is prescription a refill or new fill?
-          example: 0
-        last_filled_date:
-          type: string
-          format: date
-          description: When prescription was last filled (null if not)
-          example: '2022-08-03T13:09:27.000Z'
-        expiration_date_utc:
-          type: string
-          format: date
-          description: When the prescription will expire
-          example: '2022-09-11T13:09:27.000Z'
-        medication_sig:
-          type: string
-          description: Instructions for taking medication
-          example: Use as directed for 90 days.
-        number_of_refills_allowed:
-          type: string
-          description: Number of refills allowed for prescription
-          example: 2
-        prescribed_brand_name:
-          type: string
-          description: Name of medication prescribed
-          example: Viagra
-        prescribed_drug_strength:
-          type: string
-          description: Drug strength prescribed
-          example: 10 mg
-        prescribed_generic_name:
-          type: string
-          description: Name of generic medication prescribed
-          example: Generic 10mg tablet
-        prescribed_ndc:
-          type: string
-          description: NDC of prescribed medication
-          example: '51580000807'
-          pattern: ^[0-9]{4,5}-[0-9]{3,4}-[0-9]{1,3}$
-        prescribed_quantity:
-          type: string
-          description: Quantity of prescribed medication
-          example: 1
-        prescribed_written_name:
-          type: string
-          description: Name of medication prescribed as written
-          example: Sildenafil
-        prescriber:
-          type: string
-          description: Name of prescriber
-          example: Molly
-        prescriber_npi:
-          type: string
-          description: NPI of prescriber
-          example: '1111111111'
-        quantity_remaining:
-          type: string
-          description: Quantity of doses remaining on prescription
-          example: 84
-        refills_remaining:
-          type: string
-          description: Number of refills on this prescription
-          example: 2
-        rx_number:
-          type: string
-          description: Rx number of prescription
-          example: '111110000'
-        origin:
-          type: string
-          description: Original source of prescription
-          example: Electronic
-        prescriber_order_number:
-          type: string
-          description: Prescriber order number of escript
-          example: '2222222'
-        original_prescribed_ndc:
-          type: string
-          description: NDC of prescribed medication as originally written on eScript (if applicable)
-          example: '51580000807'
-          pattern: ^[0-9]{4,5}-[0-9]{3,4}-[0-9]{1,3}$
-        date_filled_utc:
-          type: string
-          format: date
-          description: When prescription was last filled (null if not)
-          example: '2021-10-13T10:13:42Z'
-        prescription_token:
-          type: string
-          description: Token to reference the prescription
-          example: deb071563ead
-        medication_name:
-          type: string
-          description: Medication name
-          example: Sildenafil
-        fillable:
-          type: boolean
-          description: Is this prescription fillable (has not expired, been transferred-out, etc.)
-          example: true
-    Model221:
-      type: object
-      properties:
-        patient_token:
-          type: string
-          example: a35be240f1f5da6b
-        timestamp:
-          type: integer
-          example: 1631571795
-        status:
-          type: string
-          example: success
-        details:
-          $ref: '#/components/schemas/Model220'
     Model23:
       type: object
       properties:
@@ -1214,12 +1042,115 @@ components:
       - last_name
       - gender
       - dob
-    Model231:
+    Prescription:
       type: object
       properties:
-        patient_token:
+        date_written:
           type: string
-          example: a35be240f1f5da6b
+          format: date
+          description: When the prescribed was written
+          example: '2021-09-11T13:09:27.000Z'
+        days_supply:
+          type: string
+          description: Days supply
+          example: '90'
+        is_refill:
+          type: number
+          description: Is prescription a refill or new fill?
+          example: 0
+        last_filled_date:
+          type: string
+          format: date
+          description: When prescription was last filled (null if not)
+          example: '2022-08-03T13:09:27.000Z'
+        expiration_date_utc:
+          type: string
+          format: date
+          description: When the prescription will expire
+          example: '2022-09-11T13:09:27.000Z'
+        medication_sig:
+          type: string
+          description: Instructions for taking medication
+          example: Use as directed for 90 days.
+        number_of_refills_allowed:
+          type: string
+          description: Number of refills allowed for prescription
+          example: 2
+        prescribed_brand_name:
+          type: string
+          description: Name of medication prescribed
+          example: Viagra
+        prescribed_drug_strength:
+          type: string
+          description: Drug strength prescribed
+          example: 10 mg
+        prescribed_generic_name:
+          type: string
+          description: Name of generic medication prescribed
+          example: Generic 10mg tablet
+        prescribed_ndc:
+          type: string
+          description: NDC of prescribed medication
+          example: '51580000807'
+          pattern: ^[0-9]{4,5}-[0-9]{3,4}-[0-9]{1,3}$
+        prescribed_quantity:
+          type: string
+          description: Quantity of prescribed medication
+          example: 1
+        prescribed_written_name:
+          type: string
+          description: Name of medication prescribed as written
+          example: Sildenafil
+        prescriber:
+          type: string
+          description: Name of prescriber
+          example: Molly
+        prescriber_npi:
+          type: string
+          description: NPI of prescriber
+          example: '1111111111'
+        quantity_remaining:
+          type: string
+          description: Quantity of doses remaining on prescription
+          example: 84
+        refills_remaining:
+          type: string
+          description: Number of refills on this prescription
+          example: 2
+        rx_number:
+          type: string
+          description: Rx number of prescription
+          example: '111110000'
+        origin:
+          type: string
+          description: Original source of prescription
+          example: Electronic
+        prescriber_order_number:
+          type: string
+          description: Prescriber order number of escript
+          example: '2222222'
+        original_prescribed_ndc:
+          type: string
+          description: NDC of prescribed medication as originally written on eScript (if applicable)
+          example: '51580000807'
+          pattern: ^[0-9]{4,5}-[0-9]{3,4}-[0-9]{1,3}$
+        date_filled_utc:
+          type: string
+          format: date
+          description: When prescription was last filled (null if not)
+          example: '2021-10-13T10:13:42Z'
+        prescription_token:
+          type: string
+          description: Token to reference the prescription
+          example: deb071563ead
+        medication_name:
+          type: string
+          description: Medication name
+          example: Sildenafil
+        fillable:
+          type: boolean
+          description: Is this prescription fillable (has not expired, been transferred-out, etc.)
+          example: true
     Model104:
       type: object
       properties:
@@ -1228,183 +1159,12 @@ components:
           example: 55d8131974c7af33
         prescriptions:
           $ref: '#/components/schemas/Prescriptions'
-    Model220:
+    Model231:
       type: object
       properties:
-        message:
+        patient_token:
           type: string
-          example: 'Accepted: Patient a35be240f1f5da6b has been updated'
-    Model57:
-      type: object
-      properties:
-        name:
-          type: string
-          x-convert:
-            trim: true
-        company:
-          type: string
-          example: Walmart Pharmacy
-          x-convert:
-            trim: true
-        street1:
-          type: string
-          description: Primary street where the company is located
-          example: 123 Some Lane
-          x-convert:
-            trim: true
-        street2:
-          type: string
-          description: Secondary street where the company is located
-          example: Maggio Expressway
-          x-convert:
-            trim: true
-        city:
-          type: string
-          description: City where the company is located
-          example: San Mateo
-          x-convert:
-            trim: true
-        state:
-          type: string
-          description: State where the company is located
-          example: CA
-          x-convert:
-            trim: true
-        zip:
-          type: string
-          description: Postal code where the company is located
-          example: '94538'
-          pattern: ^\d{5}(-\d{4})?$
-        country:
-          type: string
-          description: Country where the company is located
-          example: US
-          default: US
-          x-convert:
-            trim: true
-        email:
-          type: string
-          description: 'Company email for email messaging '
-          example: some_email@gmail.com
-          x-format:
-            email: true
-          x-convert:
-            trim: true
-        phone:
-          type: string
-          x-convert:
-            trim: true
-      required:
-      - name
-      - street1
-      - city
-      - state
-      - zip
-    Model105:
-      type: object
-      properties:
-        weight_value:
-          type: number
-          example: 1.01
-        weight_unit:
-          type: string
-          example: oz
-        created_at:
-          type: string
-          format: date
-          example: '2021-09-15T02:22:21.000Z'
-        updated_at:
-          type: string
-          format: date
-          example: '2021-09-15T02:22:21.000Z'
-        asthma_breathing:
-          type: boolean
-          description: Whether the patient has asthma or breathing problems
-        heart_disease:
-          type: boolean
-          description: Whether the patient has heart disease
-        arthritis:
-          type: boolean
-          description: Whether the patient has arthritis
-        lung_disorder:
-          type: boolean
-          description: Whether the patient has a lung disorder
-        bleeding_clotting_disorder:
-          type: boolean
-          description: Whether the patient has a bleeding or clotting disorder
-        neurological_chronic_headaches:
-          type: boolean
-          description: Whether the patient has neurological disorders or chronic headaches
-        blood_transfusion:
-          type: boolean
-          description: Whether the patient has had a blood transfusion
-        psychiatric_disorder:
-          type: boolean
-          description: Whether the patient has a psychiatric disorder
-        bowel_stomach:
-          type: boolean
-          description: Whether the patient has bowel or stomach problems
-        pulmonary_embolism:
-          type: boolean
-          description: Whether the patient has had a pulmonary embolism
-        cancer:
-          type: boolean
-          description: Whether the patient has had cancer
-        stroke:
-          type: boolean
-          description: Whether the patient has had a stroke
-        cholesterol_disorder:
-          type: boolean
-          description: Whether the patient has a cholesterol disorder
-        seizure_epilepsy:
-          type: boolean
-          description: Whether the patient has seizures or epilepsy
-        diabetes:
-          type: boolean
-          description: Whether the patient has diabetes
-        thyroid_disorder:
-          type: boolean
-          description: Whether the patient has a thyroid disorder
-        eye_disorder:
-          type: boolean
-          description: Whether the patient has an eye disorder
-        urinary_kidney_disorder:
-          type: boolean
-          description: Whether the patient has a urinary or kidney disorder
-        conditions:
-          type: string
-        smoking_frequency:
-          type: string
-          description: The frequency of smoking, if any
-        drinking_frequency:
-          type: string
-          description: The frequency of drinking, if any
-        other_medications:
-          type: string
-        known_allergies:
-          type: boolean
-          description: Any allergies this patient has
-        url_token:
-          type: string
-          example: 837ab5
-        pregnancy:
-          type: boolean
-          description: Whether the patient is pregnant or not
-    Model224:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 400
-        error:
-          type: string
-          example: Bad Request
-        validation_errors:
-          $ref: '#/components/schemas/Model223'
-    Prescriptions:
-      type: array
-      items:
-        $ref: '#/components/schemas/Prescription'
+          example: a35be240f1f5da6b
     Model219:
       type: object
       properties:
@@ -1491,6 +1251,14 @@ components:
           description: Date NOPP was received
           example: '20180401'
           pattern: ^((1|2)\d{3}[01][0-9][0-3][0-9]$)
+    Prescriptions:
+      type: array
+      items:
+        $ref: '#/components/schemas/Prescription'
+    Model233:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model232'
     Model232:
       type: object
       properties:
@@ -1791,6 +1559,191 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Model222'
+    Model220:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'Accepted: Patient a35be240f1f5da6b has been updated'
+    Model105:
+      type: object
+      properties:
+        weight_value:
+          type: number
+          example: 1.01
+        weight_unit:
+          type: string
+          example: oz
+        created_at:
+          type: string
+          format: date
+          example: '2021-09-15T02:22:21.000Z'
+        updated_at:
+          type: string
+          format: date
+          example: '2021-09-15T02:22:21.000Z'
+        asthma_breathing:
+          type: boolean
+          description: Whether the patient has asthma or breathing problems
+        heart_disease:
+          type: boolean
+          description: Whether the patient has heart disease
+        arthritis:
+          type: boolean
+          description: Whether the patient has arthritis
+        lung_disorder:
+          type: boolean
+          description: Whether the patient has a lung disorder
+        bleeding_clotting_disorder:
+          type: boolean
+          description: Whether the patient has a bleeding or clotting disorder
+        neurological_chronic_headaches:
+          type: boolean
+          description: Whether the patient has neurological disorders or chronic headaches
+        blood_transfusion:
+          type: boolean
+          description: Whether the patient has had a blood transfusion
+        psychiatric_disorder:
+          type: boolean
+          description: Whether the patient has a psychiatric disorder
+        bowel_stomach:
+          type: boolean
+          description: Whether the patient has bowel or stomach problems
+        pulmonary_embolism:
+          type: boolean
+          description: Whether the patient has had a pulmonary embolism
+        cancer:
+          type: boolean
+          description: Whether the patient has had cancer
+        stroke:
+          type: boolean
+          description: Whether the patient has had a stroke
+        cholesterol_disorder:
+          type: boolean
+          description: Whether the patient has a cholesterol disorder
+        seizure_epilepsy:
+          type: boolean
+          description: Whether the patient has seizures or epilepsy
+        diabetes:
+          type: boolean
+          description: Whether the patient has diabetes
+        thyroid_disorder:
+          type: boolean
+          description: Whether the patient has a thyroid disorder
+        eye_disorder:
+          type: boolean
+          description: Whether the patient has an eye disorder
+        urinary_kidney_disorder:
+          type: boolean
+          description: Whether the patient has a urinary or kidney disorder
+        conditions:
+          type: string
+        smoking_frequency:
+          type: string
+          description: The frequency of smoking, if any
+        drinking_frequency:
+          type: string
+          description: The frequency of drinking, if any
+        other_medications:
+          type: string
+        known_allergies:
+          type: boolean
+          description: Any allergies this patient has
+        url_token:
+          type: string
+          example: 837ab5
+        pregnancy:
+          type: boolean
+          description: Whether the patient is pregnant or not
+    Model222:
+      type: object
+      properties:
+        key:
+          type: string
+          example: first_name
+        message:
+          type: string
+          example: is not allowed
+    Model57:
+      type: object
+      properties:
+        name:
+          type: string
+          x-convert:
+            trim: true
+        company:
+          type: string
+          example: Walmart Pharmacy
+          x-convert:
+            trim: true
+        street1:
+          type: string
+          description: Primary street where the company is located
+          example: 123 Some Lane
+          x-convert:
+            trim: true
+        street2:
+          type: string
+          description: Secondary street where the company is located
+          example: Maggio Expressway
+          x-convert:
+            trim: true
+        city:
+          type: string
+          description: City where the company is located
+          example: San Mateo
+          x-convert:
+            trim: true
+        state:
+          type: string
+          description: State where the company is located
+          example: CA
+          x-convert:
+            trim: true
+        zip:
+          type: string
+          description: Postal code where the company is located
+          example: '94538'
+          pattern: ^\d{5}(-\d{4})?$
+        country:
+          type: string
+          description: Country where the company is located
+          example: US
+          default: US
+          x-convert:
+            trim: true
+        email:
+          type: string
+          description: 'Company email for email messaging '
+          example: some_email@gmail.com
+          x-format:
+            email: true
+          x-convert:
+            trim: true
+        phone:
+          type: string
+          x-convert:
+            trim: true
+      required:
+      - name
+      - street1
+      - city
+      - state
+      - zip
+    Model221:
+      type: object
+      properties:
+        patient_token:
+          type: string
+          example: a35be240f1f5da6b
+        timestamp:
+          type: integer
+          example: 1631571795
+        status:
+          type: string
+          example: success
+        details:
+          $ref: '#/components/schemas/Model220'
     Model234:
       type: object
       properties:
@@ -1802,6 +1755,53 @@ components:
           example: Bad Request
         validation_errors:
           $ref: '#/components/schemas/Model233'
+    Model224:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 400
+        error:
+          type: string
+          example: Bad Request
+        validation_errors:
+          $ref: '#/components/schemas/Model223'
+    Model58:
+      type: object
+      properties:
+        guardian:
+          type: string
+        species:
+          type: string
+          description: Pet type
+          example: Dog
+        first_name:
+          type: string
+          description: Legal patient first name
+          example: Lola
+        last_name:
+          type: string
+          description: Legal patient last name
+          example: Martin
+        dob:
+          type: string
+          description: Legal patient date of birth, YYYYMMDD format
+          example: '20180401'
+        gender:
+          type: string
+          description: 'Assigned gender at birth: male or female'
+          example: male
+        address:
+          $ref: '#/components/schemas/Model57'
+        communications_opt_in:
+          type: boolean
+        patient_token:
+          type: string
+          example: a35be240f1f5da6b
+        mbi:
+          type: string
+          description: Medicare Beneficiary ID
+          example: 1EG4TE5MK73
   securitySchemes:
     apiKey:
       type: apiKey

@@ -194,6 +194,43 @@ components:
         additional_rejection_details:
           type: string
           example: Med not covered by insurance
+    insurance_tokens:
+      type: array
+      items:
+        type: string
+    copay_request_prescriptions_tokens:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model131'
+    Model129:
+      type: array
+      example:
+      - skhsyq83rkd3uht9
+      - ubqfc1a0a17hjb1c
+      - oi4aafwcsv5zzvvj
+      minItems: 1
+      items:
+        type: string
+    Model132:
+      type: object
+      properties:
+        copay_request_token:
+          type: string
+          example: a2fcd842de60b010
+        copay_request_prescriptions_tokens:
+          $ref: '#/components/schemas/copay_request_prescriptions_tokens'
+    Model211:
+      type: object
+      properties:
+        code:
+          type: string
+          example: CUSTOMER_CANCELLATION_REQUEST
+        description:
+          type: string
+          example: Copay Request Cancelled by Customer Request
+        message:
+          type: string
+          example: 'Accepted: Copay Request 34f68f71f980f78bb0bc has been cancelled.'
     Model131:
       type: object
       properties:
@@ -206,23 +243,40 @@ components:
         status:
           type: string
           example: pending
-    copay_request_prescriptions_tokens:
+    Model128:
       type: array
-      items:
-        $ref: '#/components/schemas/Model131'
-    prescriptions:
-      type: array
-      items:
-        $ref: '#/components/schemas/Model44'
-    Model129:
-      type: array
+      description: Patient's prescriptions.
       example:
-      - skhsyq83rkd3uht9
-      - ubqfc1a0a17hjb1c
-      - oi4aafwcsv5zzvvj
-      minItems: 1
+      - prescription_token: z3q2jr
+        quantity: 8.7
+        days_supply: 30
+        patient_consent:
+          consent_statement: Patient Bruce Banner consented that Truepill pharmacy will bill their insurance in order to provide a fill of Medication Sildenafil 10mg for a quantity of 10.
+          patient_name: Bruce Banner
+          consent_provided_by: Hulk
+          item: sildenafil 10mg
+          consent_method: VERBAL
+          consent_date: ' 2021-01-25 15:17:51.000Z'
+          consent_type: INSURANCE
+        claim_overrides:
+        - insurance_token: adcbc795028c009d
+          prior_authorization_number: ABC123
+          submission_clarification_code: '4'
+        - insurance_token: 75539ed9ffb86f38
+          other_coverage_code: '8'
+      - b5q3t2
+      - h3r55c
       items:
         type: string
+        description: Prescription token
+        example: 4526d90a
+        minLength: 1
+        x-alternatives:
+        - type: string
+          description: Prescription token
+          example: 4526d90a
+          minLength: 1
+        - $ref: '#/x-alt-definitions/Model4'
     Model45:
       type: object
       properties:
@@ -265,12 +319,6 @@ components:
           example: CA
           x-constraint:
             length: 2
-    Model213:
-      type: object
-      properties:
-        message:
-          type: string
-          example: Copay not found
     Model212:
       type: object
       properties:
@@ -285,38 +333,16 @@ components:
           example: success
         details:
           $ref: '#/components/schemas/Model211'
-    Model211:
-      type: object
-      properties:
-        code:
-          type: string
-          example: CUSTOMER_CANCELLATION_REQUEST
-        description:
-          type: string
-          example: Copay Request Cancelled by Customer Request
-        message:
-          type: string
-          example: 'Accepted: Copay Request 34f68f71f980f78bb0bc has been cancelled.'
-    Model133:
-      type: object
-      properties:
-        request_id:
-          type: string
-          example: 40277544de5c6ba685dc4161e189d3e2
-        timestamp:
-          type: integer
-          example: 1631571795.423
-        status:
-          type: string
-          example: success
-        details:
-          $ref: '#/components/schemas/Model132'
-    Model134:
+    prescriptions:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model44'
+    Model213:
       type: object
       properties:
         message:
           type: string
-          example: Patient not found
+          example: Copay not found
     Model210:
       type: object
       properties:
@@ -328,60 +354,6 @@ components:
           type: string
           description: Request id
           example: bf11da52584eb54188bf8ebed33ef15f
-    Model132:
-      type: object
-      properties:
-        copay_request_token:
-          type: string
-          example: a2fcd842de60b010
-        copay_request_prescriptions_tokens:
-          $ref: '#/components/schemas/copay_request_prescriptions_tokens'
-    Model46:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 404
-        error:
-          type: string
-          example: Not Found
-        message:
-          type: string
-          example: Unable to find Copay Request.
-    Model128:
-      type: array
-      description: Patient's prescriptions.
-      example:
-      - prescription_token: z3q2jr
-        quantity: 8.7
-        days_supply: 30
-        patient_consent:
-          consent_statement: Patient Bruce Banner consented that Truepill pharmacy will bill their insurance in order to provide a fill of Medication Sildenafil 10mg for a quantity of 10.
-          patient_name: Bruce Banner
-          consent_provided_by: Hulk
-          item: sildenafil 10mg
-          consent_method: VERBAL
-          consent_date: ' 2021-01-25 15:17:51.000Z'
-          consent_type: INSURANCE
-        claim_overrides:
-        - insurance_token: adcbc795028c009d
-          prior_authorization_number: ABC123
-          submission_clarification_code: '4'
-        - insurance_token: 75539ed9ffb86f38
-          other_coverage_code: '8'
-      - b5q3t2
-      - h3r55c
-      items:
-        type: string
-        description: Prescription token
-        example: 4526d90a
-        minLength: 1
-        x-alternatives:
-        - type: string
-          description: Prescription token
-          example: 4526d90a
-          minLength: 1
-        - $ref: '#/x-alt-definitions/Model4'
     Model130:
       type: object
       properties:
@@ -420,10 +392,38 @@ components:
           - insurance
       required:
       - patient_token
-    insurance_tokens:
-      type: array
-      items:
-        type: string
+    Model133:
+      type: object
+      properties:
+        request_id:
+          type: string
+          example: 40277544de5c6ba685dc4161e189d3e2
+        timestamp:
+          type: integer
+          example: 1631571795.423
+        status:
+          type: string
+          example: success
+        details:
+          $ref: '#/components/schemas/Model132'
+    Model46:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 404
+        error:
+          type: string
+          example: Not Found
+        message:
+          type: string
+          example: Unable to find Copay Request.
+    Model134:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Patient not found
   securitySchemes:
     apiKey:
       type: apiKey

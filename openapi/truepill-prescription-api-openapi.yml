@@ -2335,6 +2335,43 @@ paths:
               $ref: '#/components/schemas/Model229'
 components:
   schemas:
+    Model229:
+      type: object
+      properties:
+        reason_code:
+          type: string
+          enum:
+          - RETAIL
+          - MAIL
+          - OON
+          - NOT_COVERED
+          - OTHER
+        additional_information:
+          type: string
+        transfer_to:
+          $ref: '#/components/schemas/transfer_to'
+      required:
+      - reason_code
+      - additional_information
+      - transfer_to
+    Model63:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 404
+        error:
+          type: string
+          example: Not Found
+        message:
+          type: string
+          example: Unable to find Prescription.
+    icd_codes:
+      type: object
+    Model111:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model110'
     Model227:
       type: object
       properties:
@@ -2343,6 +2380,115 @@ components:
           example: Discontinuation of therapy
       required:
       - reason
+    Model110:
+      type: object
+      properties:
+        patient_copay_amount:
+          type: number
+          description: Expected patient copay amount from claim if adjudication is successful
+          example: 10
+        transaction_code:
+          type: string
+          description: Adjudication transaction type
+          example: B2
+        claim_type:
+          type: string
+          description: Insurance claim type
+          example: Reversal
+        transmission_date:
+          type: string
+          format: date
+          example: '2021-09-15T03:07:01.000Z'
+        insurance:
+          $ref: '#/components/schemas/insurance'
+        payor:
+          type: string
+          description: Payor's name
+          example: Health Partners
+        payor_adjudication_amount:
+          type: number
+          description: Payor adjudication amount
+          example: 0
+    transfer_to:
+      type: object
+      properties:
+        pharmacy_name:
+          type: string
+        pharmacist_name:
+          type: string
+        npi:
+          type: string
+          pattern: ^[0-9]+$
+          x-constraint:
+            length: 10
+        phone:
+          type: string
+          pattern: ^\(?\d{3}\)?[-\s]?\d{3}[-\s]?\d{4}$
+        fax:
+          type: string
+          pattern: ^\(?\d{3}\)?[-\s]?\d{3}[-\s]?\d{4}$
+        address:
+          $ref: '#/components/schemas/Model228'
+      required:
+      - pharmacy_name
+      - address
+    Model112:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 404
+        error:
+          type: string
+          example: Not Found
+        message:
+          type: string
+          example: Unable to find Rx.
+    Model228:
+      type: object
+      properties:
+        street1:
+          type: string
+        street2:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        zip:
+          type: string
+      required:
+      - street1
+      - city
+      - state
+      - zip
+    Model62:
+      type: object
+      properties:
+        prescription:
+          $ref: '#/components/schemas/prescription'
+    insurance:
+      type: object
+      properties:
+        group_number:
+          type: string
+          description: Insurance group number associated to claim
+          example: GRP
+        bin:
+          type: string
+          description: Insurance BIN number associated to claim
+          example: '321654'
+        pcn:
+          type: string
+          description: Insurance PCN associated to claim
+          example: '321654'
+        cardholder_id:
+          type: string
+          description: Member ID number on insurance card
+          example: '321654'
+    formulary:
+      type: object
+      description: Formulary details if available
     prescription:
       type: object
       properties:
@@ -2520,152 +2666,6 @@ components:
       properties:
         xml:
           type: string
-    Model63:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 404
-        error:
-          type: string
-          example: Not Found
-        message:
-          type: string
-          example: Unable to find Prescription.
-    Model112:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 404
-        error:
-          type: string
-          example: Not Found
-        message:
-          type: string
-          example: Unable to find Rx.
-    formulary:
-      type: object
-      description: Formulary details if available
-    transfer_to:
-      type: object
-      properties:
-        pharmacy_name:
-          type: string
-        pharmacist_name:
-          type: string
-        npi:
-          type: string
-          pattern: ^[0-9]+$
-          x-constraint:
-            length: 10
-        phone:
-          type: string
-          pattern: ^\(?\d{3}\)?[-\s]?\d{3}[-\s]?\d{4}$
-        fax:
-          type: string
-          pattern: ^\(?\d{3}\)?[-\s]?\d{3}[-\s]?\d{4}$
-        address:
-          $ref: '#/components/schemas/Model228'
-      required:
-      - pharmacy_name
-      - address
-    Model111:
-      type: array
-      items:
-        $ref: '#/components/schemas/Model110'
-    Model110:
-      type: object
-      properties:
-        patient_copay_amount:
-          type: number
-          description: Expected patient copay amount from claim if adjudication is successful
-          example: 10
-        transaction_code:
-          type: string
-          description: Adjudication transaction type
-          example: B2
-        claim_type:
-          type: string
-          description: Insurance claim type
-          example: Reversal
-        transmission_date:
-          type: string
-          format: date
-          example: '2021-09-15T03:07:01.000Z'
-        insurance:
-          $ref: '#/components/schemas/insurance'
-        payor:
-          type: string
-          description: Payor's name
-          example: Health Partners
-        payor_adjudication_amount:
-          type: number
-          description: Payor adjudication amount
-          example: 0
-    Model228:
-      type: object
-      properties:
-        street1:
-          type: string
-        street2:
-          type: string
-        city:
-          type: string
-        state:
-          type: string
-        zip:
-          type: string
-      required:
-      - street1
-      - city
-      - state
-      - zip
-    icd_codes:
-      type: object
-    Model229:
-      type: object
-      properties:
-        reason_code:
-          type: string
-          enum:
-          - RETAIL
-          - MAIL
-          - OON
-          - NOT_COVERED
-          - OTHER
-        additional_information:
-          type: string
-        transfer_to:
-          $ref: '#/components/schemas/transfer_to'
-      required:
-      - reason_code
-      - additional_information
-      - transfer_to
-    insurance:
-      type: object
-      properties:
-        group_number:
-          type: string
-          description: Insurance group number associated to claim
-          example: GRP
-        bin:
-          type: string
-          description: Insurance BIN number associated to claim
-          example: '321654'
-        pcn:
-          type: string
-          description: Insurance PCN associated to claim
-          example: '321654'
-        cardholder_id:
-          type: string
-          description: Member ID number on insurance card
-          example: '321654'
-    Model62:
-      type: object
-      properties:
-        prescription:
-          $ref: '#/components/schemas/prescription'
   securitySchemes:
     apiKey:
       type: apiKey

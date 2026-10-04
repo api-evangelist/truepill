@@ -173,6 +173,18 @@ paths:
                 $ref: '#/components/schemas/Model2'
 components:
   schemas:
+    Model3:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 401
+        error:
+          type: string
+          example: Unauthorized
+        message:
+          type: string
+          example: Invalid credentials
     Model2:
       type: object
       properties:
@@ -185,6 +197,39 @@ components:
       required:
       - statusCode
       - message
+    Model113:
+      type: object
+      properties:
+        id:
+          type: string
+          example: f716ba1c-bd4b-43c7-9395-84255cd943cd
+          x-format:
+            guid: true
+        submit_on:
+          type: string
+          format: date
+          example: '2022-01-01T00:00:00.000Z'
+        original_fill_request_token:
+          type: string
+          example: fill_request_token_abc123
+      required:
+      - id
+      - submit_on
+      - original_fill_request_token
+    Model240:
+      type: object
+      properties:
+        id:
+          type: string
+          example: f716ba1c-bd4b-43c7-9395-84255cd943cd
+          x-format:
+            guid: true
+        status:
+          type: string
+          example: CANCELLED
+      required:
+      - id
+      - status
     Model4:
       type: object
       properties:
@@ -208,51 +253,6 @@ components:
       - status
       - submit_on
       - original_fill_request_token
-    Model240:
-      type: object
-      properties:
-        id:
-          type: string
-          example: f716ba1c-bd4b-43c7-9395-84255cd943cd
-          x-format:
-            guid: true
-        status:
-          type: string
-          example: CANCELLED
-      required:
-      - id
-      - status
-    Model113:
-      type: object
-      properties:
-        id:
-          type: string
-          example: f716ba1c-bd4b-43c7-9395-84255cd943cd
-          x-format:
-            guid: true
-        submit_on:
-          type: string
-          format: date
-          example: '2022-01-01T00:00:00.000Z'
-        original_fill_request_token:
-          type: string
-          example: fill_request_token_abc123
-      required:
-      - id
-      - submit_on
-      - original_fill_request_token
-    Model3:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 401
-        error:
-          type: string
-          example: Unauthorized
-        message:
-          type: string
-          example: Invalid credentials
   securitySchemes:
     apiKey:
       type: apiKey

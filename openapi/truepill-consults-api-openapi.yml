@@ -325,15 +325,12 @@ paths:
               $ref: '#/components/schemas/Model251'
 components:
   schemas:
-    media:
+    videoLinks:
       type: object
       properties:
-        videos:
-          $ref: '#/components/schemas/videos'
-        images:
-          $ref: '#/components/schemas/videos'
-        documents:
-          $ref: '#/components/schemas/videos'
+        patient:
+          type: string
+          example: https://video.falsepill.com/?t=cGF0aWVudA%3D%&src=MjNhbmRtZQ%3D%4E
     answers:
       type: object
       properties:
@@ -357,285 +354,63 @@ components:
             - 1
             - 2
             - 3
-    identification:
-      type: array
-      items:
-        $ref: '#/components/schemas/Model191'
-    authorized_representatives:
-      type: array
-      items:
-        $ref: '#/components/schemas/Model198'
-    Model6:
+    Model79:
       type: object
       properties:
-        patient_token:
-          type: string
-          example: bc955e1dccd8295c
         id:
           type: string
-          example: 61b1d934c398d1001eab5cf2
+          example: 61ae6866b6c29c001d3c7eag
+        order_id:
+          type: string
+          example: 8f4507a3-b3b6-4348-b1c3-91f8a34e8c78
+        name:
+          type: string
+          example: BLOODTEST
+        panels:
+          $ref: '#/components/schemas/panels'
+        kit_serial:
+          type: string
+          example: 8f4507a3-b3b6-4348-b1c3-91f8a66e8c78
         status:
           type: string
-          example: completed
-        provider:
-          $ref: '#/components/schemas/provider'
-        program:
-          $ref: '#/components/schemas/program'
-        lab_tests:
-          $ref: '#/components/schemas/lab_tests'
-        created_at:
-          type: string
-          example: '2021-12-09T10:23:48.547Z'
-    current_medications:
-      type: object
-      properties:
-        medications:
-          $ref: '#/components/schemas/insurance_tokens'
-    Model82:
-      type: object
-      properties:
-        id:
-          type: string
-          example: 62ae6fe8ea635e79f047e89e
-        ndc:
-          type: string
-          example: 00469260190
-        name:
-          type: string
-          example: PFIZER 10
-        strength:
-          type: string
-          example: '1'
-        refills:
-          type: number
-          example: 0
-        days_supply:
-          type: number
-          example: 3
-        sig:
-          type: string
-          example: Take 500 mg twice daily for 5 days.
-        quantity:
-          type: number
-          example: 20
-        created_at:
-          type: string
-          example: '2021-12-07T14:30:00.162Z'
+          example: ACCEPTED
         active_date:
           type: string
-          example: '2021-12-07'
-        pharmacy:
-          $ref: '#/components/schemas/pharmacy'
-    shipping_address:
+          example: '2021-12-06'
+        created_at:
+          type: string
+          example: '2021-12-06T19:45:42.334Z'
+        results:
+          $ref: '#/components/schemas/Model78'
+    validation:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model201'
+    Model195:
+      type: array
+      x-constraint: {}
+      items:
+        $ref: '#/components/schemas/Model194'
+    Model194:
       type: object
       properties:
-        line1:
+        lab_test_name:
           type: string
-        line2:
+        days_from_now:
+          type: integer
+          minimum: 0
+        kit_serial:
           type: string
-        street1:
+          example: 8f4507a3-b3b6-4348-b1c3-91f8a66e8c78
+        panels:
+          $ref: '#/components/schemas/insurance_tokens'
+        return_tracking_number:
           type: string
-        street2:
+        return_carrier:
           type: string
-        state:
-          type: string
-        city:
-          type: string
-        zip:
-          type: string
-          example: '13812'
-    preferred_treatment:
-      type: object
-      properties:
-        rx:
-          $ref: '#/components/schemas/RX'
-        devices:
-          $ref: '#/components/schemas/devices'
-        lab_tests:
-          $ref: '#/components/schemas/Model195'
-    payor:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Insurance plan name
-          example: LIC’s NEW MONEY BACK PLAN - 25 YEARS
-        name:
-          type: string
-          description: Payor name
-          example: John Doe
-        street1:
-          type: string
-          description: Payor streen
-          example: Jackson road
-        city:
-          type: string
-          description: Payor city
-          example: Boston
-        state:
-          type: string
-          description: US state
-          example: CA
-          x-constraint:
-            length: 2
-        country:
-          type: string
-          description: Payor country
-          example: US
-          x-constraint:
-            length: 2
-        zip:
-          type: string
-          description: Zip code
-          example: '94538'
-          pattern: ^\d{5}(-\d{4})?$
-        phone:
-          type: string
-          description: Insurance’s phone number
-          example: 430-304-3949
       required:
-      - zip
-    Model192:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Medication ID in the Questionnaire
-          example: 5fd2e79d4ff610001c3b84c5
-        ndc:
-          type: string
-          description: National drug code
-          example: ndc_code
-          enum:
-          - ANY
-          pattern: ^[0-9]{4,5}-[0-9]{3,4}-[0-9]{1,3}$
-        days_supply:
-          type: number
-          description: Days supply
-          example: 90
-        quantity:
-          type: number
-          description: RX quantity
-          example: 1
-        num_refills:
-          type: number
-          description: Number of refills
-          example: 1
-        strength:
-          type: string
-          description: RX strength
-          example: 20mg
-        allow_substitutions:
-          type: boolean
-          description: If medication is allowed to substitute
-          example: false
-        frequency:
-          type: string
-          description: The frequency of medication use
-          example: MONTHLY
-          enum:
-          - MONTHLY
-          - QUARTERLY
-        sig:
-          type: string
-          example: Take 1 daily
-        notes_to_pharmacist:
-          type: string
-          example: 'Disclaimer: This is a compounded prescription order for...'
-    Model8:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 401
-        error:
-          type: string
-          example: Unauthorized
-        message:
-          type: string
-          example: Please Send a Valid Api-Key
-    Model202:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 400
-        error:
-          type: string
-          example: Bad Request
-        message:
-          type: string
-          example: appointment.apptDate is required
-        validation:
-          $ref: '#/components/schemas/validation'
-    other_contacts:
-      type: array
-      description: Patient’s other contacts
-      items:
-        $ref: '#/components/schemas/Model189'
-    other_consult_info:
-      type: object
-      description: Other consult information
-      example: Bad feeling after wake up
-    icd_codes:
-      type: object
-    Model90:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 400
-        error:
-          type: string
-          example: Bad Request
-        validation_errors:
-          $ref: '#/components/schemas/Model89'
-    Model250:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 404
-        error:
-          type: string
-          example: Not Found
-        message:
-          type: string
-          example: Media to be updated does not exists in consult
-    Model245:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 400
-        error:
-          type: string
-          example: Bad Request
-        validation_errors:
-          $ref: '#/components/schemas/Model244'
-    Model252:
-      type: object
-      properties:
-        newStatus:
-          type: string
-        statusFlowFromTo:
-          type: string
-    Model197:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Should be a uuid
-          example: 059d52b6-b2b0-4bd1-97df-082b1e2196c1
-          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
-    insurances:
-      type: array
-      items:
-        $ref: '#/components/schemas/Model77'
-    insurance_tokens:
-      type: array
-      items:
-        type: string
+      - lab_test_name
+      - days_from_now
     Patient:
       type: object
       properties:
@@ -704,6 +479,17 @@ components:
       - home_zip
       - preferred_contact
       - preferred_contact
+    lab_tests:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model5'
+    Model198:
+      type: object
+      properties:
+        full_name:
+          type: string
+        phone:
+          type: string
     Model76:
       type: object
       properties:
@@ -713,39 +499,6 @@ components:
         name:
           type: string
           example: My Consult Program
-    Model201:
-      type: object
-      properties:
-        source:
-          type: string
-          example: payload
-        keys:
-          $ref: '#/components/schemas/keys'
-    Model81:
-      type: object
-      properties:
-        street1:
-          type: string
-        city:
-          type: string
-        state:
-          type: string
-        zip:
-          type: string
-      required:
-      - street1
-      - city
-      - state
-      - zip
-    notificationSettings:
-      type: object
-      properties:
-        optOutSms:
-          type: boolean
-        optOutEmail:
-          type: boolean
-        optOutPhone:
-          type: boolean
     CreateConsult:
       type: object
       properties:
@@ -817,139 +570,57 @@ components:
       - shipping_address
       - insurances
       - questionaire
-    Model80:
+    panels:
       type: array
       items:
-        $ref: '#/components/schemas/Model79'
-    Model89:
-      type: array
-      items:
-        $ref: '#/components/schemas/Model88'
-    videos:
-      type: array
-      items:
-        $ref: '#/components/schemas/Model197'
-    Model79:
+        type: string
+        example: Lipids
+    Model203:
       type: object
       properties:
-        id:
+        statusCode:
+          type: number
+          example: 404
+        error:
           type: string
-          example: 61ae6866b6c29c001d3c7eag
-        order_id:
-          type: string
-          example: 8f4507a3-b3b6-4348-b1c3-91f8a34e8c78
-        name:
-          type: string
-          example: BLOODTEST
-        panels:
-          $ref: '#/components/schemas/panels'
-        kit_serial:
-          type: string
-          example: 8f4507a3-b3b6-4348-b1c3-91f8a66e8c78
-        status:
-          type: string
-          example: ACCEPTED
-        active_date:
-          type: string
-          example: '2021-12-06'
-        created_at:
-          type: string
-          example: '2021-12-06T19:45:42.334Z'
-        results:
-          $ref: '#/components/schemas/Model78'
-    diagnoses:
-      type: array
-      items:
-        $ref: '#/components/schemas/Model85'
-    Model5:
-      type: object
-      properties:
-        order_id:
-          type: string
-          description: Should be a uuid
-          example: 059d52b6-b2b0-4bd1-97df-082b1e2196c1
-          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
-    Model200:
-      type: object
-      properties:
-        consult:
-          type: string
-          example: 61b27d15999d5b001d6784bc
-        patient:
-          $ref: '#/components/schemas/Model199'
-        videoLinks:
-          $ref: '#/components/schemas/videoLinks'
-        patient_token:
-          type: string
-          example: e0a515397a25044g
-    videoLinks:
-      type: object
-      properties:
-        patient:
-          type: string
-          example: https://video.falsepill.com/?t=cGF0aWVudA%3D%&src=MjNhbmRtZQ%3D%4E
-    Model243:
-      type: object
-      properties:
-        consult_id:
-          type: string
-          example: 607619bb13b4b6001d36f223
-    Model7:
-      type: array
-      items:
-        $ref: '#/components/schemas/Model6'
-    Model88:
-      type: object
-      properties:
-        key:
-          type: string
-          example: consult_id
+          example: Not Found
         message:
           type: string
-          example: length must be 24 characters long
-    Model194:
+          example: Questionaire not found (You may not be authorized to it).
+    devices:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model193'
+    Model249:
       type: object
       properties:
-        lab_test_name:
+        mediaId:
           type: string
-        days_from_now:
-          type: integer
-          minimum: 0
-        kit_serial:
-          type: string
-          example: 8f4507a3-b3b6-4348-b1c3-91f8a66e8c78
-        panels:
-          $ref: '#/components/schemas/insurance_tokens'
-        return_tracking_number:
-          type: string
-        return_carrier:
+          x-format:
+            guid: true
+        form:
           type: string
       required:
-      - lab_test_name
-      - days_from_now
-    Model193:
+      - mediaId
+    Model78:
+      type: array
+      items:
+        $ref: '#/components/schemas/icd_codes'
+    insurances:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model77'
+    Model90:
       type: object
       properties:
-        hcpcs:
-          type: string
-          example: hcpcs_billing_code
-        quantity:
+        statusCode:
           type: number
-          example: 1
-        num_refills:
-          type: number
-          example: 1
-      required:
-      - hcpcs
-    Model86:
-      type: object
-      properties:
-        options:
-          $ref: '#/components/schemas/insurance_tokens'
-        key:
+          example: 400
+        error:
           type: string
-        value:
-          type: string
+          example: Bad Request
+        validation_errors:
+          $ref: '#/components/schemas/Model89'
     Model77:
       type: object
       properties:
@@ -984,224 +655,28 @@ components:
           $ref: '#/components/schemas/payor'
         subscriber:
           $ref: '#/components/schemas/Subscriber'
-    panels:
-      type: array
-      items:
-        type: string
-        example: Lipids
-    patient:
+    notificationSettings:
       type: object
       properties:
-        id:
-          type: string
-        patient_token:
-          type: string
-        first_name:
-          type: string
-        last_name:
-          type: string
-        current_medications:
-          $ref: '#/components/schemas/current_medications'
-        notificationSettings:
-          $ref: '#/components/schemas/notificationSettings'
-        demographicChanges:
-          $ref: '#/components/schemas/icd_codes'
-        phone:
-          type: string
-        email:
-          type: string
-        allergies:
-          type: string
-        conditions:
-          type: string
-    Model251:
-      type: object
-      properties:
-        status:
-          type: string
-          example: issue
-          enum:
-          - completed
-          - issue
-          - rejected
-          - issueCompleted
-          - issueRejected
-        issueReasonTopic:
-          type: string
-        issueReason:
-          type: string
-        rejectReasonTopic:
-          type: string
-        rejectReason:
-          type: string
-        notes:
-          type: string
-        completionState:
-          type: string
-        rx_ndc:
-          type: string
-        providerAnswers:
-          $ref: '#/components/schemas/icd_codes'
-        icd10:
-          type: string
-      required:
-      - status
-      - issueReason
-      - rejectReason
-      - notes
-      - completionState
-    devices:
-      type: array
-      items:
-        $ref: '#/components/schemas/Model193'
-    Model191:
-      type: object
-      properties:
-        media_id:
-          type: string
-          description: Should be a uuid
-          example: 059d52b6-b2b0-4bd1-97df-082b1e2196c1
-          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
-        form:
-          type: string
-          description: The valid forms of identification required by the consult's questionnaire
-          example: SELF_PORTRAIT
-          enum:
-          - SELF_PORTRAIT
-          - PHOTO_IDENTIFICATION
-    provider:
-      type: object
-      properties:
-        id:
-          type: string
-          example: 607619bb13b4b6001d36f223
-        npi:
-          type: number
-          example: 3948693843
-        first_name:
-          type: string
-          example: Test
-        last_name:
-          type: string
-          example: Doc
-        title:
-          type: string
-          example: MD
-    validation_errors:
-      type: array
-      items:
-        $ref: '#/components/schemas/Model12'
-    Model198:
-      type: object
-      properties:
-        full_name:
-          type: string
-        phone:
-          type: string
-    Model203:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 404
-        error:
-          type: string
-          example: Not Found
-        message:
-          type: string
-          example: Questionaire not found (You may not be authorized to it).
-    Model246:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 404
-        error:
-          type: string
-          example: Not Found
-        message:
-          type: string
-          example: Consult not found. (You may not be authorized to it)
-    Appointment:
-      type: object
-      description: Appointment information
-      properties:
-        duration:
-          type: number
-          description: Appointment duration
-          example: 3600
-          default: 3600
-        appt_date:
-          type: string
-          format: date-time
-          description: Appointment date
-          example: '2020-02-08'
-      required:
-      - appt_date
-    Model199:
-      type: object
-      properties:
-        patient_token:
-          type: string
-          example: e0a515397a25044g
-    appointment:
-      type: object
-      properties:
-        scheduled:
+        optOutSms:
           type: boolean
-          example: false
-    Model78:
+        optOutEmail:
+          type: boolean
+        optOutPhone:
+          type: boolean
+    provider_answers:
       type: array
       items:
-        $ref: '#/components/schemas/icd_codes'
-    validation:
+        $ref: '#/components/schemas/Model86'
+    videos:
       type: array
       items:
-        $ref: '#/components/schemas/Model201'
-    Model87:
-      type: object
-      properties:
-        id:
-          type: string
-          example: 62adf0a45e7022537790f5c8
-        completed_at:
-          type: string
-          example: '2021-12-06T19:45:42.568Z'
-        status:
-          type: string
-          example: REVIEW
-        metadata:
-          type: string
-          example: NA_
-        program:
-          $ref: '#/components/schemas/Model76'
-        insurances:
-          $ref: '#/components/schemas/insurances'
-        appointment:
-          $ref: '#/components/schemas/appointment'
-        lab_tests:
-          $ref: '#/components/schemas/Model80'
-        prescriptions:
-          $ref: '#/components/schemas/Model83'
-        notificationSettings:
-          $ref: '#/components/schemas/notificationSettings'
-        provider:
-          $ref: '#/components/schemas/Model84'
-        patient_token:
-          type: string
-          example: 5f7175be123aedb5
-        patient:
-          $ref: '#/components/schemas/patient'
-        shipping_address:
-          $ref: '#/components/schemas/shipping_address'
-        treatment_identifier:
-          $ref: '#/components/schemas/insurance_tokens'
-        diagnoses:
-          $ref: '#/components/schemas/diagnoses'
-        notes_to_patient:
-          type: string
-        provider_answers:
-          $ref: '#/components/schemas/provider_answers'
+        $ref: '#/components/schemas/Model197'
+    RX:
+      type: array
+      description: RX information
+      items:
+        $ref: '#/components/schemas/Model192'
     Subscriber:
       type: object
       description: Subscriber information
@@ -1258,77 +733,6 @@ components:
             length: 2
       required:
       - zip
-    Model249:
-      type: object
-      properties:
-        mediaId:
-          type: string
-          x-format:
-            guid: true
-        form:
-          type: string
-      required:
-      - mediaId
-    Model12:
-      type: object
-      properties:
-        key:
-          type: string
-          example: questionnaire
-        message:
-          type: string
-          example: length must be 24 characters long
-    keys:
-      type: array
-      items:
-        type: string
-        example: appointment.apptDate
-    Model83:
-      type: array
-      items:
-        $ref: '#/components/schemas/Model82'
-    provider_answers:
-      type: array
-      items:
-        $ref: '#/components/schemas/Model86'
-    pharmacy:
-      type: object
-      properties:
-        name:
-          type: string
-        address:
-          $ref: '#/components/schemas/Model81'
-        phone:
-          type: string
-        fax:
-          type: string
-        npi:
-          type: string
-      required:
-      - name
-    Model13:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 400
-        error:
-          type: string
-          example: Bad Request
-        validation_errors:
-          $ref: '#/components/schemas/validation_errors'
-    payment:
-      type: object
-      properties:
-        customer_token:
-          type: string
-        shipping_option:
-          type: string
-    Model195:
-      type: array
-      x-constraint: {}
-      items:
-        $ref: '#/components/schemas/Model194'
     program:
       type: object
       properties:
@@ -1338,41 +742,10 @@ components:
         name:
           type: string
           example: My Program
-    contacts:
-      type: object
-      properties:
-        email:
-          type: string
-          example: hulkout@hulk.com
-          x-format:
-            email: true
-          x-convert:
-            trim: true
-        phone:
-          type: string
-          description: Patient’s phone number
-          example: 430-304-3949
-        sms:
-          type: string
-        other_contacts:
-          $ref: '#/components/schemas/other_contacts'
-    RX:
+    identification:
       type: array
-      description: RX information
       items:
-        $ref: '#/components/schemas/Model192'
-    Model9:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 500
-        error:
-          type: string
-          example: An internal server error occurred
-        message:
-          type: string
-          example: An internal server error occurred
+        $ref: '#/components/schemas/Model191'
     Model84:
       type: object
       properties:
@@ -1388,14 +761,339 @@ components:
         title:
           type: string
           example: MD
-    lab_tests:
+    Model5:
+      type: object
+      properties:
+        order_id:
+          type: string
+          description: Should be a uuid
+          example: 059d52b6-b2b0-4bd1-97df-082b1e2196c1
+          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+    other_contacts:
       type: array
+      description: Patient’s other contacts
       items:
-        $ref: '#/components/schemas/Model5'
+        $ref: '#/components/schemas/Model189'
     Model244:
       type: array
       items:
         $ref: '#/components/schemas/Model243'
+    provider:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 607619bb13b4b6001d36f223
+        npi:
+          type: number
+          example: 3948693843
+        first_name:
+          type: string
+          example: Test
+        last_name:
+          type: string
+          example: Doc
+        title:
+          type: string
+          example: MD
+    Model8:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 401
+        error:
+          type: string
+          example: Unauthorized
+        message:
+          type: string
+          example: Please Send a Valid Api-Key
+    preferred_treatment:
+      type: object
+      properties:
+        rx:
+          $ref: '#/components/schemas/RX'
+        devices:
+          $ref: '#/components/schemas/devices'
+        lab_tests:
+          $ref: '#/components/schemas/Model195'
+    Model87:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 62adf0a45e7022537790f5c8
+        completed_at:
+          type: string
+          example: '2021-12-06T19:45:42.568Z'
+        status:
+          type: string
+          example: REVIEW
+        metadata:
+          type: string
+          example: NA_
+        program:
+          $ref: '#/components/schemas/Model76'
+        insurances:
+          $ref: '#/components/schemas/insurances'
+        appointment:
+          $ref: '#/components/schemas/appointment'
+        lab_tests:
+          $ref: '#/components/schemas/Model80'
+        prescriptions:
+          $ref: '#/components/schemas/Model83'
+        notificationSettings:
+          $ref: '#/components/schemas/notificationSettings'
+        provider:
+          $ref: '#/components/schemas/Model84'
+        patient_token:
+          type: string
+          example: 5f7175be123aedb5
+        patient:
+          $ref: '#/components/schemas/patient'
+        shipping_address:
+          $ref: '#/components/schemas/shipping_address'
+        treatment_identifier:
+          $ref: '#/components/schemas/insurance_tokens'
+        diagnoses:
+          $ref: '#/components/schemas/diagnoses'
+        notes_to_patient:
+          type: string
+        provider_answers:
+          $ref: '#/components/schemas/provider_answers'
+    Model88:
+      type: object
+      properties:
+        key:
+          type: string
+          example: consult_id
+        message:
+          type: string
+          example: length must be 24 characters long
+    patient:
+      type: object
+      properties:
+        id:
+          type: string
+        patient_token:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        current_medications:
+          $ref: '#/components/schemas/current_medications'
+        notificationSettings:
+          $ref: '#/components/schemas/notificationSettings'
+        demographicChanges:
+          $ref: '#/components/schemas/icd_codes'
+        phone:
+          type: string
+        email:
+          type: string
+        allergies:
+          type: string
+        conditions:
+          type: string
+    icd_codes:
+      type: object
+    Model200:
+      type: object
+      properties:
+        consult:
+          type: string
+          example: 61b27d15999d5b001d6784bc
+        patient:
+          $ref: '#/components/schemas/Model199'
+        videoLinks:
+          $ref: '#/components/schemas/videoLinks'
+        patient_token:
+          type: string
+          example: e0a515397a25044g
+    pharmacy:
+      type: object
+      properties:
+        name:
+          type: string
+        address:
+          $ref: '#/components/schemas/Model81'
+        phone:
+          type: string
+        fax:
+          type: string
+        npi:
+          type: string
+      required:
+      - name
+    Model252:
+      type: object
+      properties:
+        newStatus:
+          type: string
+        statusFlowFromTo:
+          type: string
+    insurance_tokens:
+      type: array
+      items:
+        type: string
+    Model201:
+      type: object
+      properties:
+        source:
+          type: string
+          example: payload
+        keys:
+          $ref: '#/components/schemas/keys'
+    Model250:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 404
+        error:
+          type: string
+          example: Not Found
+        message:
+          type: string
+          example: Media to be updated does not exists in consult
+    payment:
+      type: object
+      properties:
+        customer_token:
+          type: string
+        shipping_option:
+          type: string
+    Model251:
+      type: object
+      properties:
+        status:
+          type: string
+          example: issue
+          enum:
+          - completed
+          - issue
+          - rejected
+          - issueCompleted
+          - issueRejected
+        issueReasonTopic:
+          type: string
+        issueReason:
+          type: string
+        rejectReasonTopic:
+          type: string
+        rejectReason:
+          type: string
+        notes:
+          type: string
+        completionState:
+          type: string
+        rx_ndc:
+          type: string
+        providerAnswers:
+          $ref: '#/components/schemas/icd_codes'
+        icd10:
+          type: string
+      required:
+      - status
+      - issueReason
+      - rejectReason
+      - notes
+      - completionState
+    Model243:
+      type: object
+      properties:
+        consult_id:
+          type: string
+          example: 607619bb13b4b6001d36f223
+    Model12:
+      type: object
+      properties:
+        key:
+          type: string
+          example: questionnaire
+        message:
+          type: string
+          example: length must be 24 characters long
+    Model199:
+      type: object
+      properties:
+        patient_token:
+          type: string
+          example: e0a515397a25044g
+    media:
+      type: object
+      properties:
+        videos:
+          $ref: '#/components/schemas/videos'
+        images:
+          $ref: '#/components/schemas/videos'
+        documents:
+          $ref: '#/components/schemas/videos'
+    Model202:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 400
+        error:
+          type: string
+          example: Bad Request
+        message:
+          type: string
+          example: appointment.apptDate is required
+        validation:
+          $ref: '#/components/schemas/validation'
+    Model246:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 404
+        error:
+          type: string
+          example: Not Found
+        message:
+          type: string
+          example: Consult not found. (You may not be authorized to it)
+    other_consult_info:
+      type: object
+      description: Other consult information
+      example: Bad feeling after wake up
+    Model82:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 62ae6fe8ea635e79f047e89e
+        ndc:
+          type: string
+          example: 00469260190
+        name:
+          type: string
+          example: PFIZER 10
+        strength:
+          type: string
+          example: '1'
+        refills:
+          type: number
+          example: 0
+        days_supply:
+          type: number
+          example: 3
+        sig:
+          type: string
+          example: Take 500 mg twice daily for 5 days.
+        quantity:
+          type: number
+          example: 20
+        created_at:
+          type: string
+          example: '2021-12-07T14:30:00.162Z'
+        active_date:
+          type: string
+          example: '2021-12-07'
+        pharmacy:
+          $ref: '#/components/schemas/pharmacy'
     Model189:
       type: object
       properties:
@@ -1416,6 +1114,104 @@ components:
       required:
       - number
       - type
+    Appointment:
+      type: object
+      description: Appointment information
+      properties:
+        duration:
+          type: number
+          description: Appointment duration
+          example: 3600
+          default: 3600
+        appt_date:
+          type: string
+          format: date-time
+          description: Appointment date
+          example: '2020-02-08'
+      required:
+      - appt_date
+    shipping_address:
+      type: object
+      properties:
+        line1:
+          type: string
+        line2:
+          type: string
+        street1:
+          type: string
+        street2:
+          type: string
+        state:
+          type: string
+        city:
+          type: string
+        zip:
+          type: string
+          example: '13812'
+    Model245:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 400
+        error:
+          type: string
+          example: Bad Request
+        validation_errors:
+          $ref: '#/components/schemas/Model244'
+    validation_errors:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model12'
+    Model81:
+      type: object
+      properties:
+        street1:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        zip:
+          type: string
+      required:
+      - street1
+      - city
+      - state
+      - zip
+    Model9:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 500
+        error:
+          type: string
+          example: An internal server error occurred
+        message:
+          type: string
+          example: An internal server error occurred
+    Model6:
+      type: object
+      properties:
+        patient_token:
+          type: string
+          example: bc955e1dccd8295c
+        id:
+          type: string
+          example: 61b1d934c398d1001eab5cf2
+        status:
+          type: string
+          example: completed
+        provider:
+          $ref: '#/components/schemas/provider'
+        program:
+          $ref: '#/components/schemas/program'
+        lab_tests:
+          $ref: '#/components/schemas/lab_tests'
+        created_at:
+          type: string
+          example: '2021-12-09T10:23:48.547Z'
     Model85:
       type: object
       properties:
@@ -1425,6 +1221,110 @@ components:
           type: string
         version:
           type: string
+    keys:
+      type: array
+      items:
+        type: string
+        example: appointment.apptDate
+    Model13:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 400
+        error:
+          type: string
+          example: Bad Request
+        validation_errors:
+          $ref: '#/components/schemas/validation_errors'
+    current_medications:
+      type: object
+      properties:
+        medications:
+          $ref: '#/components/schemas/insurance_tokens'
+    contacts:
+      type: object
+      properties:
+        email:
+          type: string
+          example: hulkout@hulk.com
+          x-format:
+            email: true
+          x-convert:
+            trim: true
+        phone:
+          type: string
+          description: Patient’s phone number
+          example: 430-304-3949
+        sms:
+          type: string
+        other_contacts:
+          $ref: '#/components/schemas/other_contacts'
+    Model83:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model82'
+    Model193:
+      type: object
+      properties:
+        hcpcs:
+          type: string
+          example: hcpcs_billing_code
+        quantity:
+          type: number
+          example: 1
+        num_refills:
+          type: number
+          example: 1
+      required:
+      - hcpcs
+    Model192:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Medication ID in the Questionnaire
+          example: 5fd2e79d4ff610001c3b84c5
+        ndc:
+          type: string
+          description: National drug code
+          example: ndc_code
+          enum:
+          - ANY
+          pattern: ^[0-9]{4,5}-[0-9]{3,4}-[0-9]{1,3}$
+        days_supply:
+          type: number
+          description: Days supply
+          example: 90
+        quantity:
+          type: number
+          description: RX quantity
+          example: 1
+        num_refills:
+          type: number
+          description: Number of refills
+          example: 1
+        strength:
+          type: string
+          description: RX strength
+          example: 20mg
+        allow_substitutions:
+          type: boolean
+          description: If medication is allowed to substitute
+          example: false
+        frequency:
+          type: string
+          description: The frequency of medication use
+          example: MONTHLY
+          enum:
+          - MONTHLY
+          - QUARTERLY
+        sig:
+          type: string
+          example: Take 1 daily
+        notes_to_pharmacist:
+          type: string
+          example: 'Disclaimer: This is a compounded prescription order for...'
     Model91:
       type: object
       properties:
@@ -1437,6 +1337,106 @@ components:
         message:
           type: string
           example: 61ae5a2fb6c29c001d3c7e91 not found
+    diagnoses:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model85'
+    Model86:
+      type: object
+      properties:
+        options:
+          $ref: '#/components/schemas/insurance_tokens'
+        key:
+          type: string
+        value:
+          type: string
+    Model7:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model6'
+    Model191:
+      type: object
+      properties:
+        media_id:
+          type: string
+          description: Should be a uuid
+          example: 059d52b6-b2b0-4bd1-97df-082b1e2196c1
+          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+        form:
+          type: string
+          description: The valid forms of identification required by the consult's questionnaire
+          example: SELF_PORTRAIT
+          enum:
+          - SELF_PORTRAIT
+          - PHOTO_IDENTIFICATION
+    Model80:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model79'
+    authorized_representatives:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model198'
+    appointment:
+      type: object
+      properties:
+        scheduled:
+          type: boolean
+          example: false
+    payor:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Insurance plan name
+          example: LIC’s NEW MONEY BACK PLAN - 25 YEARS
+        name:
+          type: string
+          description: Payor name
+          example: John Doe
+        street1:
+          type: string
+          description: Payor streen
+          example: Jackson road
+        city:
+          type: string
+          description: Payor city
+          example: Boston
+        state:
+          type: string
+          description: US state
+          example: CA
+          x-constraint:
+            length: 2
+        country:
+          type: string
+          description: Payor country
+          example: US
+          x-constraint:
+            length: 2
+        zip:
+          type: string
+          description: Zip code
+          example: '94538'
+          pattern: ^\d{5}(-\d{4})?$
+        phone:
+          type: string
+          description: Insurance’s phone number
+          example: 430-304-3949
+      required:
+      - zip
+    Model197:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Should be a uuid
+          example: 059d52b6-b2b0-4bd1-97df-082b1e2196c1
+          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+    Model89:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model88'
   securitySchemes:
     apiKey:
       type: apiKey

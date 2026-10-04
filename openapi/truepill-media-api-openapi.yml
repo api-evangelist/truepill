@@ -525,18 +525,42 @@ paths:
               $ref: '#/components/schemas/CreateMediaV2'
 components:
   schemas:
-    Model56:
+    Model3:
       type: object
       properties:
         statusCode:
           type: number
-          example: 404
+          example: 401
         error:
           type: string
-          example: Not Found
+          example: Unauthorized
         message:
           type: string
-          example: Media with id not found
+          example: Invalid credentials
+    Model9:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 500
+        error:
+          type: string
+          example: An internal server error occurred
+        message:
+          type: string
+          example: An internal server error occurred
+    Model108:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 403
+        error:
+          type: string
+          example: Forbidden
+        message:
+          type: string
+          example: This file cannot be downloaded
     CreateMedia:
       type: object
       properties:
@@ -551,37 +575,6 @@ components:
           example: Skin damage media
       required:
       - fileName
-    Model161:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 404
-        error:
-          type: string
-          example: Not Found
-        message:
-          type: string
-          example: Media not found
-    Model54:
-      type: object
-      properties:
-        id:
-          type: string
-          example: 059d52b6-b2b0-4bd1-97df-082b1e2196c1
-          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
-        createdAt:
-          type: string
-          example: '2021-11-09T08:00:00.000Z'
-        updatedAt:
-          type: string
-          example: '2021-11-09T08:00:00.000Z'
-        title:
-          type: string
-          example: Right ear
-        status:
-          type: string
-          example: AVAILABLE
     Model75:
       type: object
       properties:
@@ -609,76 +602,25 @@ components:
       - name
       - status
       - url
-    Model3:
+    Model54:
       type: object
       properties:
-        statusCode:
-          type: number
-          example: 401
-        error:
+        id:
           type: string
-          example: Unauthorized
-        message:
+          example: 059d52b6-b2b0-4bd1-97df-082b1e2196c1
+          pattern: ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-4[0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}$
+        createdAt:
           type: string
-          example: Invalid credentials
-    Model108:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 403
-        error:
+          example: '2021-11-09T08:00:00.000Z'
+        updatedAt:
           type: string
-          example: Forbidden
-        message:
+          example: '2021-11-09T08:00:00.000Z'
+        title:
           type: string
-          example: This file cannot be downloaded
-    Model55:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 401
-        error:
+          example: Right ear
+        status:
           type: string
-          example: Unauthorized
-        message:
-          type: string
-          example: Invalid Credentials passed
-    CreateMediaV2:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Human readable media title
-          example: Skin damage media
-          maxLength: 255
-      required:
-      - name
-    Model9:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 500
-        error:
-          type: string
-          example: An internal server error occurred
-        message:
-          type: string
-          example: An internal server error occurred
-    Model109:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 422
-        error:
-          type: string
-          example: Unprocessable Entity
-        message:
-          type: string
-          example: File with this name already exists
+          example: AVAILABLE
     Model188:
       type: object
       properties:
@@ -710,6 +652,18 @@ components:
       - name
       - status
       - upload_url
+    Model161:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 404
+        error:
+          type: string
+          example: Not Found
+        message:
+          type: string
+          example: Media not found
     Model160:
       type: object
       properties:
@@ -732,6 +686,52 @@ components:
           type: string
           description: Captures whether we are currently scanning the media, or whether it is safe or not. Quarantined medias are inaccessible
           example: AVAILABLE
+    CreateMediaV2:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Human readable media title
+          example: Skin damage media
+          maxLength: 255
+      required:
+      - name
+    Model109:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 422
+        error:
+          type: string
+          example: Unprocessable Entity
+        message:
+          type: string
+          example: File with this name already exists
+    Model55:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 401
+        error:
+          type: string
+          example: Unauthorized
+        message:
+          type: string
+          example: Invalid Credentials passed
+    Model56:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 404
+        error:
+          type: string
+          example: Not Found
+        message:
+          type: string
+          example: Media with id not found
   securitySchemes:
     apiKey:
       type: apiKey

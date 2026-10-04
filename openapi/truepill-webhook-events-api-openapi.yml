@@ -213,55 +213,10 @@ paths:
                 $ref: '#/components/schemas/Model74'
 components:
   schemas:
-    Model34:
-      type: object
-      properties:
-        metadata:
-          type: string
-          example: some metadata
-        message:
-          type: string
-          example: Your fill request was processed and is pending shipment.
-        date_filled:
-          type: string
-          example: Wed, 08 Sep 2021 10:04:25 GMT
-        order_token:
-          type: string
-          example: e4469e
-        medications:
-          $ref: '#/components/schemas/Model33'
-        tracking_url:
-          type: string
-          example: https://tools.usps.com/go/TrackConfirmAction_input?origTrackNum=48081107879780000000000000
-        location:
-          type: string
-          example: Brooklyn, NY
-        patient_token:
-          type: string
-          example: fa4ca2d7c1214214
-    remaining_refills:
-      type: object
-      properties:
-        total_remaining_refills:
-          type: number
-          example: 5
-        total_quantity_remaining:
-          type: number
-          example: 150
-    Model37:
-      type: object
-      properties:
-        results:
-          $ref: '#/components/schemas/Model36'
-    Model33:
+    insurance_tokens:
       type: array
       items:
-        $ref: '#/components/schemas/Model32'
-    Model74:
-      type: object
-      properties:
-        results:
-          $ref: '#/components/schemas/Model73'
+        type: string
     Model71:
       type: object
       properties:
@@ -273,6 +228,19 @@ components:
           example: NOTIFY_RX
         details:
           $ref: '#/components/schemas/Model70'
+    Model74:
+      type: object
+      properties:
+        results:
+          $ref: '#/components/schemas/Model73'
+    Model36:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model35'
+    Model33:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model32'
     delivery_data:
       type: object
       properties:
@@ -282,6 +250,19 @@ components:
         status_code:
           type: number
           example: 204
+    remaining_refills:
+      type: object
+      properties:
+        total_remaining_refills:
+          type: number
+          example: 5
+        total_quantity_remaining:
+          type: number
+          example: 150
+    Model73:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model72'
     Model72:
       type: object
       properties:
@@ -292,14 +273,27 @@ components:
         next_page_token:
           type: string
           example: eyJpdiI6IjRiNDc2ODM3ODI2MWU4N2Q1ZmQwNzQ2MzhlZWFiZmQ3IiwiY29udGVudCI6IjY3YWYxNGRmYTQ4Mzg1ZTMzMjBhZTA0MjAwODBhOTQ4OTIzNjMzYzIxODIwMzIifZ==
-    insurance_tokens:
-      type: array
-      items:
-        type: string
-    Model36:
-      type: array
-      items:
-        $ref: '#/components/schemas/Model35'
+    payload:
+      type: object
+      properties:
+        timestamp:
+          type: number
+          example: 1631593381
+        callback_type:
+          type: string
+          example: ORDER
+        details:
+          $ref: '#/components/schemas/Model34'
+    Model35:
+      type: object
+      properties:
+        payload:
+          $ref: '#/components/schemas/payload'
+        delivery_data:
+          $ref: '#/components/schemas/delivery_data'
+        next_page_token:
+          type: string
+          example: eyJpdiI6IjRiNDc2ODM3ODI2MWU4N2Q1ZmQwNzQ2MzhlZWFiZmQ3IiwiY29udGVudCI6IjY3YWYxNGRmYTQ4Mzg1ZTMzMjBhZTA0MjAwODBhOTQ4OTIzNjMzYzIxODIwMzIifZ==
     Model32:
       type: object
       properties:
@@ -344,27 +338,37 @@ components:
         rx_link:
           type: string
           example: rxl_d374bfb72980319f2a80f8af
-    Model35:
+    Model34:
       type: object
       properties:
-        payload:
-          $ref: '#/components/schemas/payload'
-        delivery_data:
-          $ref: '#/components/schemas/delivery_data'
-        next_page_token:
+        metadata:
           type: string
-          example: eyJpdiI6IjRiNDc2ODM3ODI2MWU4N2Q1ZmQwNzQ2MzhlZWFiZmQ3IiwiY29udGVudCI6IjY3YWYxNGRmYTQ4Mzg1ZTMzMjBhZTA0MjAwODBhOTQ4OTIzNjMzYzIxODIwMzIifZ==
-    payload:
+          example: some metadata
+        message:
+          type: string
+          example: Your fill request was processed and is pending shipment.
+        date_filled:
+          type: string
+          example: Wed, 08 Sep 2021 10:04:25 GMT
+        order_token:
+          type: string
+          example: e4469e
+        medications:
+          $ref: '#/components/schemas/Model33'
+        tracking_url:
+          type: string
+          example: https://tools.usps.com/go/TrackConfirmAction_input?origTrackNum=48081107879780000000000000
+        location:
+          type: string
+          example: Brooklyn, NY
+        patient_token:
+          type: string
+          example: fa4ca2d7c1214214
+    Model37:
       type: object
       properties:
-        timestamp:
-          type: number
-          example: 1631593381
-        callback_type:
-          type: string
-          example: ORDER
-        details:
-          $ref: '#/components/schemas/Model34'
+        results:
+          $ref: '#/components/schemas/Model36'
     Model70:
       type: object
       properties:
@@ -390,10 +394,6 @@ components:
         rx_link:
           type: string
           example: rxl_750b5e71eb4261c1f73066ee
-    Model73:
-      type: array
-      items:
-        $ref: '#/components/schemas/Model72'
   securitySchemes:
     apiKey:
       type: apiKey

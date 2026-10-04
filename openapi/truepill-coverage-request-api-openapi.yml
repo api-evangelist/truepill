@@ -63,6 +63,15 @@ paths:
               $ref: '#/components/schemas/Model135'
 components:
   schemas:
+    Model136:
+      type: object
+      properties:
+        coverage_request_token:
+          type: string
+          example: 097b844c799b9c00
+        message:
+          type: string
+          example: Your coverage request has been processed successfully.
     Model137:
       type: object
       properties:
@@ -77,21 +86,6 @@ components:
           example: success
         details:
           $ref: '#/components/schemas/Model136'
-    Model134:
-      type: object
-      properties:
-        message:
-          type: string
-          example: Patient not found
-    Model136:
-      type: object
-      properties:
-        coverage_request_token:
-          type: string
-          example: 097b844c799b9c00
-        message:
-          type: string
-          example: Your coverage request has been processed successfully.
     Model135:
       type: object
       properties:
@@ -103,6 +97,12 @@ components:
           example: metadata
       required:
       - patient_token
+    Model134:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Patient not found
   securitySchemes:
     apiKey:
       type: apiKey

@@ -93,51 +93,18 @@ paths:
                 $ref: '#/components/schemas/Model9'
 components:
   schemas:
-    Model11:
-      type: object
-      properties:
-        availabilities:
-          $ref: '#/components/schemas/availabilities'
-    Model12:
-      type: object
-      properties:
-        key:
-          type: string
-          example: questionnaire
-        message:
-          type: string
-          example: length must be 24 characters long
-    Model8:
+    Model14:
       type: object
       properties:
         statusCode:
           type: number
-          example: 401
+          example: 404
         error:
           type: string
-          example: Unauthorized
+          example: Not Found
         message:
           type: string
-          example: Please Send a Valid Api-Key
-    availabilities:
-      type: array
-      items:
-        $ref: '#/components/schemas/Model10'
-    validation_errors:
-      type: array
-      items:
-        $ref: '#/components/schemas/Model12'
-    Model13:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 400
-        error:
-          type: string
-          example: Bad Request
-        validation_errors:
-          $ref: '#/components/schemas/validation_errors'
+          example: Consult questionnaire not found. (You may not be authorized to it)
     Model9:
       type: object
       properties:
@@ -150,6 +117,22 @@ components:
         message:
           type: string
           example: An internal server error occurred
+    Model11:
+      type: object
+      properties:
+        availabilities:
+          $ref: '#/components/schemas/availabilities'
+    Model13:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 400
+        error:
+          type: string
+          example: Bad Request
+        validation_errors:
+          $ref: '#/components/schemas/validation_errors'
     Model10:
       type: object
       properties:
@@ -164,18 +147,35 @@ components:
       required:
       - start
       - end
-    Model14:
+    availabilities:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model10'
+    validation_errors:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model12'
+    Model8:
       type: object
       properties:
         statusCode:
           type: number
-          example: 404
+          example: 401
         error:
           type: string
-          example: Not Found
+          example: Unauthorized
         message:
           type: string
-          example: Consult questionnaire not found. (You may not be authorized to it)
+          example: Please Send a Valid Api-Key
+    Model12:
+      type: object
+      properties:
+        key:
+          type: string
+          example: questionnaire
+        message:
+          type: string
+          example: length must be 24 characters long
   securitySchemes:
     apiKey:
       type: apiKey

@@ -10843,15 +10843,203 @@ paths:
               $ref: '#/components/schemas/icd_codes'
 components:
   schemas:
-    delivery_data:
+    Model48:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 403
+        error:
+          type: string
+          example: Forbidden
+        message:
+          type: string
+          example: Unauthorized from viewing this direct transfer
+    Model49:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 404
+        error:
+          type: string
+          example: Not Found
+        message:
+          type: string
+          example: Unable to find direct transfer.
+    Model140:
+      type: object
+      properties:
+        direct_transfer_id:
+          type: string
+          example: 9a8b9e4161
+    Model47:
       type: object
       properties:
         status:
           type: string
-          example: success
-        status_code:
-          type: number
-          example: 204
+          example: pending
+        rejection_reason:
+          type: string
+        additional_rejection_details:
+          type: string
+        prescription_token:
+          type: string
+          example: 61323ceea1da89001d154adc
+        metadata:
+          type: string
+          example: some metadata
+        created_at:
+          type: string
+          example: '2021-09-14T04:49:12.000Z'
+    Model138:
+      type: object
+      properties:
+        name:
+          type: string
+          x-convert:
+            trim: true
+        street1:
+          type: string
+          description: Primary street where the company is located
+          example: 123 Some Lane
+          x-convert:
+            trim: true
+        city:
+          type: string
+          description: City where the company is located
+          example: San Mateo
+          x-convert:
+            trim: true
+        state:
+          type: string
+          description: State where the company is located
+          example: CA
+          x-convert:
+            trim: true
+        zip:
+          type: string
+          description: Postal code where the company is located
+          example: '94538'
+          pattern: ^\d{5}(-\d{4})?$
+      required:
+      - name
+      - street1
+      - city
+      - state
+      - zip
+    CreateDirectTransfer:
+      type: object
+      description: Create new direct transfer
+      properties:
+        metadata:
+          type: string
+        prescriber:
+          $ref: '#/components/schemas/Prescriber'
+        patient_token:
+          type: string
+          description: Token to reference patient record
+          example: 4526d90a
+        transfer_from:
+          $ref: '#/components/schemas/TransferFrom'
+        transfer_to:
+          $ref: '#/components/schemas/TransferTo'
+        prescription:
+          $ref: '#/components/schemas/Model139'
+        source:
+          type: string
+      required:
+      - prescriber
+      - transfer_from
+      - transfer_to
+      - prescription
+    Model96:
+      type: object
+      properties:
+        metadata:
+          type: string
+          example: my_identifier
+        message:
+          type: string
+          example: Direct Transfer Accepted.
+        patient_token:
+          type: string
+          example: 221e6f904c32faac
+        direct_transfer_token:
+          type: string
+          example: b5338d53e5
+        prescription_token:
+          type: string
+          example: 622b9f344fa7
+        rx_link:
+          type: string
+          example: rxl_31ad83984d0404f7109f0992
+    Prescriber:
+      type: object
+      description: Prescriber description
+      properties:
+        prescriber_type:
+          type: string
+          example: OD
+          enum:
+          - OD
+          - PMHNP
+          - MBBS
+          - DNP
+          - D.O.
+          - DPT
+          - D.D.S.
+          - F.N.P.
+          - CPP
+          - N.D.
+          - P.A.
+          - APNP
+          - V.M.D.
+          - RPh
+          - APRN
+          - DC APC
+          - PsyD
+          - CRNA
+          - PharmD
+          - B.V.M.S.
+          - WHNP
+          - PhD
+          - ARNP
+          - PT
+          - CRNP
+          - DPM
+          - CNP
+          - N.P.
+          - CDH
+          - D.M.D.
+          - D.V.M.
+          - M.D.
+          - CNM
+        first_name:
+          type: string
+          description: Prescriber's first name
+          example: Stephen
+          x-convert:
+            trim: true
+        last_name:
+          type: string
+          description: Prescriber's last name
+          example: Strange
+          x-convert:
+            trim: true
+        address:
+          $ref: '#/components/schemas/Model138'
+        dea:
+          type: string
+        npi:
+          type: string
+          description: National provider identifier
+          example: '123123123'
+      required:
+      - first_name
+      - last_name
+      - address
+      - npi
     Model139:
       type: object
       description: Prescription description
@@ -10956,170 +11144,19 @@ components:
           example: DIRECT_TRANSFER
         details:
           $ref: '#/components/schemas/Model96'
-    CreateDirectTransfer:
-      type: object
-      description: Create new direct transfer
-      properties:
-        metadata:
-          type: string
-        prescriber:
-          $ref: '#/components/schemas/Prescriber'
-        patient_token:
-          type: string
-          description: Token to reference patient record
-          example: 4526d90a
-        transfer_from:
-          $ref: '#/components/schemas/TransferFrom'
-        transfer_to:
-          $ref: '#/components/schemas/TransferTo'
-        prescription:
-          $ref: '#/components/schemas/Model139'
-        source:
-          type: string
-      required:
-      - prescriber
-      - transfer_from
-      - transfer_to
-      - prescription
-    TransferTo:
-      type: object
-      description: Pharmacy to transfer prescriptions to
-      properties:
-        name:
-          type: string
-          description: Name of pharmacy
-          example: Walmart Pharmacy
-        dea:
-          type: string
-        pharmacist:
-          type: string
-          example: Dr. Storm
-        id_number:
-          type: string
-      required:
-      - name
-      - pharmacist
-    Model138:
-      type: object
-      properties:
-        name:
-          type: string
-          x-convert:
-            trim: true
-        street1:
-          type: string
-          description: Primary street where the company is located
-          example: 123 Some Lane
-          x-convert:
-            trim: true
-        city:
-          type: string
-          description: City where the company is located
-          example: San Mateo
-          x-convert:
-            trim: true
-        state:
-          type: string
-          description: State where the company is located
-          example: CA
-          x-convert:
-            trim: true
-        zip:
-          type: string
-          description: Postal code where the company is located
-          example: '94538'
-          pattern: ^\d{5}(-\d{4})?$
-      required:
-      - name
-      - street1
-      - city
-      - state
-      - zip
-    Model142:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 400
-        error:
-          type: string
-          example: Bad Request
-        message:
-          type: string
-          example: Direct transfer already exists with token 4009e71e42
-    icd_codes:
-      type: object
-    Model49:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 404
-        error:
-          type: string
-          example: Not Found
-        message:
-          type: string
-          example: Unable to find direct transfer.
-    Model98:
-      type: object
-      properties:
-        payload:
-          $ref: '#/components/schemas/Model97'
-        delivery_data:
-          $ref: '#/components/schemas/delivery_data'
-    Model48:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 403
-        error:
-          type: string
-          example: Forbidden
-        message:
-          type: string
-          example: Unauthorized from viewing this direct transfer
-    Model99:
-      type: array
-      items:
-        $ref: '#/components/schemas/Model98'
-    Model100:
-      type: object
-      properties:
-        results:
-          $ref: '#/components/schemas/Model99'
-    Model47:
+    delivery_data:
       type: object
       properties:
         status:
           type: string
-          example: pending
-        rejection_reason:
-          type: string
-        additional_rejection_details:
-          type: string
-        prescription_token:
-          type: string
-          example: 61323ceea1da89001d154adc
-        metadata:
-          type: string
-          example: some metadata
-        created_at:
-          type: string
-          example: '2021-09-14T04:49:12.000Z'
-    Model143:
-      type: object
-      properties:
-        message:
-          type: string
-          example: Unable to find Patient.
-    Model140:
-      type: object
-      properties:
-        direct_transfer_id:
-          type: string
-          example: 9a8b9e4161
+          example: success
+        status_code:
+          type: number
+          example: 204
+    Model99:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model98'
     TransferFrom:
       type: object
       description: Pharmacy to transfer prescriptions from
@@ -11143,6 +11180,11 @@ components:
       - pharmacist
       - id_number
       - address
+    Model100:
+      type: object
+      properties:
+        results:
+          $ref: '#/components/schemas/Model99'
     Model141:
       type: object
       properties:
@@ -11157,93 +11199,51 @@ components:
           example: success
         details:
           $ref: '#/components/schemas/Model140'
-    Model96:
+    icd_codes:
+      type: object
+    Model142:
       type: object
       properties:
-        metadata:
+        statusCode:
+          type: number
+          example: 400
+        error:
           type: string
-          example: my_identifier
+          example: Bad Request
         message:
           type: string
-          example: Direct Transfer Accepted.
-        patient_token:
-          type: string
-          example: 221e6f904c32faac
-        direct_transfer_token:
-          type: string
-          example: b5338d53e5
-        prescription_token:
-          type: string
-          example: 622b9f344fa7
-        rx_link:
-          type: string
-          example: rxl_31ad83984d0404f7109f0992
-    Prescriber:
+          example: Direct transfer already exists with token 4009e71e42
+    Model143:
       type: object
-      description: Prescriber description
       properties:
-        prescriber_type:
+        message:
           type: string
-          example: OD
-          enum:
-          - OD
-          - PMHNP
-          - MBBS
-          - DNP
-          - D.O.
-          - DPT
-          - D.D.S.
-          - F.N.P.
-          - CPP
-          - N.D.
-          - P.A.
-          - APNP
-          - V.M.D.
-          - RPh
-          - APRN
-          - DC APC
-          - PsyD
-          - CRNA
-          - PharmD
-          - B.V.M.S.
-          - WHNP
-          - PhD
-          - ARNP
-          - PT
-          - CRNP
-          - DPM
-          - CNP
-          - N.P.
-          - CDH
-          - D.M.D.
-          - D.V.M.
-          - M.D.
-          - CNM
-        first_name:
+          example: Unable to find Patient.
+    Model98:
+      type: object
+      properties:
+        payload:
+          $ref: '#/components/schemas/Model97'
+        delivery_data:
+          $ref: '#/components/schemas/delivery_data'
+    TransferTo:
+      type: object
+      description: Pharmacy to transfer prescriptions to
+      properties:
+        name:
           type: string
-          description: Prescriber's first name
-          example: Stephen
-          x-convert:
-            trim: true
-        last_name:
-          type: string
-          description: Prescriber's last name
-          example: Strange
-          x-convert:
-            trim: true
-        address:
-          $ref: '#/components/schemas/Model138'
+          description: Name of pharmacy
+          example: Walmart Pharmacy
         dea:
           type: string
-        npi:
+        pharmacist:
           type: string
-          description: National provider identifier
-          example: '123123123'
+          example: Dr. Storm
+        id_number:
+          type: string
       required:
-      - first_name
-      - last_name
-      - address
-      - npi
+      - name
+      - pharmacist
   securitySchemes:
     apiKey:
       type: apiKey
