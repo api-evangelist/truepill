@@ -421,6 +421,8 @@ apis:
   humanURL: https://rxdocs.fuzehealth.com
   baseURL: https://rxapi.fuzehealth.com/consults/v0
   tags:
+  - OpenAPI
+  tags_raw:
   - Open Api
   properties:
   - type: OpenAPI
@@ -457,6 +459,8 @@ apis:
   humanURL: https://rxdocs.fuzehealth.com
   baseURL: https://rxapi.fuzehealth.com/consults/v0
   tags:
+  - Patients
+  tags_raw:
   - Patient
   properties:
   - type: OpenAPI
@@ -565,6 +569,8 @@ apis:
   humanURL: https://rxdocs.fuzehealth.com
   baseURL: https://rxapi.fuzehealth.com/consults/v0
   tags:
+  - Same-Day Delivery
+  tags_raw:
   - Same Day Delivery
   properties:
   - type: OpenAPI
