@@ -1,0 +1,12 @@
+{
+ "url": "https://rxapi.fuzehealth.com/swagger.json",
+ "requested_url": "https://rxapi.fuzehealth.com/swagger.json",
+ "status": 200,
+ "content_type": "application/json; charset=utf-8",
+ "bytes": 481739,
+ "sha256": "ddc91eedd5500ab54f88ea7278600ccee7ec5e419c8cf1984760a086d4ff6d2d",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "equivalent",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the provider's current document describes the same operations (Jaccard 1.0), but the bytes differ, so the archive is an earlier or reformatted copy."
+}
