@@ -173,18 +173,6 @@ paths:
                 $ref: '#/components/schemas/Model2'
 components:
   schemas:
-    Model3:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 401
-        error:
-          type: string
-          example: Unauthorized
-        message:
-          type: string
-          example: Invalid credentials
     Model2:
       type: object
       properties:
@@ -197,6 +185,18 @@ components:
       required:
       - statusCode
       - message
+    Model3:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 401
+        error:
+          type: string
+          example: Unauthorized
+        message:
+          type: string
+          example: Invalid credentials
     Model113:
       type: object
       properties:

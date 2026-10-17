@@ -431,39 +431,51 @@ paths:
                 $ref: '#/components/schemas/Model19'
 components:
   schemas:
-    Model247:
+    scheduled_fill_address:
       type: object
       properties:
-        timestamp:
+        name:
           type: string
-          format: date
-          example: '2026-08-07T19:45:22.706Z'
-        status:
+          example: address name
+        street1:
           type: string
-          example: successful
-    Model42:
-      type: object
-      properties:
-        timestamp:
+          example: street 1
+        street2:
           type: string
-          format: date
-          example: '2026-08-07T19:45:22.707Z'
-        status:
+          example: street 2
+        city:
           type: string
-          example: successful
-        details:
-          $ref: '#/components/schemas/Model41'
-    Model43:
-      type: object
-      properties:
-        code:
+          example: city
+        state:
+          type: string
+          example: state
+        zip:
           type: number
-          example: 200
-        err:
-          type: boolean
-          example: false
-        data:
-          $ref: '#/components/schemas/Model42'
+          example: 12345
+        phone:
+          type: string
+          example: ((123)456-7890
+        email:
+          type: string
+          example: email@email.com
+        country:
+          type: string
+    details:
+      type: object
+      properties:
+        auto_refill_subscriptions:
+          $ref: '#/components/schemas/auto_refill_subscriptions'
+    Model207:
+      type: object
+      properties:
+        auto_refill_medications:
+          $ref: '#/components/schemas/Model206'
+    Model225:
+      type: object
+      properties:
+        sas_id:
+          type: string
+          example: 985c7f9f-b506-424a-b016-0a47144f46b6
     Model95:
       type: object
       properties:
@@ -475,6 +487,113 @@ components:
           example: false
         data:
           $ref: '#/components/schemas/Model94'
+    Model43:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 200
+        err:
+          type: boolean
+          example: false
+        data:
+          $ref: '#/components/schemas/Model42'
+    Model247:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date
+          example: '2026-08-07T19:45:22.706Z'
+        status:
+          type: string
+          example: successful
+    Model15:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 200
+        err:
+          type: boolean
+          example: false
+        data:
+          $ref: '#/components/schemas/data'
+    Model242:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 200
+        err:
+          type: boolean
+          example: false
+        data:
+          $ref: '#/components/schemas/Model241'
+    Model208:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date
+          example: '2021-05-20T00:00:00.000Z'
+        status:
+          type: string
+          example: successful
+        details:
+          $ref: '#/components/schemas/Model207'
+    Model93:
+      type: object
+      properties:
+        auto_refill_subscriptions:
+          $ref: '#/components/schemas/Model92'
+        nextPageToken:
+          type: string
+          example: nextPageTokenString
+        total:
+          type: number
+          example: 1
+    Model209:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 200
+        err:
+          type: boolean
+          example: false
+        data:
+          $ref: '#/components/schemas/Model208'
+    Model18:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 400
+        err:
+          type: boolean
+          example: true
+        data:
+          $ref: '#/components/schemas/Model17'
+    Model241:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date
+          example: '2026-08-07T19:45:22.698Z'
+        status:
+          type: string
+          example: successful
+    Model41:
+      type: object
+      properties:
+        auto_refill_medications:
+          $ref: '#/components/schemas/auto_refill_medications'
+        scheduled_fill_address:
+          $ref: '#/components/schemas/scheduled_fill_address'
+        scheduled_fill_survey:
+          $ref: '#/components/schemas/scheduled_fill_survey'
     auto_refill_medications:
       type: object
       properties:
@@ -491,12 +610,32 @@ components:
         refills_remaining:
           type: number
           example: 3
-    Model207:
+    Model92:
+      type: array
+      example:
+      - id: 1
+        prescription_token: token
+        status: active
+      items:
+        type: string
+    Model19:
       type: object
       properties:
-        auto_refill_medications:
-          $ref: '#/components/schemas/Model206'
-    data:
+        code:
+          type: number
+          example: 500
+        err:
+          type: boolean
+          example: true
+        data:
+          $ref: '#/components/schemas/Model17'
+    Model16:
+      type: object
+      properties:
+        message:
+          type: string
+          example: An example error message
+    Model94:
       type: object
       properties:
         timestamp:
@@ -507,8 +646,8 @@ components:
           type: string
           example: successful
         details:
-          $ref: '#/components/schemas/details'
-    Model226:
+          $ref: '#/components/schemas/Model93'
+    Model248:
       type: object
       properties:
         code:
@@ -518,7 +657,7 @@ components:
           type: boolean
           example: false
         data:
-          $ref: '#/components/schemas/Model225'
+          $ref: '#/components/schemas/Model247'
     Model17:
       type: object
       properties:
@@ -531,16 +670,7 @@ components:
           example: unsuccessful
         details:
           $ref: '#/components/schemas/Model16'
-    Model41:
-      type: object
-      properties:
-        auto_refill_medications:
-          $ref: '#/components/schemas/auto_refill_medications'
-        scheduled_fill_address:
-          $ref: '#/components/schemas/scheduled_fill_address'
-        scheduled_fill_survey:
-          $ref: '#/components/schemas/scheduled_fill_survey'
-    Model208:
+    data:
       type: object
       properties:
         timestamp:
@@ -551,18 +681,19 @@ components:
           type: string
           example: successful
         details:
-          $ref: '#/components/schemas/Model207'
-    Model209:
+          $ref: '#/components/schemas/details'
+    Model42:
       type: object
       properties:
-        code:
-          type: number
-          example: 200
-        err:
-          type: boolean
-          example: false
-        data:
-          $ref: '#/components/schemas/Model208'
+        timestamp:
+          type: string
+          format: date
+          example: '2026-08-07T19:45:22.707Z'
+        status:
+          type: string
+          example: successful
+        details:
+          $ref: '#/components/schemas/Model41'
     scheduled_fill_survey:
       type: object
       properties:
@@ -624,12 +755,6 @@ components:
           type: number
         pregnancy:
           type: boolean
-    Model16:
-      type: object
-      properties:
-        message:
-          type: string
-          example: An example error message
     Model206:
       type: object
       properties:
@@ -641,142 +766,6 @@ components:
           format: date
           description: Date the next refill will be filled.
           example: '2021-07-31T00:00:00.000Z'
-    Model248:
-      type: object
-      properties:
-        code:
-          type: number
-          example: 200
-        err:
-          type: boolean
-          example: false
-        data:
-          $ref: '#/components/schemas/Model247'
-    details:
-      type: object
-      properties:
-        auto_refill_subscriptions:
-          $ref: '#/components/schemas/auto_refill_subscriptions'
-    Model94:
-      type: object
-      properties:
-        timestamp:
-          type: string
-          format: date
-          example: '2021-05-20T00:00:00.000Z'
-        status:
-          type: string
-          example: successful
-        details:
-          $ref: '#/components/schemas/Model93'
-    scheduled_fill_address:
-      type: object
-      properties:
-        name:
-          type: string
-          example: address name
-        street1:
-          type: string
-          example: street 1
-        street2:
-          type: string
-          example: street 2
-        city:
-          type: string
-          example: city
-        state:
-          type: string
-          example: state
-        zip:
-          type: number
-          example: 12345
-        phone:
-          type: string
-          example: ((123)456-7890
-        email:
-          type: string
-          example: email@email.com
-        country:
-          type: string
-    Model19:
-      type: object
-      properties:
-        code:
-          type: number
-          example: 500
-        err:
-          type: boolean
-          example: true
-        data:
-          $ref: '#/components/schemas/Model17'
-    Model241:
-      type: object
-      properties:
-        timestamp:
-          type: string
-          format: date
-          example: '2026-08-07T19:45:22.698Z'
-        status:
-          type: string
-          example: successful
-    Model18:
-      type: object
-      properties:
-        code:
-          type: number
-          example: 400
-        err:
-          type: boolean
-          example: true
-        data:
-          $ref: '#/components/schemas/Model17'
-    Model93:
-      type: object
-      properties:
-        auto_refill_subscriptions:
-          $ref: '#/components/schemas/Model92'
-        nextPageToken:
-          type: string
-          example: nextPageTokenString
-        total:
-          type: number
-          example: 1
-    Model92:
-      type: array
-      example:
-      - id: 1
-        prescription_token: token
-        status: active
-      items:
-        type: string
-    Model15:
-      type: object
-      properties:
-        code:
-          type: number
-          example: 200
-        err:
-          type: boolean
-          example: false
-        data:
-          $ref: '#/components/schemas/data'
-    Model242:
-      type: object
-      properties:
-        code:
-          type: number
-          example: 200
-        err:
-          type: boolean
-          example: false
-        data:
-          $ref: '#/components/schemas/Model241'
-    Model225:
-      type: object
-      properties:
-        sas_id:
-          type: string
-          example: 985c7f9f-b506-424a-b016-0a47144f46b6
     auto_refill_subscriptions:
       type: object
       properties:
@@ -792,6 +781,17 @@ components:
         status:
           type: string
           example: active
+    Model226:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 200
+        err:
+          type: boolean
+          example: false
+        data:
+          $ref: '#/components/schemas/Model225'
   securitySchemes:
     apiKey:
       type: apiKey

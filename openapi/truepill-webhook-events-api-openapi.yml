@@ -213,66 +213,6 @@ paths:
                 $ref: '#/components/schemas/Model74'
 components:
   schemas:
-    insurance_tokens:
-      type: array
-      items:
-        type: string
-    Model71:
-      type: object
-      properties:
-        timestamp:
-          type: number
-          example: 1631593381
-        callback_type:
-          type: string
-          example: NOTIFY_RX
-        details:
-          $ref: '#/components/schemas/Model70'
-    Model74:
-      type: object
-      properties:
-        results:
-          $ref: '#/components/schemas/Model73'
-    Model36:
-      type: array
-      items:
-        $ref: '#/components/schemas/Model35'
-    Model33:
-      type: array
-      items:
-        $ref: '#/components/schemas/Model32'
-    delivery_data:
-      type: object
-      properties:
-        status:
-          type: string
-          example: success
-        status_code:
-          type: number
-          example: 204
-    remaining_refills:
-      type: object
-      properties:
-        total_remaining_refills:
-          type: number
-          example: 5
-        total_quantity_remaining:
-          type: number
-          example: 150
-    Model73:
-      type: array
-      items:
-        $ref: '#/components/schemas/Model72'
-    Model72:
-      type: object
-      properties:
-        payload:
-          $ref: '#/components/schemas/Model71'
-        delivery_data:
-          $ref: '#/components/schemas/delivery_data'
-        next_page_token:
-          type: string
-          example: eyJpdiI6IjRiNDc2ODM3ODI2MWU4N2Q1ZmQwNzQ2MzhlZWFiZmQ3IiwiY29udGVudCI6IjY3YWYxNGRmYTQ4Mzg1ZTMzMjBhZTA0MjAwODBhOTQ4OTIzNjMzYzIxODIwMzIifZ==
     payload:
       type: object
       properties:
@@ -284,6 +224,38 @@ components:
           example: ORDER
         details:
           $ref: '#/components/schemas/Model34'
+    delivery_data:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        status_code:
+          type: number
+          example: 204
+    Model33:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model32'
+    Model72:
+      type: object
+      properties:
+        payload:
+          $ref: '#/components/schemas/Model71'
+        delivery_data:
+          $ref: '#/components/schemas/delivery_data'
+        next_page_token:
+          type: string
+          example: eyJpdiI6IjRiNDc2ODM3ODI2MWU4N2Q1ZmQwNzQ2MzhlZWFiZmQ3IiwiY29udGVudCI6IjY3YWYxNGRmYTQ4Mzg1ZTMzMjBhZTA0MjAwODBhOTQ4OTIzNjMzYzIxODIwMzIifZ==
+    Model36:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model35'
+    Model74:
+      type: object
+      properties:
+        results:
+          $ref: '#/components/schemas/Model73'
     Model35:
       type: object
       properties:
@@ -294,6 +266,75 @@ components:
         next_page_token:
           type: string
           example: eyJpdiI6IjRiNDc2ODM3ODI2MWU4N2Q1ZmQwNzQ2MzhlZWFiZmQ3IiwiY29udGVudCI6IjY3YWYxNGRmYTQ4Mzg1ZTMzMjBhZTA0MjAwODBhOTQ4OTIzNjMzYzIxODIwMzIifZ==
+    Model34:
+      type: object
+      properties:
+        metadata:
+          type: string
+          example: some metadata
+        message:
+          type: string
+          example: Your fill request was processed and is pending shipment.
+        date_filled:
+          type: string
+          example: Wed, 08 Sep 2021 10:04:25 GMT
+        order_token:
+          type: string
+          example: e4469e
+        medications:
+          $ref: '#/components/schemas/Model33'
+        tracking_url:
+          type: string
+          example: https://tools.usps.com/go/TrackConfirmAction_input?origTrackNum=48081107879780000000000000
+        location:
+          type: string
+          example: Brooklyn, NY
+        patient_token:
+          type: string
+          example: fa4ca2d7c1214214
+    remaining_refills:
+      type: object
+      properties:
+        total_remaining_refills:
+          type: number
+          example: 5
+        total_quantity_remaining:
+          type: number
+          example: 150
+    insurance_tokens:
+      type: array
+      items:
+        type: string
+    Model37:
+      type: object
+      properties:
+        results:
+          $ref: '#/components/schemas/Model36'
+    Model70:
+      type: object
+      properties:
+        medication_name:
+          type: string
+          example: Brand Label 10mg Tablet
+        prescriber:
+          type: string
+          example: Dr. P. Scribe
+        prescription_token:
+          type: string
+          example: bac3aa39d938
+        patient_token:
+          type: string
+          example: a842f3e8112c916d
+        patient_token_duplicates:
+          $ref: '#/components/schemas/insurance_tokens'
+        merged_patients:
+          $ref: '#/components/schemas/insurance_tokens'
+        location:
+          type: string
+          example: hayward
+        rx_link:
+          type: string
+          example: rxl_750b5e71eb4261c1f73066ee
     Model32:
       type: object
       properties:
@@ -338,62 +379,21 @@ components:
         rx_link:
           type: string
           example: rxl_d374bfb72980319f2a80f8af
-    Model34:
+    Model71:
       type: object
       properties:
-        metadata:
+        timestamp:
+          type: number
+          example: 1631593381
+        callback_type:
           type: string
-          example: some metadata
-        message:
-          type: string
-          example: Your fill request was processed and is pending shipment.
-        date_filled:
-          type: string
-          example: Wed, 08 Sep 2021 10:04:25 GMT
-        order_token:
-          type: string
-          example: e4469e
-        medications:
-          $ref: '#/components/schemas/Model33'
-        tracking_url:
-          type: string
-          example: https://tools.usps.com/go/TrackConfirmAction_input?origTrackNum=48081107879780000000000000
-        location:
-          type: string
-          example: Brooklyn, NY
-        patient_token:
-          type: string
-          example: fa4ca2d7c1214214
-    Model37:
-      type: object
-      properties:
-        results:
-          $ref: '#/components/schemas/Model36'
-    Model70:
-      type: object
-      properties:
-        medication_name:
-          type: string
-          example: Brand Label 10mg Tablet
-        prescriber:
-          type: string
-          example: Dr. P. Scribe
-        prescription_token:
-          type: string
-          example: bac3aa39d938
-        patient_token:
-          type: string
-          example: a842f3e8112c916d
-        patient_token_duplicates:
-          $ref: '#/components/schemas/insurance_tokens'
-        merged_patients:
-          $ref: '#/components/schemas/insurance_tokens'
-        location:
-          type: string
-          example: hayward
-        rx_link:
-          type: string
-          example: rxl_750b5e71eb4261c1f73066ee
+          example: NOTIFY_RX
+        details:
+          $ref: '#/components/schemas/Model70'
+    Model73:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model72'
   securitySchemes:
     apiKey:
       type: apiKey

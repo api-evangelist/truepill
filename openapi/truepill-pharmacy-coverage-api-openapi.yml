@@ -137,17 +137,6 @@ components:
         phone:
           type: string
           example: (111) 123-4321
-    Model26:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 400
-        message:
-          $ref: '#/components/schemas/message'
-        error:
-          type: string
-          example: Bad Request
     message:
       type: array
       items:
@@ -162,6 +151,17 @@ components:
         message:
           type: string
           example: Forbidden
+    Model26:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 400
+        message:
+          $ref: '#/components/schemas/message'
+        error:
+          type: string
+          example: Bad Request
     Model27:
       type: object
       properties:

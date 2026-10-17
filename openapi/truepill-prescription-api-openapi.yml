@@ -2335,26 +2335,7 @@ paths:
               $ref: '#/components/schemas/Model229'
 components:
   schemas:
-    Model229:
-      type: object
-      properties:
-        reason_code:
-          type: string
-          enum:
-          - RETAIL
-          - MAIL
-          - OON
-          - NOT_COVERED
-          - OTHER
-        additional_information:
-          type: string
-        transfer_to:
-          $ref: '#/components/schemas/transfer_to'
-      required:
-      - reason_code
-      - additional_information
-      - transfer_to
-    Model63:
+    Model112:
       type: object
       properties:
         statusCode:
@@ -2365,21 +2346,35 @@ components:
           example: Not Found
         message:
           type: string
-          example: Unable to find Prescription.
-    icd_codes:
-      type: object
-    Model111:
-      type: array
-      items:
-        $ref: '#/components/schemas/Model110'
-    Model227:
+          example: Unable to find Rx.
+    transfer_to:
       type: object
       properties:
-        reason:
+        pharmacy_name:
           type: string
-          example: Discontinuation of therapy
+        pharmacist_name:
+          type: string
+        npi:
+          type: string
+          pattern: ^[0-9]+$
+          x-constraint:
+            length: 10
+        phone:
+          type: string
+          pattern: ^\(?\d{3}\)?[-\s]?\d{3}[-\s]?\d{4}$
+        fax:
+          type: string
+          pattern: ^\(?\d{3}\)?[-\s]?\d{3}[-\s]?\d{4}$
+        address:
+          $ref: '#/components/schemas/Model228'
       required:
-      - reason
+      - pharmacy_name
+      - address
+    Model106:
+      type: object
+      properties:
+        xml:
+          type: string
     Model110:
       type: object
       properties:
@@ -2409,41 +2404,40 @@ components:
           type: number
           description: Payor adjudication amount
           example: 0
-    transfer_to:
+    Model227:
       type: object
       properties:
-        pharmacy_name:
+        reason:
           type: string
-        pharmacist_name:
-          type: string
-        npi:
-          type: string
-          pattern: ^[0-9]+$
-          x-constraint:
-            length: 10
-        phone:
-          type: string
-          pattern: ^\(?\d{3}\)?[-\s]?\d{3}[-\s]?\d{4}$
-        fax:
-          type: string
-          pattern: ^\(?\d{3}\)?[-\s]?\d{3}[-\s]?\d{4}$
-        address:
-          $ref: '#/components/schemas/Model228'
+          example: Discontinuation of therapy
       required:
-      - pharmacy_name
-      - address
-    Model112:
+      - reason
+    Model111:
+      type: array
+      items:
+        $ref: '#/components/schemas/Model110'
+    formulary:
+      type: object
+      description: Formulary details if available
+    Model229:
       type: object
       properties:
-        statusCode:
-          type: number
-          example: 404
-        error:
+        reason_code:
           type: string
-          example: Not Found
-        message:
+          enum:
+          - RETAIL
+          - MAIL
+          - OON
+          - NOT_COVERED
+          - OTHER
+        additional_information:
           type: string
-          example: Unable to find Rx.
+        transfer_to:
+          $ref: '#/components/schemas/transfer_to'
+      required:
+      - reason_code
+      - additional_information
+      - transfer_to
     Model228:
       type: object
       properties:
@@ -2462,11 +2456,6 @@ components:
       - city
       - state
       - zip
-    Model62:
-      type: object
-      properties:
-        prescription:
-          $ref: '#/components/schemas/prescription'
     insurance:
       type: object
       properties:
@@ -2486,9 +2475,25 @@ components:
           type: string
           description: Member ID number on insurance card
           example: '321654'
-    formulary:
+    icd_codes:
       type: object
-      description: Formulary details if available
+    Model63:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 404
+        error:
+          type: string
+          example: Not Found
+        message:
+          type: string
+          example: Unable to find Prescription.
+    Model62:
+      type: object
+      properties:
+        prescription:
+          $ref: '#/components/schemas/prescription'
     prescription:
       type: object
       properties:
@@ -2661,11 +2666,6 @@ components:
       - quantity_remaining
       - current_rx_status_text
       - rx_link
-    Model106:
-      type: object
-      properties:
-        xml:
-          type: string
   securitySchemes:
     apiKey:
       type: apiKey

@@ -58,18 +58,6 @@ paths:
                 $ref: '#/components/schemas/Model2'
 components:
   schemas:
-    Model3:
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 401
-        error:
-          type: string
-          example: Unauthorized
-        message:
-          type: string
-          example: Invalid credentials
     Model2:
       type: object
       properties:
@@ -104,6 +92,23 @@ components:
       required:
       - timestamp
       - status
+    Model3:
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 401
+        error:
+          type: string
+          example: Unauthorized
+        message:
+          type: string
+          example: Invalid credentials
+    metadata:
+      type: object
+      description: The additional data json for current scheduled action
+      example:
+        request_id: 8
     getScheduledActions.data.details.scheduled_actions:
       type: array
       description: The list of all scheduled actions of all types by customer
@@ -119,6 +124,30 @@ components:
         customer_id: 21
       items:
         $ref: '#/components/schemas/Model1'
+    getScheduledActions.data.details:
+      type: object
+      description: The details of the response
+      properties:
+        next_page_token:
+          type: string
+          description: Base64 encoded datetime cursor to start the following paginated list from
+          example: MjAyMi0wMy0wOCAxNjoyMDowMg==
+        total:
+          type: number
+          description: The total number of scheduled actions of any type for the current customer
+          example: 50
+        per_page:
+          type: number
+          description: The limit of actions per paginated list
+          example: 10
+        pages:
+          type: number
+          description: The total number of scheduled actions
+          example: 5
+      required:
+      - total
+      - per_page
+      - pages
     Model1:
       type: object
       properties:
@@ -164,35 +193,6 @@ components:
       - id
       - created_at
       - submit_on
-    metadata:
-      type: object
-      description: The additional data json for current scheduled action
-      example:
-        request_id: 8
-    getScheduledActions.data.details:
-      type: object
-      description: The details of the response
-      properties:
-        next_page_token:
-          type: string
-          description: Base64 encoded datetime cursor to start the following paginated list from
-          example: MjAyMi0wMy0wOCAxNjoyMDowMg==
-        total:
-          type: number
-          description: The total number of scheduled actions of any type for the current customer
-          example: 50
-        per_page:
-          type: number
-          description: The limit of actions per paginated list
-          example: 10
-        pages:
-          type: number
-          description: The total number of scheduled actions
-          example: 5
-      required:
-      - total
-      - per_page
-      - pages
   securitySchemes:
     apiKey:
       type: apiKey
