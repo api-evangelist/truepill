@@ -1211,3 +1211,9 @@ x-alt-definitions:
         description: Approximate distance rounded to nearest 0.01 mile
     required:
     - ncpdpid
+x-provenance:
+  method: harvested
+  publisher: Truepill
+  source: https://rxapi.fuzehealth.com/swagger.json
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
