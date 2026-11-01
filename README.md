@@ -1,4 +1,4 @@
-# Truepill (truepill)
+# Truepill
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -66,140 +66,186 @@
 
 Truepill is a pharmacy and healthcare-infrastructure company providing API-driven prescription fulfillment, pharmacy dispensing, insurance/copay adjudication, telehealth, and at-home diagnostics. Following LetsGetChecked's 2024 acquisition of Truepill, the combined company rebranded as Fuze Health in May 2025, and the developer platform now ships as FuzeRx. The REST API exposes JSON endpoints for patients, prescriptions, transfers, insurance/copay, and webhook events under https://rxapi.fuzehealth.com/v1.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/truepill/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/truepill/refs/heads/main/apis.yml)
+**Areas:** Pharmacy · Healthcare · Prescription Fulfillment · Telehealth · Diagnostics · Insurance · Copay Adjudication · Prior Authorization · Electronic Prescribing · Pharmacy Transfers · Webhook · HIPAA
 
-## Tags
+## Truepill on APIs.io
 
-- Pharmacy
-- Healthcare
-- Prescription Fulfillment
-- Telehealth
-- Diagnostics
-- Insurance
+Everything profiled for Truepill is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/truepill/](https://apis.io/providers/truepill/)** — or go straight to one of the APIs or properties below.
 
-## Timestamps
+### APIs (33)
 
-- **Created:** 2026-06-21
-- **Modified:** 2026-06-21
+- [Truepill Consults API](https://apis.io/apis/truepill/truepill-consults-api/) — Telehealth consult creation, retrieval, media attachment and status simulation. Published at v0 under /consults/v0 — pre-1.0 by the provider's own…
+- [Truepill Diagnostics API](https://apis.io/apis/truepill/truepill-diagnostics-api/) — At-home diagnostics — test catalogue, kit serial validation, order creation and registration, rejection detail and results retrieval. Published at v0, with…
+- [Truepill Scheduled Actions API](https://apis.io/apis/truepill/truepill-scheduled-actions-api/) — The scheduled-actions API from Truepill — 1 operation(s) for scheduled-actions.
+- [Truepill Scheduled Fill Requests API](https://apis.io/apis/truepill/truepill-scheduled-fill-requests-api/) — The scheduled-fill-requests API from Truepill — 2 operation(s) for scheduled-fill-requests.
+- [Truepill Auto Refill API](https://apis.io/apis/truepill/truepill-auto-refill-api/) — The Auto Refill API from Truepill — 10 operation(s) for auto refill.
+- [Truepill Availability API](https://apis.io/apis/truepill/truepill-availability-api/) — The Availability API from Truepill — 2 operation(s) for availability.
+- [Truepill Cancel Request API](https://apis.io/apis/truepill/truepill-cancel-request-api/) — The Cancel Request API from Truepill — 2 operation(s) for cancel request.
+- [Truepill Copay Request API](https://apis.io/apis/truepill/truepill-copay-request-api/) — The Copay Request API from Truepill — 6 operation(s) for copay request.
+- [Truepill Coverage Request API](https://apis.io/apis/truepill/truepill-coverage-request-api/) — The Coverage Request API from Truepill — 2 operation(s) for coverage request.
+- [Truepill Direct Transfer API](https://apis.io/apis/truepill/truepill-direct-transfer-api/) — The Direct Transfer API from Truepill — 8 operation(s) for direct transfer.
+- [Truepill External Location Matches API](https://apis.io/apis/truepill/truepill-external-location-matches-api/) — The External Location Matches API from Truepill — 2 operation(s) for external location matches.
+- [Truepill External Locations API](https://apis.io/apis/truepill/truepill-external-locations-api/) — The External Locations API from Truepill — 4 operation(s) for external locations.
+- [Truepill External Transfers API](https://apis.io/apis/truepill/truepill-external-transfers-api/) — The External Transfers API from Truepill — 2 operation(s) for external transfers.
+- [Truepill Fill Request API](https://apis.io/apis/truepill/truepill-fill-request-api/) — The Fill Request API from Truepill — 8 operation(s) for fill request.
+- [Truepill Fill Requests API](https://apis.io/apis/truepill/truepill-fill-requests-api/) — The Fill Requests API from Truepill — 2 operation(s) for fill requests.
+- [Truepill Fuzion Test API](https://apis.io/apis/truepill/truepill-fuzion-test-api/) — The Fuzion Test API from Truepill — 2 operation(s) for fuzion test.
+- [Truepill Insurance API](https://apis.io/apis/truepill/truepill-insurance-api/) — The Insurance API from Truepill — 6 operation(s) for insurance.
+- [Truepill Media API](https://apis.io/apis/truepill/truepill-media-api/) — The Media API from Truepill — 12 operation(s) for media.
+- [Truepill Nearby Same Day Pickup Locations API](https://apis.io/apis/truepill/truepill-nearby-same-day-pickup-locations-api/) — The Nearby Same Day Pickup Locations API from Truepill — 2 operation(s) for nearby same day pickup locations.
+- [Truepill Open API](https://apis.io/apis/truepill/truepill-open-api-api/) — The Open Api API from Truepill — 2 operation(s) for open api.
+- [Truepill Order API](https://apis.io/apis/truepill/truepill-order-api/) — The Order API from Truepill — 4 operation(s) for order.
+- [Truepill Patient API](https://apis.io/apis/truepill/truepill-patient-api/) — The Patient API from Truepill — 8 operation(s) for patient.
+- [Truepill Pharmacy Coverage API](https://apis.io/apis/truepill/truepill-pharmacy-coverage-api/) — The Pharmacy Coverage API from Truepill — 2 operation(s) for pharmacy coverage.
+- [Truepill Prescriber API](https://apis.io/apis/truepill/truepill-prescriber-api/) — The Prescriber API from Truepill — 4 operation(s) for prescriber.
+- [Truepill Prescription API](https://apis.io/apis/truepill/truepill-prescription-api/) — The Prescription API from Truepill — 12 operation(s) for prescription.
+- [Truepill Prescriptions API](https://apis.io/apis/truepill/truepill-prescriptions-api/) — The Prescriptions API from Truepill — 2 operation(s) for prescriptions.
+- [Truepill Prior Authorization API](https://apis.io/apis/truepill/truepill-prior-authorization-api/) — The Prior Authorization API from Truepill — 2 operation(s) for prior authorization.
+- [Truepill Same Day Delivery API](https://apis.io/apis/truepill/truepill-same-day-delivery-api/) — The Same Day Delivery API from Truepill — 4 operation(s) for same day delivery.
+- [Truepill Schedule API](https://apis.io/apis/truepill/truepill-schedule-api/) — The Schedule API from Truepill — 1 operation(s) for schedule.
+- [Truepill Specialty Pharmacies API](https://apis.io/apis/truepill/truepill-specialty-pharmacies-api/) — The Specialty Pharmacies API from Truepill — 2 operation(s) for specialty pharmacies.
+- [Truepill Transfer Request API](https://apis.io/apis/truepill/truepill-transfer-request-api/) — The Transfer Request API from Truepill — 4 operation(s) for transfer request.
+- [Truepill Update Request API](https://apis.io/apis/truepill/truepill-update-request-api/) — The Update Request API from Truepill — 2 operation(s) for update request.
+- [Truepill Webhook Events API](https://apis.io/apis/truepill/truepill-webhook-events-api/) — The Webhook Events API from Truepill — 4 operation(s) for webhook events.
 
-## APIs
+### Published properties
 
-### Truepill Patients API
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-Create, update, retrieve, and search patient records (demographics, address, contact, language preference) and list a patient's prescriptions. Patients are referenced by an opaque patient_token.
+#### AsyncAPI (1)
 
-- **Human URL:** [https://rxdocs.fuzehealth.com](https://rxdocs.fuzehealth.com)
-- **Base URL:** `https://rxapi.fuzehealth.com/v1`
+Event-driven and webhook contracts.
 
-#### Tags
+- [Truepill Webhooks](https://apis.io/asyncapis/truepill/truepill-webhooks/)
 
-- Patients
-- Demographics
-- Eligibility
+#### MCP servers (1)
 
-#### Properties
+Model Context Protocol servers that expose the API to agents.
 
-- [Documentation](https://rxdocs.fuzehealth.com)
-- [OpenAPI](openapi/truepill-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/truepill.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/truepill.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+- [truepill](https://apis.io/servers/truepill/truepill/)
 
-### Truepill Prescriptions & Orders API
+#### Agentic access (1)
 
-Retrieve prescription details and orchestrate prescription routing via transfer requests and direct transfers (v1 and v2) into Truepill/FuzeRx pharmacy fulfillment.
+Which operations an agent can call, which act, and which need a human in the loop.
 
-- **Human URL:** [https://rxdocs.fuzehealth.com](https://rxdocs.fuzehealth.com)
-- **Base URL:** `https://rxapi.fuzehealth.com/v1`
+- [Truepill Agentic Access](https://apis.io/agentic-access/truepill/truepill-agentic-access/)
 
-#### Tags
+#### Collections (6)
 
-- Prescriptions
-- Orders
-- Transfers
+Postman and Open Collection request collections.
 
-#### Properties
+- [Truepill (FuzeRx) API](https://apis.io/collections/truepill/open-truepill/)
+- [Truepill (FuzeRx) Insurance API](https://apis.io/collections/truepill/open-truepill-insurance-api/)
+- [Truepill (FuzeRx) Insurance Patients API](https://apis.io/collections/truepill/open-truepill-patients-api/)
+- [Truepill (FuzeRx) Insurance Prescriptions API](https://apis.io/collections/truepill/open-truepill-prescriptions-api/)
+- [Truepill (FuzeRx) Insurance Transfers API](https://apis.io/collections/truepill/open-truepill-transfers-api/)
+- [Truepill (FuzeRx) Insurance Webhooks API](https://apis.io/collections/truepill/open-truepill-webhooks-api/)
 
-- [Documentation](https://rxdocs.fuzehealth.com)
-- [OpenAPI](openapi/truepill-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/truepill.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/truepill.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+#### Overlays (9)
 
-### Truepill Medications & Insurance API
+OpenAPI overlays, including conversational phrasing for each operation.
 
-Establish patient insurance objects (BIN, group, member ID), submit copay requests for real-time out-of-pocket determination, and query adjudicated insurance claim details across primary, secondary, and tertiary coverage.
+- [Truepill Consults Api Overlay](https://apis.io/overlays/truepill/truepill-consults-api-overlay/)
+- [Truepill Diagnostics Api Overlay](https://apis.io/overlays/truepill/truepill-diagnostics-api-overlay/)
+- [Truepill Fulfillment Api Overlay](https://apis.io/overlays/truepill/truepill-fulfillment-api-overlay/)
+- [Truepill Insurance Api Overlay](https://apis.io/overlays/truepill/truepill-insurance-api-overlay/)
+- [Truepill Media Api Overlay](https://apis.io/overlays/truepill/truepill-media-api-overlay/)
+- [Truepill Patients Api Overlay](https://apis.io/overlays/truepill/truepill-patients-api-overlay/)
+- [Truepill Prescriptions Api Overlay](https://apis.io/overlays/truepill/truepill-prescriptions-api-overlay/)
+- [Truepill Transfers Api Overlay](https://apis.io/overlays/truepill/truepill-transfers-api-overlay/)
+- [Truepill Webhooks Api Overlay](https://apis.io/overlays/truepill/truepill-webhooks-api-overlay/)
 
-- **Human URL:** [https://rxdocs.fuzehealth.com](https://rxdocs.fuzehealth.com)
-- **Base URL:** `https://rxapi.fuzehealth.com/v1`
+#### Security (2)
 
-#### Tags
+Authentication, trust centre, and vulnerability disclosure.
 
-- Medications
-- Insurance
-- Copay
-- Eligibility
+- [Truepill Authentication](https://apis.io/security/truepill/truepill-authentication/)
+- [Truepill Domain Security](https://apis.io/security/truepill/truepill-domain-security/)
 
-#### Properties
+#### Plans and pricing (1)
 
-- [Documentation](https://rxdocs.fuzehealth.com)
-- [API Reference](https://tpos-api.truepill.com/documentation/)
-- [OpenAPI](openapi/truepill-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/truepill.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/truepill.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+Published plans, tiers and prices.
 
-### Truepill Shipments & Fulfillment API
+- [Truepill Plans Pricing](https://apis.io/plans/truepill/truepill-plans-pricing/)
 
-Pharmacy dispensing and prescription fulfillment, surfaced through prescription status and webhook events rather than a standalone shipments resource. Shipment and tracking state is delivered asynchronously via webhook notifications.
+#### Rate limits (1)
 
-- **Human URL:** [https://healthbrands.truepill.com/](https://healthbrands.truepill.com/)
-- **Base URL:** `https://rxapi.fuzehealth.com/v1`
+Published request limits.
 
-#### Tags
+- [Truepill Rate Limits](https://apis.io/rate-limits/truepill/truepill-rate-limits/)
 
-- Shipments
-- Fulfillment
-- Dispensing
+#### FinOps (1)
 
-#### Properties
+What the API costs to run, by operation.
 
-- [Documentation](https://rxdocs.fuzehealth.com)
-- [OpenAPI](openapi/truepill-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/truepill.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/truepill.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+- [Truepill Finops](https://apis.io/finops/truepill/truepill-finops/)
 
-### Truepill Webhooks API
+## Where to find this API
 
-Retrieve webhook events by type (including Notify Rx) carrying asynchronous status updates for prescriptions, copay/insurance adjudication, and fulfillment. Events include callback_type, status, timestamp, and a details object.
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
-- **Human URL:** [https://rxdocs.fuzehealth.com](https://rxdocs.fuzehealth.com)
-- **Base URL:** `https://rxapi.fuzehealth.com/v1`
-
-#### Tags
-
-- Webhooks
-- Events
-- Notifications
-
-#### Properties
-
-- [Documentation](https://rxdocs.fuzehealth.com)
-- [OpenAPI](openapi/truepill-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/truepill.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/truepill.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-## Common Properties
-
-- [LinkedIn](https://www.linkedin.com/company/truepill)
 - [Website](https://www.truepill.com)
 - [Documentation](https://rxdocs.fuzehealth.com)
-- [Plans](plans/truepill-plans-pricing.yml)
-- [Rate Limits](rate-limits/truepill-rate-limits.yml)
-- [Fin Ops](finops/truepill-finops.yml)
+- [Getting started](https://rx.fuzehealth.com/api-docs/introduction)
+- [API reference](https://rxdocs.fuzehealth.com)
+- [Support](https://rx.fuzehealth.com/contact)
+- [Compliance](https://rxdocs.fuzehealth.com/#hipaa-amp-security)
+- [Terms of service](https://rx.fuzehealth.com/legal/terms-and-conditions)
+- [Privacy policy](https://rx.fuzehealth.com/legal/privacy)
+- [GitHub](https://github.com/truepill)
+- [Status](https://status.rx.fuzehealth.com)
 
-## Ownership
+## API Evangelist rating
 
-LetsGetChecked acquired Truepill in 2024. In May 2025 the combined company launched as **Fuze Health** (with Alto Pharmacy joining), and the developer platform now ships as **FuzeRx**. Legacy `truepill.com/api-docs` URLs 301-redirect to `rx.fuzehealth.com`, and the API is served from `rxapi.fuzehealth.com`. Production access and pricing are sales-led, so plans, rate limits, and FinOps artifacts are marked `reconciled: false`. See [review.yml](review.yml) for the full availability and ownership assessment.
+**Kin Score 53.4** — developing · rubric 0.25.0 · scored 2026-10-23
 
-## Maintainers
+| Facet | Score |
+|---|---|
+| Discoverability | 73.2 |
+| Contract quality | 51.0 |
+| Contract governance | 18.2 |
+| Operational transparency | 57.9 |
+| Developer ergonomics | 64.9 |
+| Access clarity | 46.1 |
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Agent readiness 33.1** — agent-ready
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | documented (partial credit) |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | verified |
+| OpenAPI Examples | partial |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | yes |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | — |
+| Operation Distinctiveness | — |
+
+**Regulatory alignment 26.2** — Health
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/truepill/](https://apis.io/providers/truepill/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Truepill: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/truepill/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
